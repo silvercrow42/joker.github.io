@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://example.com</id>
+    <id>https://silvercrow42.github.io/joker.github.io</id>
     <title>Joker • Posts by &#34;后端&#34; tag</title>
-    <link href="http://example.com" />
+    <link href="https://silvercrow42.github.io/joker.github.io" />
     <updated>2024-09-10T02:00:01.000Z</updated>
     <category term="后端" />
     <category term="MQ" />
@@ -12,9 +12,9 @@
     <category term="Zookeeper" />
     <category term="分布式锁" />
     <entry>
-        <id>http://example.com/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</id>
+        <id>https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</id>
         <title>【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</title>
-        <link rel="alternate" href="http://example.com/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
+        <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
         <content type="html">&lt;p&gt;&lt;ul class=&#34;markdownIt-TOC&#34;&gt;
 &lt;li&gt;
 &lt;ul&gt;
@@ -224,9 +224,9 @@
         <updated>2024-09-10T02:00:01.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/</id>
+        <id>https://silvercrow42.github.io/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/</id>
         <title>【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</title>
-        <link rel="alternate" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/"/>
+        <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/"/>
         <content type="html">&lt;p&gt;&lt;ul class=&#34;markdownIt-TOC&#34;&gt;
 &lt;li&gt;&lt;a href=&#34;#spring%E5%BC%95%E5%85%A5rocketmq&#34;&gt;Spring引入RocketMQ&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%E5%AD%A6%E4%B9%A0springrocketmq%E8%8C%83%E4%BE%8B&#34;&gt;学习SpringRocketMQ范例&lt;/a&gt;
@@ -591,9 +591,9 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
         <updated>2024-09-09T05:06:48.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/</id>
+        <id>https://silvercrow42.github.io/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/</id>
         <title>【RocketMQ】安装与部署（Windows）</title>
-        <link rel="alternate" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/"/>
+        <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/"/>
         <content type="html">&lt;p&gt;&lt;ul class=&#34;markdownIt-TOC&#34;&gt;
 &lt;li&gt;&lt;a href=&#34;#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&#34;&gt;准备工作&lt;/a&gt;
 &lt;ul&gt;
