@@ -1,0 +1,597 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="Joker" href="http://example.com/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="Joker" href="http://example.com/atom.xml" />
+<link rel="alternate" type="application/json" title="Joker" href="http://example.com/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="后端,MQ,RocketMQ" />
+
+
+<link rel="canonical" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/">
+
+
+
+  <title>
+【RocketMQ】安装与部署（Windows） - RocketMQ |
+Joker = Joker</title>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">【RocketMQ】安装与部署（Windows）
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2024-09-09 11:46:16">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2024-09-09T11:46:16+08:00">2024-09-09</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">Joker</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+          <img src="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/c687d3c664944954288c48a951b7aa5e.png">
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/RocketMQ/" itemprop="item" rel="index" title="分类于 RocketMQ"><span itemprop="name">RocketMQ</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.png">
+    <meta itemprop="name" content="Joker">
+    <meta itemprop="description" content=", ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Joker">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <p><ul class="markdownIt-TOC">
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a>
+<ul>
+<li><a href="#%E4%B8%8B%E8%BD%BD">下载</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">环境变量</a></li>
+</ul>
+</li>
+<li><a href="#nameserver">NameServer</a>
+<ul>
+<li><a href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98">可能出现的问题</a>
+<ul>
+<li><a href="#please-set-the-rocketmq_home-variable-in-your-environment">Please set the ROCKETMQ_HOME variable in your environment!</a></li>
+<li><a href="#unrecognized-vm-option">Unrecognized VM option</a></li>
+<li><a href="#%E6%89%BE%E4%B8%8D%E5%88%B0%E6%88%96%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E4%B8%BB%E7%B1%BB">找不到或无法加载主类</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#broker">Broker</a>
+<ul>
+<li><a href="#%E5%90%AF%E5%8A%A8">启动</a>
+<ul>
+<li><a href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98-2">可能出现的问题</a>
+<ul>
+<li><a href="#%E5%AF%BC%E5%8C%85%E9%97%AE%E9%A2%98">导包问题</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%8E%A7%E5%88%B6%E5%8F%B0">控制台</a>
+<ul>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81">获取源码</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96">安装依赖</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8-2">启动</a>
+<ul>
+<li><a href="#%E9%85%8D%E7%BD%AEnameserver%E5%9C%B0%E5%9D%80">配置NameServer地址</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%90%AF%E5%8A%A8%E7%AB%AF%E5%8F%A3">配置启动端口</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8-3">启动</a></li>
+</ul>
+</li>
+<li><a href="#%E9%83%A8%E7%BD%B2">部署</a></li>
+<li><a href="#%E8%AE%BF%E9%97%AE">访问</a></li>
+</ul>
+</li>
+</ul>
+(【RocketMQ】安装与部署（Windows）)</p>
+<h1 id="准备工作"><a class="markdownIt-Anchor" href="#准备工作">#</a> 准备工作</h1>
+<h2 id="下载"><a class="markdownIt-Anchor" href="#下载">#</a> 下载</h2>
+<p>可以在官网上下载<span class="exturl" data-url="aHR0cHM6Ly9yb2NrZXRtcS5hcGFjaGUub3JnL3poLw=="> RocketMQ・官方网站 | RocketMQ (apache.org)</span><br>
+ 或者直接到 Apache 的文件站点下<span class="exturl" data-url="aHR0cHM6Ly9hcmNoaXZlLmFwYWNoZS5vcmcvZGlzdC9yb2NrZXRtcS8="> Index of /dist/rocketmq (apache.org)</span> 找到对应版本下载。</p>
+<p>这里以编写时的最新版本为例，选择 Binary 版本下载，该版本为编译后的版本，可以直接使用。</p>
+<p>Source 下载获取的是源码，需要经过编译后才可以使用，不过比较方便自行扩展，有扩展需求可以使用该版本自行编译。<br>
+<img data-src="c687d3c664944954288c48a951b7aa5e.png" alt="官网下载页"><br>
+下载完成后解压出来是如下的文件结构。<br>
+<img data-src="7e6608c24fb49bcd9982d9b25fa9c819.png" alt="下载后的文件结构"><br>
+以下以 windows 为环境演示。</p>
+<p>RocketMQ 依赖的是 Java 的运行环境，因此系统上应该安装 Java 并且拥有对应的环境变量 JAVA_HOME.</p>
+<p>RocketMQ 使用的 java 环境是 java8，对于高版本环境可能需要进行一些适配性的改动。</p>
+<p>在 RocketMQ 目录下的 bin 文件夹中有对应的服务启动脚本，包含 Linux 可运行的 sh 文件以及 Windows 可运行的 cmd 文件。</p>
+<h2 id="环境变量"><a class="markdownIt-Anchor" href="#环境变量">#</a> 环境变量</h2>
+<p>解压完毕后需要手动添加名为 ROCKETMQ_HOME 的环境变量，索引到 RocketMQ 的解压目录即可，设置完毕后需要重启电脑。<br>
+<img data-src="b9d692cbe18a30e8c27f757d0208f0ec.png" alt="环境变量设置"></p>
+<h1 id="nameserver"><a class="markdownIt-Anchor" href="#nameserver">#</a> NameServer</h1>
+<p>打开 cmd 命令行后，通过 cd 命令进入到解压目录的 bin 目录下。然后使用 <code>start mqnamesrv.cmd </code> 命令新开一个命令行窗口启动 NameServer<br>
+<img data-src="31d4e322a0dd35ade7d8198071115f27.png" alt="新窗口启动NameServer"><br>
+ 或者直接使用 <code>mqnamesrv.cmd</code>  在当前命令行中启动。</p>
+<p>其本质是通过此前设置的环境变量找到 RocketMQ 的 bin 路径，再通过该路径下的 runserver.cmd 脚本文件实现运行的，因此启动项配置其实来自 runserver.cmd 中。</p>
+<p>出现 The Name Server boot success 提示则表示 NameServer 服务启动成功，启动成功后不要关闭该命令窗口。</p>
+<h2 id="可能出现的问题"><a class="markdownIt-Anchor" href="#可能出现的问题">#</a> 可能出现的问题</h2>
+<h3 id="please-set-the-rocketmq_home-variable-in-your-environment"><a class="markdownIt-Anchor" href="#please-set-the-rocketmq_home-variable-in-your-environment">#</a> Please set the ROCKETMQ_HOME variable in your environment!</h3>
+<p>这个问题提示其实不够准确，并不一定是在我们没有设置环境变量时出现。<br>
+<img data-src="45ac5254ebbaf057393dc8743474c119.png" alt="问题定位1"><br>
+ 因为在运行过程中，脚本文件是通过环境变量来定位到 runserver.cmd 的位置再通过该脚本来启动应用的，因此在当 runserver.cmd 文件定位不到时才会出现该问题。</p>
+<p><strong>处理方法</strong>：可以重新打开一个命令行，然后通过 <code>echo %ROCKETMQ_HOME%</code> <br>
+ 打印一下环境变量出来检查一下环境变量是否有误。同时这种方式也能够让环境变量刷新，如果此前曾经修改过环境变量而没有重启电脑，则这种方式能够让环境变量刷新成修改后的值。</p>
+<p>如果仍然没有解决，则可以进入到该对应路径下看看是否缺失了 runserver.cmd 文件，到这一步也都没有发现问题，那就只能重启一下试试，可能环境变量的更改并没有生效。</p>
+<h3 id="unrecognized-vm-option"><a class="markdownIt-Anchor" href="#unrecognized-vm-option">#</a> Unrecognized VM option</h3>
+<p>在通过 runserver.cmd 运行时，如果以高于 java8 的版本作为环境运行可能会出现如下错误：<strong>Unrecognized VM option ’<br>
+UseConcMarkSweepGC’</strong><br>
+<img data-src="41367fb287fe7a305b9b51f4c0fc252b.png" alt="问题定位2-1"><br>
+ 这是因为在运行脚本中，包含了一些对 CMSGC 的一些调优参数。<br>
+<img data-src="32ef686e52b0f1c87d1ef0640b87d779.png" alt="问题定位2-2"><br>
+ 据查在 java9 中使用 G1 来作为 GC 的默认实现，从而废弃了 CMS 相关的一些参数。因此启动时需要进行一些相关参数的改动，或者将 java 降级，指定特定的 jre8 来作为虚拟机运行。</p>
+<p>在 sh 版本的 runserver 脚本中对 java 的版本进行了专门的适配，可以识别 java 版本采用特定的指令。如果使用 cmd 脚本时仍需要在 Java 高版本环境中运行，也可以参照 sh 版本脚本修改一下对应的虚拟机参数。<br>
+<img data-src="3e12c58e5dd33d6864284ce2a5f8b783.png" alt="问题定位2-3"><br>
+<strong> 处理方法</strong>：这里提供一个根据 sh 脚本修改过来的适配高版本 java 的 cmd 脚本，使用高版本运行时用该脚本替代原本的 runserver.cmd 即可。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">rem Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">rem contributor license agreements.  See the NOTICE file distributed with</span><br><span class="line">rem this work <span class="keyword">for</span> additional information regarding copyright ownership.</span><br><span class="line">rem The ASF licenses this file to You under the Apache License, Version <span class="number">2.0</span></span><br><span class="line">rem (the <span class="string">&quot;License&quot;</span>); you may not use this file except <span class="keyword">in</span> compliance with</span><br><span class="line">rem the License.  You may obtain a <span class="built_in">copy</span> of the License at</span><br><span class="line">rem</span><br><span class="line">rem     http://www.apache.org/licenses/LICENSE<span class="literal">-2</span>.<span class="number">0</span></span><br><span class="line">rem</span><br><span class="line">rem Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</span><br><span class="line">rem distributed under the License is distributed on an <span class="string">&quot;AS IS&quot;</span> BASIS,</span><br><span class="line">rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">rem See the License <span class="keyword">for</span> the specific language governing permissions and</span><br><span class="line">rem limitations under the License.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> not exist <span class="string">&quot;%JAVA_HOME%\bin\java.exe&quot;</span> <span class="built_in">echo</span> Please <span class="built_in">set</span> the JAVA_HOME variable <span class="keyword">in</span> your environment, We need java(x64)! &amp; <span class="keyword">EXIT</span> /B <span class="number">1</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA=%JAVA_HOME%\bin\java.exe&quot;</span></span><br><span class="line"></span><br><span class="line">setlocal</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> BASE_DIR=%~dp0</span><br><span class="line"><span class="built_in">set</span> BASE_DIR=%BASE_DIR:~<span class="number">0</span>,<span class="literal">-1</span>%</span><br><span class="line"><span class="keyword">for</span> %%d <span class="keyword">in</span> (%BASE_DIR%) <span class="keyword">do</span> <span class="built_in">set</span> BASE_DIR=%%~dpd</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> CLASSPATH=.;%BASE_DIR%conf;%BASE_DIR%lib\*;%CLASSPATH%</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -server -Xms4g -Xmx4g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -verbose:gc -Xloggc:&quot;</span>%USERPROFILE%\rmq_srv_gc.log<span class="string">&quot; -XX:+PrintGCDetails&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:-OmitStackTraceInFastThrow&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:-UseLargePages&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% %JAVA_OPT_EXT% -cp &quot;</span>%CLASSPATH%<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> %*</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;%JAVA%&quot;</span> %JAVA_OPT% %*</span><br></pre></td></tr></table></figure>
+<p><strong>为什么不对 cmd 脚本进行适配呢？</strong></p>
+<p>sh 脚本中的 java 版本适配其本质上，是通过运行  <code>java -version</code>  命令<br>
+获取到控制台输出的完整 java 版本信息。再通过字符串匹配的方式来获取 java 版本号，再去以 8 为基准去匹配对应的运行参数。</p>
+<p>经过测试，windows 平台下的 java -version 获取到的版本字符串通过命令行是无法捕获到的。<br>
+<img data-src="b7e356d6851105053394a790c1b7de7f.png" alt="问题定位2-4"><br>
+<img data-src="f051b72f858d696bb84b1f1c4eed0d5b.png" alt="问题定位2-5"><br>
+<img data-src="1c6676e01f035d76dad63ad38e9526d7.png" alt="问题定位2-6"><br>
+ 推测也就是这个原因 windows 导致没有办法单独通过命令行来确定 java 版本号，也自然就没有办法参照其进行适配了。</p>
+<h3 id="找不到或无法加载主类"><a class="markdownIt-Anchor" href="#找不到或无法加载主类">#</a> 找不到或无法加载主类</h3>
+<p><img data-src="1e4aced6e93a87a20cd4152794c4fe3b.png" alt="问题定位3-1"><br>
+ 该问题的主要诱因是环境变量中存在空格。导致解析命令时环境变量被分割成了两个命令。<br>
+<img data-src="7ac4047b712f71097b7aff8518a1ec40.png" alt="问题定位3-2"><br>
+<strong> 处理方法</strong>：最好的解决办法是变更目录，在 RocketMQ 的路径中不要存在空格。</p>
+<p>还有，其实当命令中存在不需要被分割的空格时，只需要使用 双引号 &quot;&quot; 将对应的命令包裹起来即可。<br>
+<img data-src="3de37e56ef97c4035b99d58bca794e1a.png" alt="问题定位3-3"><br>
+ 但是此处经过尝试后发现，该处被错误分割的情况消失，但是仍然存在问题，可能在 runserver 中的 BASE_DIR 与 CLASSPATH 等变量也需要加上双引号防止错误分割，解决起来较为麻烦，而且不清楚后续会不会造成其他问题，因此不再对这种情况进行处理。<br>
+<img data-src="58845da6a693a14c8060ad228ef530fa.png" alt="问题定位3-4"></p>
+<h1 id="broker"><a class="markdownIt-Anchor" href="#broker">#</a> Broker</h1>
+<h2 id="启动"><a class="markdownIt-Anchor" href="#启动">#</a> 启动</h2>
+<p>在启动前需要先添加一个环境变量 NAMESRV_ADDR，用来指向 nameServer 服务的地址。因为测试部署时服务部署在本机，所以使用 localhost 地址，加上此前默认的端口 9876 作为环境变量值。<br>
+<img data-src="66fc0e9db8f6c85a73f5ccd3f895102c.png" alt="broker环境变量"><br>
+打开 cmd 命令行后，通过 cd 命令进入到 RocketMQ 解压目录的 bin 目录下，运行命令 <code>start mqbroker.cmd autoCreateTopicEnable=true</code>  启动服务。<br>
+<img data-src="5ddf87816c70d2451863102cdf413784.png" alt="broker启动"><br>
+出现 The broker […] boot success 提示则表示 broker 服务启动成功，启动成功后同样不要关闭该命令窗口。</p>
+<h3 id="可能出现的问题-2"><a class="markdownIt-Anchor" href="#可能出现的问题-2">#</a> 可能出现的问题</h3>
+<p>因为运行逻辑类似，因此也会出现上述情况类似的问题，此处不过多阐述，对照着修改即可。</p>
+<p>关于 java 版本适配的问题，此处也提供一个高版本可用的运行脚本:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">rem Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">rem contributor license agreements.  See the NOTICE file distributed with</span><br><span class="line">rem this work <span class="keyword">for</span> additional information regarding copyright ownership.</span><br><span class="line">rem The ASF licenses this file to You under the Apache License, Version <span class="number">2.0</span></span><br><span class="line">rem (the <span class="string">&quot;License&quot;</span>); you may not use this file except <span class="keyword">in</span> compliance with</span><br><span class="line">rem the License.  You may obtain a <span class="built_in">copy</span> of the License at</span><br><span class="line">rem</span><br><span class="line">rem     http://www.apache.org/licenses/LICENSE<span class="literal">-2</span>.<span class="number">0</span></span><br><span class="line">rem</span><br><span class="line">rem Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</span><br><span class="line">rem distributed under the License is distributed on an <span class="string">&quot;AS IS&quot;</span> BASIS,</span><br><span class="line">rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">rem See the License <span class="keyword">for</span> the specific language governing permissions and</span><br><span class="line">rem limitations under the License.</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> not exist <span class="string">&quot;%JAVA_HOME%\bin\java.exe&quot;</span> <span class="built_in">echo</span> Please <span class="built_in">set</span> the JAVA_HOME variable <span class="keyword">in</span> your environment, We need java(x64)! &amp; <span class="keyword">EXIT</span> /B <span class="number">1</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA=%JAVA_HOME%\bin\java.exe&quot;</span></span><br><span class="line"></span><br><span class="line">setlocal</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> BASE_DIR=%~dp0</span><br><span class="line"><span class="built_in">set</span> BASE_DIR=%BASE_DIR:~<span class="number">0</span>,<span class="literal">-1</span>%</span><br><span class="line"><span class="keyword">for</span> %%d <span class="keyword">in</span> (%BASE_DIR%) <span class="keyword">do</span> <span class="built_in">set</span> BASE_DIR=%%~dpd</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> CLASSPATH=.;%BASE_DIR%conf;%BASE_DIR%lib\*;%CLASSPATH%</span><br><span class="line"></span><br><span class="line">rem ===========================================================================================</span><br><span class="line">rem  JVM Configuration</span><br><span class="line">rem ===========================================================================================</span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -verbose:gc -Xlog:gc*:file=%USERPROFILE%/mq_gc.log:time,tags:filecount=5,filesize=30M&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:-OmitStackTraceInFastThrow&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:+AlwaysPreTouch&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:MaxDirectMemorySize=15g&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -XX:-UseLargePages -XX:-UseBiasedLocking&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -Drocketmq.client.logUseSlf4j=true&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% %JAVA_OPT_EXT% -cp %CLASSPATH%&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;%JAVA%&quot;</span> %JAVA_OPT% %*</span><br></pre></td></tr></table></figure>
+<p>用其取代 runbroker.cmd 即可。</p>
+<h4 id="导包问题"><a class="markdownIt-Anchor" href="#导包问题">#</a> 导包问题</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalAccessError: <span class="keyword">class</span> <span class="title class_">org</span>.apache.rocketmq.common.UtilAll (in unnamed <span class="keyword">module</span> @<span class="number">0x4bde3f8a</span>) cannot access <span class="keyword">class</span> <span class="title class_">sun</span>.nio.ch.DirectBuffer (in <span class="keyword">module</span> java.base) because <span class="keyword">module</span> java.base does not export sun.nio.ch to unnamed <span class="keyword">module</span> @<span class="number">0x4bde3f8a</span></span><br></pre></td></tr></table></figure>
+<p>在启动参数中额外添加一句 <code>--add-exports=java.base/sun.nio.ch=ALL-UNNAMED</code>  即可.。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;%JAVA%&quot;</span> %JAVA_OPT% %*</span><br></pre></td></tr></table></figure>
+<p>更改为</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;%JAVA%&quot;</span> <span class="literal">--add-exports</span>=java.base/sun.nio.ch=ALL<span class="literal">-UNNAMED</span>  %JAVA_OPT% %*</span><br></pre></td></tr></table></figure>
+<h1 id="控制台"><a class="markdownIt-Anchor" href="#控制台">#</a> 控制台</h1>
+<p>上述服务搭建成功后服务就已经可用了，但是为了便于管理其中的数据，我们需要搭建一个控制台，用来提供一个前端页面供我们管理数据。</p>
+<h2 id="获取源码"><a class="markdownIt-Anchor" href="#获取源码">#</a> 获取源码</h2>
+<p>在早些时候，控制台项目隶属于<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1leHRlcm5hbHM="> GitHub - apache/rocketmq-externals</span><br>
+ 项目下，位于其中的 rocketmq-console 中，其中还包含一些其他的 RocketMQ 的拓展项目，可以参考使用。后来控制台项目单独独立了出来，我们可以在<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1kYXNoYm9hcmQ="> GitHub - apache/rocketmq-dashboard</span><br>
+ 仓库中找到。</p>
+<p>首先将其源码通过以下 git 指令克隆到本地。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq-dashboard.git</span><br></pre></td></tr></table></figure>
+<h2 id="安装依赖"><a class="markdownIt-Anchor" href="#安装依赖">#</a> 安装依赖</h2>
+<p>克隆完毕后因为还需要处理依赖，有条件的话可以直接使用 JAVA 编译器打开，使用 IDEA 导入为 maven 项目的话会自动加载依赖，其本质上就是 java<br>
+spring 的项目。如果依赖下载较慢可以使用阿里的 maven 仓库作为中央仓库，因为本来就是阿里的项目，应该不会存在依赖版本等的问题。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>不借助编译器处理依赖的话可以 cd 到项目目录下，自行使用 mvn 的指令去处理依赖。</p>
+<h2 id="启动-2"><a class="markdownIt-Anchor" href="#启动-2">#</a> 启动</h2>
+<p>在依赖安装完成之后，在运行之前先要修改一下配置。其实配置项的功能描述在 application.yml 中都有，没有的大多是 spring 的基本配置，查 spring 对应的配置项即可。此处只包括影响到应用启动的配置。</p>
+<h3 id="配置nameserver地址"><a class="markdownIt-Anchor" href="#配置nameserver地址">#</a> 配置 NameServer 地址</h3>
+<p>在 application.yml 中，需要配置一下此前的 NameServer 的 ip 地址，因为源码中的配置文件中 NameServer 地址配置多了一个 127.0.0.2:<br>
+9876 地址，运行过程中连接不上可能会报错，删掉即可。<br>
+<img data-src="ab64039c47990f681af7755c6bd38b34.png" alt="配置控制台1"><br>
+ 此处可以配置一个，也可以配置多个，使用 yml 的数组写法即可，即在每一项数组元素均使用 “-” 开头。</p>
+<p>如果在 properties 文件中数组则是类似于通常数组的写法，只不过每个元素都要单独写一项，比较麻烦。</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rocketmq.config.namesrvAddrs[0]</span>=<span class="string">127.0.0.1:9876</span></span><br><span class="line"><span class="attr">rocketmq.config.namesrvAddrs[1]</span>=<span class="string">127.0.0.2:9876</span></span><br></pre></td></tr></table></figure>
+<h3 id="配置启动端口"><a class="markdownIt-Anchor" href="#配置启动端口">#</a> 配置启动端口</h3>
+<p>也可以配置一下当前控制台的启动使用的访问端口，随意一个空闲端口即可。<br>
+<img data-src="b8fde91e184e69dc9ff077345526cc86.png" alt="配置控制台2"></p>
+<h3 id="启动-3"><a class="markdownIt-Anchor" href="#启动-3">#</a> 启动</h3>
+<p>使用编译器启动，通过 <code>mvn spring-boot:run</code>  启动或者通过 maven 打包成 jar 包然后运行 jar 包均可，运行成功后如下图。</p>
+<h2 id="部署"><a class="markdownIt-Anchor" href="#部署">#</a> 部署</h2>
+<p>部署时可以参照传统的 maven 项目进行打包部署，另外官方也提供了 docker 镜像来便捷部署，根据 ReadMe 中描述，通过以下 docker 指令拉取 docker 镜像。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull apacherocketmq/rocketmq<span class="literal">-dashboard</span>:latest</span><br></pre></td></tr></table></figure>
+<p>然后通过以下指令修改参数后运行即可</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="literal">-d</span> <span class="literal">--name</span> rocketmq<span class="literal">-dashboard</span> <span class="literal">-e</span> <span class="string">&quot;JAVA_OPTS=-Drocketmq.namesrv.addr=127.0.0.1:9876&quot;</span> <span class="literal">-p</span> <span class="number">8080</span>:<span class="number">8080</span> <span class="literal">-t</span> apacherocketmq/rocketmq<span class="literal">-dashboard</span>:latest</span><br></pre></td></tr></table></figure>
+<p>其中 rockermq.namesrv.addr 的值为此前部署的 NameServer 的地址，-p 参数冒号前的值为应用在虚拟机中的启动端口，后面的值应该映射到宿主机开放给该服务的端口。</p>
+<h2 id="访问"><a class="markdownIt-Anchor" href="#访问">#</a> 访问</h2>
+<p>启动后通过部署的 ip+port 端口的形式访问即可。<br>
+<img data-src="3dad91ef206cef1c546745174e4bf0ea.png" alt="控制台界面"><br>
+需要中文界面的话可以通过 ChangeLanguage 来切换语言。</p>
+<p><img data-src="017a22bd9ca7d08ef9fe8bfd5559ad35.png" alt="英文"><br>
+<img data-src="de23f48aafc56e32495a4e8b2ef513b7.png" alt="汉语"><br>
+多语化文件放置在源码目录下的 <code>src/main/resources/static/src/i18n</code>  文件夹中，可参照前端的 i18n 标准自行修改翻译或者添加其他语言。<br>
+<img data-src="cf3c5cd85f377a8d290e097b17e8dadd.png" alt="多语"></p>
+
+      <div class="tags">
+          <a href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
+          <a href="/tags/MQ/" rel="tag"><i class="ic i-tag"></i> MQ</a>
+          <a href="/tags/RocketMQ/" rel="tag"><i class="ic i-tag"></i> RocketMQ</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2024-09-10 09:34:23" itemprop="dateModified" datetime="2024-09-10T09:34:23+08:00">2024-09-10</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/images/wechatpay.png" alt="Joker 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/images/alipay.png" alt="Joker 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/images/paypal.png" alt="Joker 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Joker <i class="ic i-at"><em>@</em></i>Joker
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">http://example.com/2024/09/09/【RocketMQ】安装与部署（Windows）/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" itemprop="url" rel="next" data-background-image="&#x2F;2024&#x2F;09&#x2F;09&#x2F;%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ&#x2F;c6b66903f7110483a2f6fbb565e1611f.png" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> RocketMQ</span>
+  <h3>【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text"> 准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.1.</span> <span class="toc-text"> 下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.</span> <span class="toc-text"> 环境变量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#nameserver"><span class="toc-number">2.</span> <span class="toc-text"> NameServer</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text"> 可能出现的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#please-set-the-rocketmq_home-variable-in-your-environment"><span class="toc-number">2.1.1.</span> <span class="toc-text"> Please set the ROCKETMQ_HOME variable in your environment!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unrecognized-vm-option"><span class="toc-number">2.1.2.</span> <span class="toc-text"> Unrecognized VM option</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E4%B8%8D%E5%88%B0%E6%88%96%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E4%B8%BB%E7%B1%BB"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 找不到或无法加载主类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#broker"><span class="toc-number">3.</span> <span class="toc-text"> Broker</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-number">3.1.</span> <span class="toc-text"> 启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98-2"><span class="toc-number">3.1.1.</span> <span class="toc-text"> 可能出现的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BC%E5%8C%85%E9%97%AE%E9%A2%98"><span class="toc-number">3.1.1.1.</span> <span class="toc-text"> 导包问题</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0"><span class="toc-number">4.</span> <span class="toc-text"> 控制台</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81"><span class="toc-number">4.1.</span> <span class="toc-text"> 获取源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="toc-number">4.2.</span> <span class="toc-text"> 安装依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-2"><span class="toc-number">4.3.</span> <span class="toc-text"> 启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEnameserver%E5%9C%B0%E5%9D%80"><span class="toc-number">4.3.1.</span> <span class="toc-text"> 配置 NameServer 地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%90%AF%E5%8A%A8%E7%AB%AF%E5%8F%A3"><span class="toc-number">4.3.2.</span> <span class="toc-text"> 配置启动端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-3"><span class="toc-number">4.3.3.</span> <span class="toc-text"> 启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">4.4.</span> <span class="toc-text"> 部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-number">4.5.</span> <span class="toc-text"> 访问</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li class="active"><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" rel="bookmark" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></li><li><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" rel="bookmark" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Joker"
+      data-src="/images/avatar.png">
+  <p class="name" itemprop="name">Joker</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">3</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">2</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">7</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/categories/" rel="section"><i class="ic i-th"></i>分类</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+</div>
+
+    <span><a href="/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joker @ Joker</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2024/09/09/【RocketMQ】安装与部署（Windows）/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

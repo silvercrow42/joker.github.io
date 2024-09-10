@@ -1,0 +1,799 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="Joker" href="http://example.com/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="Joker" href="http://example.com/atom.xml" />
+<link rel="alternate" type="application/json" title="Joker" href="http://example.com/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="后端,MQ,RocketMQ" />
+
+
+<link rel="canonical" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/">
+
+
+
+  <title>
+【RocketMQ】SpringBoot整合与使用RocketMQ（Windows） - RocketMQ |
+Joker = Joker</title>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2024-09-09 13:06:48">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2024-09-09T13:06:48+08:00">2024-09-09</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">Joker</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+          <img src="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/c6b66903f7110483a2f6fbb565e1611f.png">
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/RocketMQ/" itemprop="item" rel="index" title="分类于 RocketMQ"><span itemprop="name">RocketMQ</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.png">
+    <meta itemprop="name" content="Joker">
+    <meta itemprop="description" content=", ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Joker">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <p><ul class="markdownIt-TOC">
+<li><a href="#spring%E5%BC%95%E5%85%A5rocketmq">Spring引入RocketMQ</a></li>
+<li><a href="#%E5%AD%A6%E4%B9%A0springrocketmq%E8%8C%83%E4%BE%8B">学习SpringRocketMQ范例</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">基本概念</a>
+<ul>
+<li><a href="#%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D">专有名词</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC">基本</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E5%B1%9E%E6%80%A7%E7%9B%B8%E5%85%B3">消息属性相关</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E9%80%BB%E8%BE%91%E7%9B%B8%E5%85%B3">运行逻辑相关</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E6%94%B6%E5%8F%91%E7%9B%B8%E5%85%B3">消息收发相关</a></li>
+<li><a href="#%E6%A6%82%E5%BF%B5%E7%9B%B8%E5%85%B3">概念相关</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B6%88%E6%81%AF%E6%B5%81%E8%BD%AC%E6%A8%A1%E5%9E%8B">消息流转模型</a></li>
+</ul>
+</li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE">获取范例项目</a>
+<ul>
+<li><a href="#span-id%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96span"><span id="单独拉取">单独拉取</span></a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4%E6%8B%89%E5%8F%96">完整拉取</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E">补充说明</a>
+<ul>
+<li><a href="#commandlinerunner">CommandLineRunner</a></li>
+</ul>
+</li>
+<li><a href="#%E7%90%86%E8%A7%A3%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE">理解范例项目</a>
+<ul>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85producer">生产者（Producer）</a>
+<ul>
+<li><a href="#extrocketmqtemplateconfiguration">@ExtRocketMQTemplateConfiguration</a></li>
+<li><a href="#rocketmqtemplate">RocketMQTemplate</a>
+<ul>
+<li><a href="#%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0">常见参数</a></li>
+<li><a href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">同步与异步</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E6%A8%A1%E5%BC%8F">发送模式</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF">发送事务消息</a>
+<ul>
+<li><a href="#%E4%BA%8B%E5%8A%A1%E7%9B%91%E5%90%AC%E5%99%A8">事务监听器</a></li>
+<li><a href="#%E7%9B%91%E5%90%AC%E5%99%A8%E7%9A%84%E7%94%A8%E5%A4%84">监听器的用处</a></li>
+<li><a href="#demo%E7%90%86%E8%A7%A3">demo理解</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%B6%88%E8%B4%B9%E8%80%85consumer">消费者（Consumer）</a>
+<ul>
+<li><a href="#push%E6%A8%A1%E5%BC%8F">PUSH模式</a>
+<ul>
+<li><a href="#rocketmqmessagelistener">@RocketMQMessageListener</a></li>
+<li><a href="#rocketmqlistener">RocketMQListener</a></li>
+<li><a href="#rocketmqreplylistener">RocketMQReplyListener</a></li>
+</ul>
+</li>
+<li><a href="#pull%E6%A8%A1%E5%BC%8F">PULL模式</a>
+<ul>
+<li><a href="#extrocketmqconsumerconfiguration">@ExtRocketMQConsumerConfiguration</a></li>
+</ul>
+</li>
+<li><a href="#pull%E6%A8%A1%E5%BC%8F-2">PULL模式</a>
+<ul>
+<li><a href="#extrocketmqconsumerconfiguration-2">@ExtRocketMQConsumerConfiguration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+(【RocketMQ】SpringBoot 整合与使用 RocketMQ（Windows）)</p>
+<p>由于是开发相关的文档，因此默认读者已经具备有 IDE，编者使用的是 IDEA 2022.1.3 以该版本作为演示基础。</p>
+<h1 id="spring引入rocketmq"><a class="markdownIt-Anchor" href="#spring引入rocketmq">#</a> Spring 引入 RocketMQ</h1>
+<p>在适配 Spring 生态方面，RocketMQ 由于本身就是 Java 语言开发并且开源，拥有 Spring 开发基础就能够参照源码进行调试，并且其本身也提供了可直接用于 SpringBoot 整合的父项目，pom.xml 中通过如下配置即可引入该父项目。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="学习springrocketmq范例"><a class="markdownIt-Anchor" href="#学习springrocketmq范例">#</a> 学习 SpringRocketMQ 范例</h1>
+<p>RocketMQ 对于 Spring 拥有良好的适配，并且拥有对应的参考项目，接下来我们借助该项目了解一下 RocketMQ 的架构及用法。</p>
+<h2 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念">#</a> 基本概念</h2>
+<p>首先，为了方便理解，我们需要了解一下 RocketMQ 中的一些基本概念、运行逻辑与名词，方便后续理解掌握。</p>
+<blockquote>
+<p>该章节整理自文章<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzc4MDk2OA=="> RocketMQ 简介 - 阿里云开发者社区 (aliyun.com) </span>原文更加详细，可通过链接了解详情。</p>
+</blockquote>
+<h3 id="专有名词"><a class="markdownIt-Anchor" href="#专有名词">#</a> 专有名词</h3>
+<h4 id="基本"><a class="markdownIt-Anchor" href="#基本">#</a> 基本</h4>
+<ul>
+<li><strong>NameServer</strong>：注册中心，相当于 ZooKeeper，不过 RocketMQ 进行了另外的实现，比较轻便。</li>
+<li><strong>Broker</strong>：消息的管理中心，其负责管理 Topic 与保存传入的消息，并且会将自己注册到 NameServer 中供其调度，其由 RocketMQ 实现。</li>
+<li><strong>Producer</strong>：也称为消息发布者，负责产生消息，需要我们自行产生消息。</li>
+<li><strong>Consumer</strong>：也称为消息订阅者，负责接收消息并处理消息，需要我们自行处理消息。</li>
+</ul>
+<h4 id="消息属性相关"><a class="markdownIt-Anchor" href="#消息属性相关">#</a> 消息属性相关</h4>
+<ul>
+<li><strong>Topic</strong>：消息主题，一级消息类型，生产者向其发送消息，消费者从中取出消息进行消费。</li>
+<li><strong>Message</strong>：生产者向 Topic 发送并最终传送给消费者的数据消息体。</li>
+<li><strong>Message ID</strong>：消息的全局唯一标识，由消息队列 RocketMQ 系统自动生成，唯一标识某条消息。</li>
+<li><strong>Message Key</strong>：消息的业务标识，由消息生产者（Producer）自行设置，可作为标识符使用标识一类业务逻辑，也可不提供。</li>
+<li><strong>Tag</strong>：消息标签，二级消息类型，由消息生产者（Producer）自行设置，用来进一步区分某个 Topic 下的消息</li>
+</ul>
+<h4 id="运行逻辑相关"><a class="markdownIt-Anchor" href="#运行逻辑相关">#</a> 运行逻辑相关</h4>
+<ul>
+<li><strong>分区</strong>：即 Topic Partition，物理上的概念。每个 Topic 包含一个或多个分区，由 RocketMQ 实现。</li>
+<li><strong>消费位点</strong>：每个 Topic 会有多个分区，每个分区会统计当前消息的总条数，这个称为最大位点 MaxOffset；分区的起始位置对应的位置叫做起始位点 MinOffset。</li>
+<li><a id="Group"><strong>Group</strong></a>：对生产者或消费者进行分组，同一组的生产者或消费者通常仅生产或消费同一类消息，且消息发布或订阅的逻辑一致，因此通常需要保证同组中的生产者与生产者之间或者消费者与消费者之间业务逻辑一致。在<a href="#%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9"> 集群消费 </a>模式下，该设计方式能够方便地对于生产者与消费者进行拓展。比如当某组中任务负载较大时，给组中额外增加多个生产者与消费者来分担该组的任务，降低负载。</li>
+<li><strong>Group ID</strong>：Group 的唯一标识，用于定位 Group，可以自行定制。</li>
+<li><strong>队列</strong>：一个 Topic 下会由一到多个队列来存储消息，其由 RocketMQ 实现。</li>
+<li><strong>Exactly-Once 投递语义</strong>：Exactly-Once 投递语义是指发送到消息系统的消息只能被 Consumer 处理且仅处理一次，即使 Producer 重试消息发送导致某消息重复投递，该消息在 Consumer 也只被消费一次。</li>
+</ul>
+<h4 id="消息收发相关"><a class="markdownIt-Anchor" href="#消息收发相关">#</a> 消息收发相关</h4>
+<ul>
+<li><span id="集群消费"><strong>集群消费</strong></span>：一个 Group ID 所标识的所有 Consumer 平均分摊消费消息。例如某个 Topic 有 9 条消息，一个 Group ID 有 3 个 Consumer 实例，那么在集群消费模式下每个实例平均分摊，只消费其中的 3 条消息。</li>
+<li><strong>广播消费</strong>：一个 Group ID 所标识的所有 Consumer 都会各自消费某条消息一次。例如某个 Topic 有 9 条消息，一个 Group ID 有 3 个 Consumer 实例，那么在广播消费模式下每个实例都会各自消费 9 条消息。</li>
+<li><strong>定时消息</strong>：Producer 将消息发送到消息队列 RocketMQ 服务端，但并不期望这条消息立马投递，而是推迟到在当前时间点之后的某一个时间投递到 Consumer 进行消费，该消息即定时消息。</li>
+<li><a id="延时消息"><strong>延时消息</strong></a>：Producer 将消息发送到消息队列 RocketMQ 服务端，但并不期望这条消息立马投递，而是延迟一定时间后才投递到 Consumer 进行消费，该消息即延时消息。</li>
+<li><strong>事务消息</strong>：RocketMQ 提供类似 X/Open XA 的分布事务功能，通过消息队列 RocketMQ 的事务消息能达到分布式事务的最终一致。</li>
+<li><a id="顺序消息"><strong>顺序消息</strong></a>：RocketMQ 提供的一种按照顺序进行发布和消费的消息类型，分为全局顺序消息和分区顺序消息。
+<ul>
+<li><strong>全局顺序消息</strong>：对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。</li>
+<li><strong>分区顺序消息</strong>：对于指定的一个 Topic，所有消息根据 Sharding Key 进行区块分区。同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。Sharding Key 是顺序消息中用来区分不同分区的关键字段，和普通消息的 Message Key 是完全不同的概念。</li>
+</ul>
+</li>
+</ul>
+<h4 id="概念相关"><a class="markdownIt-Anchor" href="#概念相关">#</a> 概念相关</h4>
+<ul>
+<li><strong>消息堆积</strong>：Producer 已经将消息发送到消息队列 RocketMQ 的服务端，但由于 Consumer 消费能力有限，未能在短时间内将所有消息正确消费掉，此时在消息队列 RocketMQ 的服务端保存着未被消费的消息，该状态即消息堆积。</li>
+<li><strong>消息过滤</strong>：Consumer 可以根据消息标签（Tag）对消息进行过滤，确保 Consumer 最终只接收被过滤后的消息类型。消息过滤在消息队列 RocketMQ 的服务端完成。</li>
+<li><strong>消息轨迹</strong>：在一条消息从 Producer 发出到 Consumer 消费处理过程中，由各个相关节点的时间、地点等数据汇聚而成的完整链路信息。通过消息轨迹，您能清晰定位消息从 Producer 发出，经由消息队列 RocketMQ 服务端，投递给 Consumer 的完整链路，方便定位排查问题。</li>
+<li><strong>重置消费位点</strong>：以时间轴为坐标，在消息持久化存储的时间范围内（默认 3 天），重新设置 Consumer 对已订阅的 Topic 的消费进度，设置完成后 Consumer 将接收设定时间点之后由 Producer 发送到消息队列 RocketMQ 服务端的消息。</li>
+<li><strong>死信队列</strong>：死信队列用于处理无法被正常消费的消息。当一条消息初次消费失败，消息队列 RocketMQ 会自动进行消息重试；达到最大重试次数后，若消费依然失败，则表明 Consumer 在正常情况下无法正确地消费该消息。此时，消息队列 RocketMQ 不会立刻将消息丢弃，而是将这条消息发送到该 Consumer 对应的特殊队列中。<br>
+消息队列 RocketMQ 将这种正常情况下无法被消费的消息称为死信消息（Dead-Letter Message），将存储死信消息的特殊队列称为死信队列（Dead-Letter Queue）。</li>
+</ul>
+<h3 id="消息流转模型"><a class="markdownIt-Anchor" href="#消息流转模型">#</a> 消息流转模型</h3>
+<p>消息队列 RocketMQ 支持发布和订阅模型，消息生产者应用创建 Topic 并将消息发送到 Topic。消费者应用创建对 Topic 的订阅以便从其接收消息。通信可以是一对多（扇出）、多对一（扇入）和多对多。具体通信如下图所示。</p>
+<img data-src="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8c2f59ab52f03f20d7a859e7c8bb82b4.png" class="" title="消息流转模型">
+<ul>
+<li><strong>生产者集群</strong>：用来表示发送消息应用，一个生产者集群下包含多个生产者实例，可以是多台机器，也可以是一台机器的多个进程，或者一个进程的多个生产者对象。<br>
+一个生产者集群可以发送多个 Topic 消息。发送分布式事务消息时，如果生产者中途意外宕机，消息队列 RocketMQ 服务端会主动回调生产者集群的任意一台机器来确认事务状态。</li>
+<li><strong>消费者集群</strong>：用来表示消费消息应用，一个消费者集群下包含多个消费者实例，可以是多台机器，也可以是多个进程，或者是一个进程的多个消费者对象。<br>
+一个消费者集群下的多个消费者以均摊方式消费消息。如果设置的是广播方式，那么这个消费者集群下的每个实例都消费全量数据。<br>
+一个消费者集群对应一个 Group ID，一个 Group ID 可以订阅多个 Topic，如上图中的 Group 2 所示。Group 和 Topic 的订阅关系可以通过直接在程序中设置即可。</li>
+</ul>
+<h2 id="获取范例项目"><a class="markdownIt-Anchor" href="#获取范例项目">#</a> 获取范例项目</h2>
+<p>在安装文档中涉及到的<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1leHRlcm5hbHM="> GitHub - apache/rocketmq-externals</span> 项目 ReadMe 中也提及到了一个关联 Spring 的 RocketMQ 项目。<br>
+<img data-src="3dff3ecbdea41baddb69e24f1b1508d0.png" alt="拓展项目"></p>
+<p>项目地址如下<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1zcHJpbmc="> GitHub - apache/rocketmq-spring</span>。</p>
+<p><img data-src="7f17ece34decafc3f316002155feaace.png" alt="拓展项目2"></p>
+<p>在<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1zcHJpbmcvdHJlZS9tYXN0ZXIvcm9ja2V0bXEtc3ByaW5nLWJvb3Qtc2FtcGxlcw=="> rocketmq-spring-boot-samples</span> 中则是基于 Spring 搭建的 RocketMQ 的范例项目，包含生产者与消费者 demo，可以进行参考学习。</p>
+<p><img data-src="00ec143cf8ed26fc1976f7b12d66bc0d.png" alt="拓展项目3"></p>
+<p>由于该项目未依赖父项目，可以单独将其拉下来运行，也可以将该 rocketmq-spring 项目完整拉取下来使用。</p>
+<h3 id="span-id单独拉取单独拉取span"><a class="markdownIt-Anchor" href="#span-id单独拉取单独拉取span">#</a> <span id="单独拉取">单独拉取</span></h3>
+<p>项目拉取下来后使用 IDE 打开，IDEA 会自动加载 rocketmq-spring-boot-starter 的依赖，此时可能会出现依赖版本问题。</p>
+<p><img data-src="1855df2c2cc50f3a51b2be2fbcec82b3.png" alt="下载样例项目"></p>
+<p>当前版本的 pom，此处给 rocketmq-spring-boot-starter 配置的是 2.2.3 快照版本，但是在 maven 仓库中已经修改 2.2.3 为正式的版本号，rocketmq-spring-boot-starter 源码版本也已经定义为 2.2.4-SNAPSHOT，此处应该是版本升级的疏漏。</p>
+<p><img data-src="c6b66903f7110483a2f6fbb565e1611f.png" alt="下载样例项目2"></p>
+<p>对应修改一下版本号即可，修改为 2.2.3 直接重新运行一下 maven 导入。</p>
+<p><img data-src="829c1285ceee1dc98d4b41a5f7df3182.png" alt="下载样例项目3"></p>
+<p>子项目均被解析为 maven 项目（项目图标右下角带蓝色小方格即表示已被解析为 maven 项目，且其中的文件结构不再是普通的文件夹结构，而是已包结构排列，并且特定的文件夹具有特定图标，如 java、resources、test 等），并且依赖项不报红，代表项目导入成功。</p>
+<p><img data-src="cc2e1fedcb6a16cd07d8f3765e39c30a.png" alt="下载样例项目4"></p>
+<h3 id="完整拉取"><a class="markdownIt-Anchor" href="#完整拉取">#</a> 完整拉取</h3>
+<p>项目拉取下来之后使用 IDE 打开，等待其安装依赖项，防止依赖项安装失败，或者找不到依赖项可以使用阿里的 maven 镜像。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>项目导入成功。</p>
+<p><img data-src="33ebac62954c73bc818a6b382c3fa99b.png" alt="下载样例项目5"></p>
+<p>编者此处 samples 并没有被解析为 maven，是由于在根目录的 pom.xml 中，该模块被默认注释掉了。</p>
+<p><img data-src="6131a66f3f3e5ef5034e7b983c52b9e4.png" alt="下载样例项目6"></p>
+<p>将 module 标签处的注释放开然后重新跑 maven 一遍，maven 就会去解析 rocketmq-spring-boot-samples 下的 pom.xml 文件。此时可能会遇到与上文<a href="#%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96"> 单独拉取 </a>时相同的情况，进入到 rocketmq-spring-boot-samples 下的 pom 中采用相同方式解决即可。</p>
+<h2 id="补充说明"><a class="markdownIt-Anchor" href="#补充说明">#</a> 补充说明</h2>
+<p>此处补充一些范例项目中出现的不常见的且不涉及 RocketMQ 逻辑的代码的解析，方便对范例项目进行理解。</p>
+<h3 id="commandlinerunner"><a class="markdownIt-Anchor" href="#commandlinerunner">#</a> CommandLineRunner</h3>
+<p>在生产者与消费者项目中都使用了 CommandLineRunner 接口。这里来探究以下该接口的效果。</p>
+<p>在启动 spring 应用时，会使用到如下的基本的 spring 启动代码 <code>SpringApplication.run(ProducerApplication.class, args)</code> ，进入到该方法中可以看到在经过多个默认的 run 方法后最终调用到了一个 run 方法中。</p>
+<p><img data-src="2a07379410e7944edce47ae2826160c1.png" alt="run"></p>
+<p>我们可以看到在该方法中 spring 进行了一系列环境的初始化操作，将 spring 环境运行起来。这部分的逻辑都不重要。</p>
+<p>在 try 代码段的末尾，我们可以看到其调用了一段 <code>callRunners(context, applicationArguments)</code>  方法，传入了 spring 容器对象以及通过启动参数 args 构造出来的 ApplicationArguments 参数对象。</p>
+<p>进入到该方法中可以看到如下方法体。</p>
+<p><img data-src="8b8970858a59e8a0e33e6f90dc0713f3.png" alt="run2"></p>
+<p>可以推出该方法的逻辑是将 ApplicationRunner.class 与 CommandLineRunner.class 构造出来的 Bean 添加到 runners 列表中，排序后依次将运行参数传入然后进行调用。</p>
+<p>简而言之，在启动 Spring 应用后，会在应用装配完毕时，运行 CommandLineRunner 与 ApplicationRunner 中的代码。并且该运行时机是要晚于 InitializingBean 的，能够确保所有 Bean 均已加载完毕。可以用来作为 Spring 应用启动后的初始化数据的方案，因为 bean 已装填完毕，可以正常使用 Spring 的功能。</p>
+<p>需要注意的是此处的代码是影响到 Spring 主线程的，如果出现异常会打断 Spring 应用的启动过程。</p>
+<p>在 demo 中的效果就是，对应的方法仅仅在启动时运行一遍，里面涉及到的就是一些演示代码。</p>
+<h2 id="理解范例项目"><a class="markdownIt-Anchor" href="#理解范例项目">#</a> 理解范例项目</h2>
+<h3 id="生产者producer"><a class="markdownIt-Anchor" href="#生产者producer">#</a> 生产者（Producer）</h3>
+<h4 id="extrocketmqtemplateconfiguration"><a class="markdownIt-Anchor" href="#extrocketmqtemplateconfiguration">#</a> @ExtRocketMQTemplateConfiguration</h4>
+<p>该类是一个注解类，其携带了 Spring 中的 @Component 类，因此被该注解修饰的类会被 Spring 解析为一个 bean 组件，可以直接通过 spring bean 的一些方式来使用。</p>
+<p>很容易就能看出，该注解是用来修饰 RocketMQTemplate 及其拓展类，并且主要修饰发送方，即生产者端的 RocketMQTemplate。该注解能够为 RocketMQTemplate 及其拓展类规定一些默认的运行参数，生产者 demo 中就使用了其中的 nameServer 参数用于指定目标 NameServer 地址，使用了 tlsEnable 用于指定是否开启 tls 加密，使用 instanceName 指定实例名称。</p>
+<h4 id="rocketmqtemplate"><a class="markdownIt-Anchor" href="#rocketmqtemplate">#</a> RocketMQTemplate</h4>
+<p>在生产者 demo 中，使用了该类中非常多种的发送方法，并且该类大多数方法都是用于生产者发送消息。因此将该类放到生产者部分讲解。需要注意的是对于每一类功能逻辑而言，应该单独拓展一个 RocketMQTemplate 子类，因为<a id="当使用事务消息时">当使用事务消息时</a>，事务监听器是直接与 RocketMQTemplate 类进行绑定的，因此为了防止事务状态紊乱出错，推荐每个功能模块单独拓展一个 RocketMQTemplate 子类，后续会进行详述。因为该类中的方法众多，为了节省篇幅且便于拓展理解，这里对其进行大概的分类解释，便于自行了解这些方法的含义。</p>
+<h5 id="常见参数"><a class="markdownIt-Anchor" href="#常见参数">#</a> 常见参数</h5>
+<ul>
+<li>
+<p>destination：用来定位当前参数需要发送到哪个 Topic，以及携带什么 Tag，标准格式为 <code>topicName:tags</code> （文档注释中此处为 tags，但是据查生产者是无法为消息指定多个 tag 的）。<br>
+例如：“test:tag1”，表示当前消息将会发送到名为 test 的 Topic 中，并且 tag 为 tag1。</p>
+</li>
+<li>
+<p>payload：消息载体，可以接收任何类对象，在发送前一般都会经过 MessageBuilder.withPayload (payload) 转化为 Message 对象。</p>
+</li>
+<li>
+<p>message/messages：一般是 Message 类对象，发送动作主要就是通过该类对象来进行，可以通过 MessageBuilder 获得</p>
+</li>
+<li>
+<p>timeout：发送超时时间，单位毫秒，当不指定时一般默认为 3 秒。</p>
+</li>
+<li>
+<p>delayLevel：延时级别，该参数不支持任意时间精度，仅支持特定的 level，例如定时 5s,10s,1m 等。其中 level=0 级表示不延时，level=1 表示 1 级延时，level=2 表示 2 级延时，以此类推。<br>
+延时级别的配置在 broker 配置（ROCKETMQ 根路径 /conf/broker.conf）中 <code>messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</code> 。时间单位支持：s、m、h、d，分别表示秒、分、时、天。</p>
+</li>
+<li>
+<p>delayTime：延时时间，可以详细指定延时时间，默认单位为毫秒。</p>
+</li>
+<li>
+<p>deliverTimeMills：交付时间，可以详细指定延时时间，默认单位为毫秒。</p>
+</li>
+<li>
+<p>mode：与 delayTime 或 deliverTimeMills 同时出现，接收 DelayMode 枚举对象。具有三种值，分别是 DELAY_SECONDS，DELAY_MILLISECONDS，DELIVER_TIME_MILLISECONDS。</p>
+<ul>
+<li>单独使用 deliverTimeMills 时，mode 默认为 DelayMode.DELIVER_TIME_MILLISECONDS</li>
+<li>单独使用 delayTime 时，默认 mode 为 DELAY_MILLISECONDS</li>
+</ul>
+<p>未查到二者的详细说明可能为新增 api，判断二者区别可能在于延时投递的方式不同。</p>
+</li>
+<li>
+<p>hashKey：用于为消息进行定位和排序。</p>
+</li>
+<li>
+<p>type：一般出现于同步消息时，用于规定返回消息的类型。</p>
+</li>
+<li>
+<p>sendCallback/rocketMQLocalRequestCallback：用于异步消息时的回调。</p>
+<ul>
+<li>sendCallback：为 SendCallback 对象，其中接收返回值时使用的是 SendResult 对象，内部以 byte 数组保存信息。</li>
+<li>rocketMQLocalRequestCallback：为 RocketMQLocalRequestCallback&lt;T&gt; 对象，返回值可以直接用泛型 T 接收，内部会自动转换成 T。</li>
+</ul>
+</li>
+</ul>
+<h5 id="同步与异步"><a class="markdownIt-Anchor" href="#同步与异步">#</a> 同步与异步</h5>
+<ul>
+<li>
+<p>带 sync 的方法：表示同步方法，调用该方法之后会阻塞当前线程，直达该方法成功完成、超时或抛错。<br>
+例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SendResult</span> <span class="variable">sendResult</span> <span class="operator">=</span> rocketMQTemplate.syncSend(springTopic, <span class="string">&quot;Hello, World!&quot;</span>);</span><br><span class="line">System.out.printf(<span class="string">&quot;syncSend1 to topic %s sendResult=%s %n&quot;</span>, springTopic, sendResult);</span><br></pre></td></tr></table></figure>
+<p>这里必须要等到 syncSend 返回了 SendResult 后才会来到下方的 printf。</p>
+</li>
+<li>
+<p>带 async 的方法：表示异步方法，其中需要定义对应的回调，即 SendCallback。调用该方法后并不会阻塞当前线程，当该方法处理成功或者失败是则会自行运行 SendCallback 中对应的代码块。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rocketMQTemplate.asyncSend(orderPaidTopic, <span class="keyword">new</span> <span class="title class_">OrderPaidEvent</span>(<span class="string">&quot;T_001&quot;</span>, <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;88.00&quot;</span>)), <span class="keyword">new</span> <span class="title class_">SendCallback</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onSuccess</span><span class="params">(SendResult var1)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;async onSucess SendResult=%s %n&quot;</span>, var1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onException</span><span class="params">(Throwable var1)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;async onException Throwable=%s %n&quot;</span>, var1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里该方法并没有返回值，该 async 方法会启用另外一个线程去发送消息，开始发送后放行主线程，由该线程完成剩下的接收并回调 SendCallback 操作。</p>
+</li>
+</ul>
+<h5 id="发送模式"><a class="markdownIt-Anchor" href="#发送模式">#</a> 发送模式</h5>
+<ul>
+<li>
+<p>send：普通的发送方法，发送一条普通消息并通过 SendResult 接收返回消息，其中的数据形式为序列化后的 byte 数组形式，不可直接使用。</p>
+</li>
+<li>
+<p>convertAndSend：来自 Spring 的默认实现 AbstractMessageSendingTemplate 提供的方法，该方法会调用配置好的 MessageConverter 为消息载体进行转化，转化成 Message 对象后再进行发送，效果上与 send 并无不同。</p>
+</li>
+<li>
+<p>sendAndReceive：发送并接收远端的响应，同步与异步方式均可用。该可以将远端的响应反序列化成指定类型的对象，同步方式下需要提供 Type 对象来表明返回值类型，而异步方式下则需要提供 <code>RocketMQLocalRequestCallback&lt;T&gt;</code>  对象用来异步回调，该对象回调时则是通过其所提供的泛型来确定返回值类型。</p>
+</li>
+<li>
+<p>oneWay：发送消息，但是不追踪其返回，也就无法判断是否发送成功，拥有较高的运行性能，但是通过该方式发送可能会出现消息丢失的情况。</p>
+</li>
+<li>
+<p>delay：发送延时消息，需要提供一个延时，其他与普通消息一致，基本逻辑同上方对<a href="#%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF"> 延时消息 </a>的表述一致。</p>
+</li>
+<li>
+<p>orderly：发送顺序消息，需要为消息提供一个 hashKey，用于对消息的排序，其他与普通消息一致，基本逻辑同上方对<a href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF"> 顺序消息 </a>的表述一致。</p>
+</li>
+</ul>
+<h5 id="发送事务消息"><a class="markdownIt-Anchor" href="#发送事务消息">#</a> 发送事务消息</h5>
+<p>sendMessageInTransaction 用于发送事务消息，在构造消息时，可以通过 <code>setHeader(RocketMQHeaders.TRANSACTION_ID, [事务id])</code>  的方式向 header 中设置事务 id 用作事务标识，后续也可以从 header 中取出来使用。</p>
+<h6 id="事务监听器"><a class="markdownIt-Anchor" href="#事务监听器">#</a> 事务监听器</h6>
+<p>在使用事务前，我们需要为事务实现一个事务监听器，节省篇幅，我们这里使用 demo 中较简单的监听器示例来讲解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RocketMQTransactionListener(rocketMQTemplateBeanName = &quot;extRocketMQTemplate&quot;)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ExtTransactionListenerImpl</span> <span class="keyword">implements</span> <span class="title class_">RocketMQLocalTransactionListener</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> RocketMQLocalTransactionState <span class="title function_">executeLocalTransaction</span><span class="params">(Message msg, Object arg)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;ExtTransactionListenerImpl executeLocalTransaction and return UNKNOWN. \n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> RocketMQLocalTransactionState.UNKNOWN;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> RocketMQLocalTransactionState <span class="title function_">checkLocalTransaction</span><span class="params">(Message msg)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;ExtTransactionListenerImpl checkLocalTransaction and return COMMIT. \n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> RocketMQLocalTransactionState.COMMIT;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现事务监听器后，需要通过 @RocketMQTransactionListener 注解将监听器与 rocketMQTemplate 的 bean 进行关联，参数 rocketMQTemplateBeanName 用来确定需要关联的 RocketMQTemplate 的 bean 的名称，其默认值为 rocketMQTemplate。其与 RocketMQTemplate 是一一对应的关系，这也就是为什么上文提到<a href="#%E5%BD%93%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%E6%97%B6">当使用事务消息时</a>，最好单独拓展一个 rocketMQTemplate。</p>
+<p>并且该监听器也会被注册为 bean，并通过 org.apache.rocketmq.spring.autoconfigure.RocketMQTransactionConfiguration 类中的以下方法将 bean 对象与对应的 rocketMQTemplate 的 bean 对象进行关联。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterSingletonsInstantiated</span><span class="params">()</span> &#123;</span><br><span class="line">    Map&lt;String, Object&gt; beans = <span class="built_in">this</span>.applicationContext.getBeansWithAnnotation(RocketMQTransactionListener.class)</span><br><span class="line">        .entrySet().stream().filter(entry -&gt; !ScopedProxyUtils.isScopedTarget(entry.getKey()))</span><br><span class="line">        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));</span><br><span class="line"></span><br><span class="line">    beans.forEach(<span class="built_in">this</span>::registerTransactionListener);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">registerTransactionListener</span><span class="params">(String beanName, Object bean)</span> &#123;</span><br><span class="line">    Class&lt;?&gt; clazz = AopProxyUtils.ultimateTargetClass(bean);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!RocketMQLocalTransactionListener.class.isAssignableFrom(bean.getClass())) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(clazz + <span class="string">&quot; is not instance of &quot;</span> + RocketMQLocalTransactionListener.class.getName());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">RocketMQTransactionListener</span> <span class="variable">annotation</span> <span class="operator">=</span> clazz.getAnnotation(RocketMQTransactionListener.class);</span><br><span class="line">    <span class="type">RocketMQTemplate</span> <span class="variable">rocketMQTemplate</span> <span class="operator">=</span> (RocketMQTemplate) applicationContext.getBean(annotation.rocketMQTemplateBeanName());</span><br><span class="line">    <span class="keyword">if</span> (((TransactionMQProducer) rocketMQTemplate.getProducer()).getTransactionListener() != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(annotation.rocketMQTemplateBeanName() + <span class="string">&quot; already exists RocketMQLocalTransactionListener&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ((TransactionMQProducer) rocketMQTemplate.getProducer()).setExecutorService(<span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(annotation.corePoolSize(), annotation.maximumPoolSize(),</span><br><span class="line">                                                                                                       annotation.keepAliveTime(), annotation.keepAliveTimeUnit(), <span class="keyword">new</span> <span class="title class_">LinkedBlockingDeque</span>&lt;&gt;(annotation.blockingQueueSize())));</span><br><span class="line">    ((TransactionMQProducer) rocketMQTemplate.getProducer()).setTransactionListener(RocketMQUtil.convert((RocketMQLocalTransactionListener) bean));</span><br><span class="line">    log.debug(<span class="string">&quot;RocketMQLocalTransactionListener &#123;&#125; register to &#123;&#125; success&quot;</span>, clazz.getName(), annotation.rocketMQTemplateBeanName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是说最终事务中使用到的监听器，是注入到 spring 容器中的监听器 bean，并不是新创建的，设计上需要注意。</p>
+<h6 id="监听器的用处"><a class="markdownIt-Anchor" href="#监听器的用处">#</a> 监听器的用处</h6>
+<p>在事务监听器中包含两个方法，分别是<a id="executeLocalTransaction"> <code>executeLocalTransaction</code> </a>和<a id="checkLocalTransaction"> <code>checkLocalTransaction</code> </a>。，从事务的运行逻辑顺序入手，来探究一下这些方法的作用。以下给出事务的运行逻辑。</p>
+<blockquote>
+<p>图片引用自文章<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pzaDIwNTAvYXJ0aWNsZS9kZXRhaWxzLzEyNDUxNzM1NQ=="> RocketMQ 事务消息机制_rocketmqtransactionlistener</span></p>
+</blockquote>
+<p><img data-src="c2eb61b0adcdc503d4314ecc070e2f25.png" alt="引用图片"></p>
+<ol>
+<li>在调用 Transaction 相关方法后，会先将消息发送出去，此时采用的是同步方式，即当前线程会被阻塞，直到获取到远端返回过来的发送结果。此时来到远端 broker 中的事务消息并不是一个可用消息，而是一个半消息，是无法被消费者消费的 **（此处对应图中第 1 步）**。</li>
+<li>根据发送结果的状态来进行，最终会提供一个 LocalTransactionState 来作为最终事务处理的依据：
+<ol>
+<li>当状态为 SEND_OK 时 **（此处对应图中第 2 步）<strong>，就会来到<a href="#executeLocalTransaction"> executeLocalTransaction</a> 方法将此前发送的消息传入作为参数传入，由其进行本地事务的后续处理，然后提供一个事务状态 RocketMQLocalTransactionState 枚举。其中包含三种值并最终与 LocalTransactionState 相对应</strong>（此处对应图中第 3 步）**。
+<ul>
+<li>COMMIT 对应 LocalTransactionState 的<a href="#%E6%8F%90%E4%BA%A4">提交</a>态</li>
+<li>ROLLBACK 对应 LocalTransactionState 的<a href="#%E5%9B%9E%E6%BB%9A">回滚</a>态</li>
+<li>UNKNOWN 对应 LocalTransactionState 的<a href="#%E6%9C%AA%E7%9F%A5">未知</a>态。</li>
+</ul>
+</li>
+<li>当状态为 FLUSH_DISK_TIMEOUT，FLUSH_SLAVE_TIMEOUT 或者 SLAVE_NOT_AVAILABLE 时，LocalTransactionState 将被置为<a href="#%E5%9B%9E%E6%BB%9A">回滚</a>态。</li>
+<li>其他情况下，状态默认为<a href="#%E6%9C%AA%E7%9F%A5">未知</a>态。</li>
+</ol>
+</li>
+<li>最后根据 LocalTransactionState 来对事务进行处理：
+<ul>
+<li><a id="提交">提交</a>，告知 Broker 将当前事务消息置为可用，可以提供给消费者消费 **（此处对应图中第 4 步 Commit）**。</li>
+<li><a id="回滚">回滚</a>，告知 Broker 回滚当前事务，删除对应的事务消息 **（此处对应图中第 4 步 Rollback）**。</li>
+<li><a id="未知">未知</a>，可能当前事务应故（网络断开，回传消息受阻等）未能获取到消息的发送状态，或者由 executeLocalTransaction 提供了 UNKNOWN 的状态，接下来等待固定的时间后，broker 发起对事务的回查请求回查事务状态 **（此处对应图中第 5 步）<strong>。<br>
+消费者此时正常响应后，会进入到事务监听器的<a href="#checkLocalTransaction"> <code>checkLocalTransaction</code> </a> 中来给出一个事务状态，判断事务接下来的处理方式</strong>（此处对应图中第 6 步）<strong>。最后发送给 broker 进行响应处理</strong>（此处对应图中第 7 步）**</li>
+</ul>
+</li>
+</ol>
+<p>可见监听器的主要用处，就是让开发者能够自行决定事务的提交和回滚，自定义实现消息的事务流程。发送事务消息的默认实现来自于 <code>org.apache.rocketmq.client.impl.producer.DefaultMQProducerImpl#sendMessageInTransaction</code>  方法，可以自行跟踪查看。</p>
+<h6 id="demo理解"><a class="markdownIt-Anchor" href="#demo理解">#</a> demo 理解</h6>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RocketMQTransactionListener(rocketMQTemplateBeanName = &quot;extRocketMQTemplate&quot;)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ExtTransactionListenerImpl</span> <span class="keyword">implements</span> <span class="title class_">RocketMQLocalTransactionListener</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> RocketMQLocalTransactionState <span class="title function_">executeLocalTransaction</span><span class="params">(Message msg, Object arg)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;ExtTransactionListenerImpl executeLocalTransaction and return UNKNOWN. \n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> RocketMQLocalTransactionState.UNKNOWN;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> RocketMQLocalTransactionState <span class="title function_">checkLocalTransaction</span><span class="params">(Message msg)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;ExtTransactionListenerImpl checkLocalTransaction and return COMMIT. \n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> RocketMQLocalTransactionState.COMMIT;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看 demo 中的监听器梳理逻辑，就不难看出，该监听器关联名称为 <code>extRocketMQTemplate</code>  的 bean 组件，当我们通过使用该组件的 <code>sendMessageInTransaction</code>  方法发送事务消息时。</p>
+<ol>
+<li>消息发送成功后首先进入到 <code>executeLocalTransaction</code>  方法中，此处返回 UNKNOWN，也就是此时 broker 并不能确定当前事务需要如何处理，因此 broker 仍然将消息置为半消息状态，保存消息但是该消息不能被访问。</li>
+<li>再一段时间后，broker 再次尝试回查事务状态，此时来到 <code>checkLocalTransaction</code>  方法，此处返回 COMMIT，表示可以提交消息了，于是 broker 将消息置为可用状态。</li>
+</ol>
+<h3 id="消费者consumer"><a class="markdownIt-Anchor" href="#消费者consumer">#</a> 消费者（Consumer）</h3>
+<p>对于消费者而言，消费消息具有两种模式，一种是 PUSH 模式，即当队列中存在消息，则 RocketMQ 服务端便将该消息 push 给对应消费该消息的消费者，即消费者被动消费消息，一种是 PULL 模式，即消费者通过 PULL 主动从 RocketMQ 服务端中获取未被消费的所有消息进行消费，即消费者主动消费。接下来讲解一下这两种模式的实现。</p>
+<h4 id="push模式"><a class="markdownIt-Anchor" href="#push模式">#</a> PUSH 模式</h4>
+<p>push 模式下比较简单，消费者被动消费消息，只需要实现对应的监听器即可，由 RocketMQ 自行管理推送的逻辑。</p>
+<h5 id="rocketmqmessagelistener"><a class="markdownIt-Anchor" href="#rocketmqmessagelistener">#</a> @RocketMQMessageListener</h5>
+<p>该类是一个注解类 ，用于添加到消费者监听器上，为该监听器指定一些对应的运行参数。例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RocketMQMessageListener(nameServer = &quot;$&#123;demo.rocketmq.myNameServer&#125;&quot;, topic = &quot;$&#123;demo.rocketmq.topic.user&#125;&quot;, consumerGroup = &quot;user_consumer&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>这里为监听器指定了 NameServer 地址，并且指定了对应订阅的 topic，同时也可以通过 selectorType（默认值为 SelectorType.TAG）与 selectorExpression 为监听器指定对应的 tag 等分类信息，consumerGroup 为消费者指定了对应的<a href="#Group">消费者组</a>。</p>
+<p>需要注意的是，该注解并不包含 Component 注解，因此不会将对应的监听器注册为 Spring bean 组件，需要自己另行注册或添加对应注解。</p>
+<h5 id="rocketmqlistener"><a class="markdownIt-Anchor" href="#rocketmqlistener">#</a> RocketMQListener</h5>
+<p>该类为一个接口，是作为消费者需要实现的监听器接口之一，其接口代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RocketMQListener</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(T message)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该接口接受一个泛型参数，该泛型参数用于指定接受到的消息类型，当接受到对应的消息时，对应的消息内容会被转换为 T 所指定的类型传入到参数 message 中。</p>
+<p>demo 样例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RocketMQMessageListener(nameServer = &quot;$&#123;demo.rocketmq.myNameServer&#125;&quot;, topic = &quot;$&#123;demo.rocketmq.topic.user&#125;&quot;, consumerGroup = &quot;user_consumer&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserConsumer</span> <span class="keyword">implements</span> <span class="title class_">RocketMQListener</span>&lt;User&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(User message)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;######## user_consumer received: %s ; age: %s ; name: %s \n&quot;</span>, message, message.getUserAge(), message.getUserName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该监听器会自动接收配置项 demo.rocketmq.topic.user 中的消息，当接收到消息时，会将消息中的二进制码部分反序列化为 User 对象作为 message 传入然后进行消费。</p>
+<h5 id="rocketmqreplylistener"><a class="markdownIt-Anchor" href="#rocketmqreplylistener">#</a> RocketMQReplyListener</h5>
+<p>该类为一个接口，是作为消费者需要实现的监听器接口之一，其接口代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RocketMQReplyListener</span>&lt;T, R&gt; &#123;</span><br><span class="line">    R <span class="title function_">onMessage</span><span class="params">(T message)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现该接口的监听器就支持对传入的消息回传进行对应的响应结果。该类接受的两个类型泛型 T、R 中，T 表示接受到的消息类型，效果同 RocketMQListener 中的 T；R 表示回传的响应数据的类型。</p>
+<p>demo 样例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RocketMQMessageListener(topic = &quot;$&#123;demo.rocketmq.objectRequestTopic&#125;&quot;, consumerGroup = &quot;$&#123;demo.rocketmq.objectRequestConsumer&#125;&quot;, selectorExpression = &quot;$&#123;demo.rocketmq.tag&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ObjectConsumerWithReplyUser</span> <span class="keyword">implements</span> <span class="title class_">RocketMQReplyListener</span>&lt;User, User&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">onMessage</span><span class="params">(User user)</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;------- ObjectConsumerWithReplyUser received: %s \n&quot;</span>, user);</span><br><span class="line">        <span class="type">User</span> <span class="variable">replyUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        replyUser.setUserAge((<span class="type">byte</span>) <span class="number">10</span>);</span><br><span class="line">        replyUser.setUserName(<span class="string">&quot;replyUserName&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> replyUser;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该监听器能够接收配置项 demo.rocketmq.objectRequestTopic 指定的 topic 中具有由配置项 demo.rocketmq.tag 指定的 tag 的消息，当接收到消息时，会将消息中的二进制码部分反序列化为 User 对象作为 message 传入然后进行消费，完毕后构造了一个新的 User 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者。</p>
+<h4 id="pull模式"><a class="markdownIt-Anchor" href="#pull模式">#</a> PULL 模式</h4>
+<p>PULL 模式需要使用到此前提到的 RocketMQTemplate 类中的 receive 方法。</p>
+<h5 id="extrocketmqconsumerconfiguration"><a class="markdownIt-Anchor" href="#extrocketmqconsumerconfiguration">#</a> @ExtRocketMQConsumerConfiguration</h5>
+<p>该类是一个注解类，同 @ExtRocketMQTemplateConfiguration 注解类似，作用于 RocketMQTemplate 子类上，不过主要用于提供给消费者主动拉取消息。例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExtRocketMQConsumerConfiguration(topic = &quot;$&#123;demo.rocketmq.topic&#125;&quot;, group = &quot;string_consumer&quot;, tlsEnable = &quot;$&#123;demo.ext.consumer.tlsEnable&#125;&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>这里为 RocketMQTemplate 指定了拉取的 topic，并指定了当前的消费者组，指定了是否开启 tls 加密。<br>
+ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者。</p>
+<h4 id="pull模式-2"><a class="markdownIt-Anchor" href="#pull模式-2">#</a> PULL 模式</h4>
+<p>PULL 模式需要使用到此前提到的 RocketMQTemplate 类中的 receive 方法。</p>
+<h5 id="extrocketmqconsumerconfiguration-2"><a class="markdownIt-Anchor" href="#extrocketmqconsumerconfiguration-2">#</a> @ExtRocketMQConsumerConfiguration</h5>
+<p>该类是一个注解类，同 @ExtRocketMQTemplateConfiguration 注解类似，作用于 RocketMQTemplate 子类上，不过主要用于提供给消费者主动拉取消息。例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExtRocketMQConsumerConfiguration(topic = &quot;$&#123;demo.rocketmq.topic&#125;&quot;, group = &quot;string_consumer&quot;, tlsEnable = &quot;$&#123;demo.ext.consumer.tlsEnable&#125;&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>这里为 RocketMQTemplate 指定了拉取的 topic，并指定了当前的消费者组，指定了是否开启 tls 加密。</p>
+
+      <div class="tags">
+          <a href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
+          <a href="/tags/MQ/" rel="tag"><i class="ic i-tag"></i> MQ</a>
+          <a href="/tags/RocketMQ/" rel="tag"><i class="ic i-tag"></i> RocketMQ</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2024-09-10 09:52:40" itemprop="dateModified" datetime="2024-09-10T09:52:40+08:00">2024-09-10</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/images/wechatpay.png" alt="Joker 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/images/alipay.png" alt="Joker 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/images/paypal.png" alt="Joker 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Joker <i class="ic i-at"><em>@</em></i>Joker
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">http://example.com/2024/09/09/【RocketMQ】SpringBoot整合与使用RocketMQ/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" itemprop="url" rel="prev" data-background-image="&#x2F;2024&#x2F;09&#x2F;09&#x2F;%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89&#x2F;c687d3c664944954288c48a951b7aa5e.png" title="【RocketMQ】安装与部署（Windows）">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> RocketMQ</span>
+  <h3>【RocketMQ】安装与部署（Windows）</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" itemprop="url" rel="next" data-background-image="&#x2F;2024&#x2F;09&#x2F;10&#x2F;%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81&#x2F;378a9d360acf6a6c560d3c2e9f68be60.png" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 分布式锁</span>
+  <h3>【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#spring%E5%BC%95%E5%85%A5rocketmq"><span class="toc-number">1.</span> <span class="toc-text"> Spring 引入 RocketMQ</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0springrocketmq%E8%8C%83%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text"> 学习 SpringRocketMQ 范例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text"> 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 专有名词</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC"><span class="toc-number">2.1.1.1.</span> <span class="toc-text"> 基本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%B1%9E%E6%80%A7%E7%9B%B8%E5%85%B3"><span class="toc-number">2.1.1.2.</span> <span class="toc-text"> 消息属性相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E9%80%BB%E8%BE%91%E7%9B%B8%E5%85%B3"><span class="toc-number">2.1.1.3.</span> <span class="toc-text"> 运行逻辑相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%94%B6%E5%8F%91%E7%9B%B8%E5%85%B3"><span class="toc-number">2.1.1.4.</span> <span class="toc-text"> 消息收发相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E7%9B%B8%E5%85%B3"><span class="toc-number">2.1.1.5.</span> <span class="toc-text"> 概念相关</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%B5%81%E8%BD%AC%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 消息流转模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.2.</span> <span class="toc-text"> 获取范例项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#span-id%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96span"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 单独拉取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%8B%89%E5%8F%96"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 完整拉取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-number">2.3.</span> <span class="toc-text"> 补充说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#commandlinerunner"><span class="toc-number">2.3.1.</span> <span class="toc-text"> CommandLineRunner</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%A7%A3%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.4.</span> <span class="toc-text"> 理解范例项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85producer"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 生产者（Producer）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#extrocketmqtemplateconfiguration"><span class="toc-number">2.4.1.1.</span> <span class="toc-text"> @ExtRocketMQTemplateConfiguration</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rocketmqtemplate"><span class="toc-number">2.4.1.2.</span> <span class="toc-text"> RocketMQTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0"><span class="toc-number">2.4.1.2.1.</span> <span class="toc-text"> 常见参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5"><span class="toc-number">2.4.1.2.2.</span> <span class="toc-text"> 同步与异步</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.1.2.3.</span> <span class="toc-text"> 发送模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-number">2.4.1.2.4.</span> <span class="toc-text"> 发送事务消息</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9B%91%E5%90%AC%E5%99%A8"><span class="toc-number">2.4.1.2.4.1.</span> <span class="toc-text"> 事务监听器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E5%99%A8%E7%9A%84%E7%94%A8%E5%A4%84"><span class="toc-number">2.4.1.2.4.2.</span> <span class="toc-text"> 监听器的用处</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#demo%E7%90%86%E8%A7%A3"><span class="toc-number">2.4.1.2.4.3.</span> <span class="toc-text"> demo 理解</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85consumer"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 消费者（Consumer）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#push%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.2.1.</span> <span class="toc-text"> PUSH 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#rocketmqmessagelistener"><span class="toc-number">2.4.2.1.1.</span> <span class="toc-text"> @RocketMQMessageListener</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#rocketmqlistener"><span class="toc-number">2.4.2.1.2.</span> <span class="toc-text"> RocketMQListener</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#rocketmqreplylistener"><span class="toc-number">2.4.2.1.3.</span> <span class="toc-text"> RocketMQReplyListener</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pull%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.2.2.</span> <span class="toc-text"> PULL 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#extrocketmqconsumerconfiguration"><span class="toc-number">2.4.2.2.1.</span> <span class="toc-text"> @ExtRocketMQConsumerConfiguration</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pull%E6%A8%A1%E5%BC%8F-2"><span class="toc-number">2.4.2.3.</span> <span class="toc-text"> PULL 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#extrocketmqconsumerconfiguration-2"><span class="toc-number">2.4.2.3.1.</span> <span class="toc-text"> @ExtRocketMQConsumerConfiguration</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" rel="bookmark" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></li><li class="active"><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" rel="bookmark" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Joker"
+      data-src="/images/avatar.png">
+  <p class="name" itemprop="name">Joker</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">3</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">2</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">7</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/categories/" rel="section"><i class="ic i-th"></i>分类</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+</div>
+
+    <span><a href="/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joker @ Joker</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2024/09/09/【RocketMQ】SpringBoot整合与使用RocketMQ/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
