@@ -372,7 +372,7 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;消息流转模型&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#消息流转模型&#34;&gt;#&lt;/a&gt; 消息流转模型&lt;/h3&gt;
 &lt;p&gt;消息队列 RocketMQ 支持发布和订阅模型，消息生产者应用创建 Topic 并将消息发送到 Topic。消费者应用创建对 Topic 的订阅以便从其接收消息。通信可以是一对多（扇出）、多对一（扇入）和多对多。具体通信如下图所示。&lt;/p&gt;
-&lt;img data-src=&#34;/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8c2f59ab52f03f20d7a859e7c8bb82b4.png&#34; class=&#34;&#34; title=&#34;消息流转模型&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8c2f59ab52f03f20d7a859e7c8bb82b4.png&#34; class=&#34;&#34; title=&#34;消息流转模型&#34;&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;生产者集群&lt;/strong&gt;：用来表示发送消息应用，一个生产者集群下包含多个生产者实例，可以是多台机器，也可以是一台机器的多个进程，或者一个进程的多个生产者对象。&lt;br&gt;
 一个生产者集群可以发送多个 Topic 消息。发送分布式事务消息时，如果生产者中途意外宕机，消息队列 RocketMQ 服务端会主动回调生产者集群的任意一台机器来确认事务状态。&lt;/li&gt;

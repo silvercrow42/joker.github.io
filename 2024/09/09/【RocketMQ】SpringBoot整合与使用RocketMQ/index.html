@@ -284,7 +284,7 @@ Joker = Joker</title>
 </ul>
 <h3 id="消息流转模型"><a class="markdownIt-Anchor" href="#消息流转模型">#</a> 消息流转模型</h3>
 <p>消息队列 RocketMQ 支持发布和订阅模型，消息生产者应用创建 Topic 并将消息发送到 Topic。消费者应用创建对 Topic 的订阅以便从其接收消息。通信可以是一对多（扇出）、多对一（扇入）和多对多。具体通信如下图所示。</p>
-<img data-src="/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8c2f59ab52f03f20d7a859e7c8bb82b4.png" class="" title="消息流转模型">
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8c2f59ab52f03f20d7a859e7c8bb82b4.png" class="" title="消息流转模型">
 <ul>
 <li><strong>生产者集群</strong>：用来表示发送消息应用，一个生产者集群下包含多个生产者实例，可以是多台机器，也可以是一台机器的多个进程，或者一个进程的多个生产者对象。<br>
 一个生产者集群可以发送多个 Topic 消息。发送分布式事务消息时，如果生产者中途意外宕机，消息队列 RocketMQ 服务端会主动回调生产者集群的任意一台机器来确认事务状态。</li>
@@ -712,7 +712,7 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
   </li>
 
       
@@ -732,7 +732,7 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
   </li>
 
   </ul>
