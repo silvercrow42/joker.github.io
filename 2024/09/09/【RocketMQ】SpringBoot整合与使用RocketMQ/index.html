@@ -146,84 +146,7 @@ Joker = Joker</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <p><ul class="markdownIt-TOC">
-<li><a href="#spring%E5%BC%95%E5%85%A5rocketmq">Spring引入RocketMQ</a></li>
-<li><a href="#%E5%AD%A6%E4%B9%A0springrocketmq%E8%8C%83%E4%BE%8B">学习SpringRocketMQ范例</a>
-<ul>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">基本概念</a>
-<ul>
-<li><a href="#%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D">专有名词</a>
-<ul>
-<li><a href="#%E5%9F%BA%E6%9C%AC">基本</a></li>
-<li><a href="#%E6%B6%88%E6%81%AF%E5%B1%9E%E6%80%A7%E7%9B%B8%E5%85%B3">消息属性相关</a></li>
-<li><a href="#%E8%BF%90%E8%A1%8C%E9%80%BB%E8%BE%91%E7%9B%B8%E5%85%B3">运行逻辑相关</a></li>
-<li><a href="#%E6%B6%88%E6%81%AF%E6%94%B6%E5%8F%91%E7%9B%B8%E5%85%B3">消息收发相关</a></li>
-<li><a href="#%E6%A6%82%E5%BF%B5%E7%9B%B8%E5%85%B3">概念相关</a></li>
-</ul>
-</li>
-<li><a href="#%E6%B6%88%E6%81%AF%E6%B5%81%E8%BD%AC%E6%A8%A1%E5%9E%8B">消息流转模型</a></li>
-</ul>
-</li>
-<li><a href="#%E8%8E%B7%E5%8F%96%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE">获取范例项目</a>
-<ul>
-<li><a href="#span-id%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96span"><span id="单独拉取">单独拉取</span></a></li>
-<li><a href="#%E5%AE%8C%E6%95%B4%E6%8B%89%E5%8F%96">完整拉取</a></li>
-</ul>
-</li>
-<li><a href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E">补充说明</a>
-<ul>
-<li><a href="#commandlinerunner">CommandLineRunner</a></li>
-</ul>
-</li>
-<li><a href="#%E7%90%86%E8%A7%A3%E8%8C%83%E4%BE%8B%E9%A1%B9%E7%9B%AE">理解范例项目</a>
-<ul>
-<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85producer">生产者（Producer）</a>
-<ul>
-<li><a href="#extrocketmqtemplateconfiguration">@ExtRocketMQTemplateConfiguration</a></li>
-<li><a href="#rocketmqtemplate">RocketMQTemplate</a>
-<ul>
-<li><a href="#%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0">常见参数</a></li>
-<li><a href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">同步与异步</a></li>
-<li><a href="#%E5%8F%91%E9%80%81%E6%A8%A1%E5%BC%8F">发送模式</a></li>
-<li><a href="#%E5%8F%91%E9%80%81%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF">发送事务消息</a>
-<ul>
-<li><a href="#%E4%BA%8B%E5%8A%A1%E7%9B%91%E5%90%AC%E5%99%A8">事务监听器</a></li>
-<li><a href="#%E7%9B%91%E5%90%AC%E5%99%A8%E7%9A%84%E7%94%A8%E5%A4%84">监听器的用处</a></li>
-<li><a href="#demo%E7%90%86%E8%A7%A3">demo理解</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E6%B6%88%E8%B4%B9%E8%80%85consumer">消费者（Consumer）</a>
-<ul>
-<li><a href="#push%E6%A8%A1%E5%BC%8F">PUSH模式</a>
-<ul>
-<li><a href="#rocketmqmessagelistener">@RocketMQMessageListener</a></li>
-<li><a href="#rocketmqlistener">RocketMQListener</a></li>
-<li><a href="#rocketmqreplylistener">RocketMQReplyListener</a></li>
-</ul>
-</li>
-<li><a href="#pull%E6%A8%A1%E5%BC%8F">PULL模式</a>
-<ul>
-<li><a href="#extrocketmqconsumerconfiguration">@ExtRocketMQConsumerConfiguration</a></li>
-</ul>
-</li>
-<li><a href="#pull%E6%A8%A1%E5%BC%8F-2">PULL模式</a>
-<ul>
-<li><a href="#extrocketmqconsumerconfiguration-2">@ExtRocketMQConsumerConfiguration</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-(【RocketMQ】SpringBoot 整合与使用 RocketMQ（Windows）)</p>
-<p>由于是开发相关的文档，因此默认读者已经具备有 IDE，编者使用的是 IDEA 2022.1.3 以该版本作为演示基础。</p>
+    <p>由于是开发相关的文档，因此默认读者已经具备有 IDE，编者使用的是 IDEA 2022.1.3 以该版本作为演示基础。</p>
 <h1 id="spring引入rocketmq"><a class="markdownIt-Anchor" href="#spring引入rocketmq">#</a> Spring 引入 RocketMQ</h1>
 <p>在适配 Spring 生态方面，RocketMQ 由于本身就是 Java 语言开发并且开源，拥有 Spring 开发基础就能够参照源码进行调试，并且其本身也提供了可直接用于 SpringBoot 整合的父项目，pom.xml 中通过如下配置即可引入该父项目。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -519,7 +442,7 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-10 09:52:40" itemprop="dateModified" datetime="2024-09-10T09:52:40+08:00">2024-09-10</time>
+    <time title="修改时间：2024-09-21 11:37:04" itemprop="dateModified" datetime="2024-09-21T11:37:04+08:00">2024-09-21</time>
   </span>
 </div>
 
@@ -719,16 +642,6 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
@@ -739,10 +652,10 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
   </li>
 
       
@@ -753,6 +666,16 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
 </div>
 
     <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
   </li>
 
   </ul>

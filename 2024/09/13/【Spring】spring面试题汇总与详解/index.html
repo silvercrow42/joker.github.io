@@ -146,91 +146,7 @@ Joker = Joker</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <p><ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#spring%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">Spring的基本概念</a>
-<ul>
-<li><a href="#1-spring-%E6%98%AF%E4%BB%80%E4%B9%88">1、Spring 是什么？</a></li>
-<li><a href="#2-spring-%E5%B8%A6%E6%9D%A5%E5%93%AA%E4%BA%9B%E5%A5%BD%E5%A4%84">2、Spring 带来哪些好处？</a></li>
-<li><a href="#3-%E8%AF%B4%E8%AF%B4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%A8%A1%E5%9D%97">3、说说 Spring 有哪些模块？</a></li>
-<li><a href="#4-spring-%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">4、Spring 中使用了哪些设计模式？</a></li>
-<li><a href="#5-spring-%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E4%BA%8B%E4%BB%B6">5、Spring 中有哪些不同类型事件？</a></li>
-</ul>
-</li>
-<li><a href="#spring-ioc">Spring IOC</a>
-<ul>
-<li><a href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-ioc">1、什么是 IOC？</a></li>
-<li><a href="#2-ioc-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%88%96%E5%A5%BD%E5%A4%84">2、IOC 的作用或好处？</a></li>
-<li><a href="#3-ioc-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E9%87%8C">3、IOC 的实现原里？</a></li>
-<li><a href="#4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%B9%E5%99%A8%E7%B1%BB">4、Spring 有哪些容器类？</a></li>
-<li><a href="#5-beanfactory-%E5%92%8C-applicationcontext-%E7%9A%84%E5%8C%BA%E5%88%AB">5、BeanFactory 和 ApplicationContext 的区别？</a></li>
-<li><a href="#6-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E4%BB%A5%E5%8F%8A%E5%8C%BA%E5%88%AB">6、有哪些注入方式以及区别？</a>
-<ul>
-<li><a href="#%E6%9E%84%E9%80%A0%E5%99%A8%E6%B3%A8%E5%85%A5">构造器注入</a></li>
-<li><a href="#%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5">属性注入</a></li>
-<li><a href="#%E5%AD%97%E6%AE%B5%E6%B3%A8%E5%85%A5">字段注入</a></li>
-<li><a href="#%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E4%B8%8A%E7%9A%84%E8%A7%84%E7%BA%A6">一些使用上的规约</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#spring-bean">Spring Bean</a>
-<ul>
-<li><a href="#1-spring-bean-%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%9C%E7%94%A8%E5%9F%9F">1、Spring Bean 有哪些作用域？</a>
-<ul>
-<li><a href="#spring-bean-%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F">Spring Bean 作用域配置方式</a></li>
-</ul>
-</li>
-<li><a href="#2-spring-%E7%9A%84%E5%8D%95%E4%BE%8B%E6%98%AF%E5%90%A6%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8">2、Spring 的单例是否线程安全？</a></li>
-<li><a href="#3-spring-bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">3、Spring Bean 的生命周期？</a></li>
-</ul>
-</li>
-<li><a href="#spring-aop">Spring AOP</a>
-<ul>
-<li><a href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-aop-%E4%BB%A5%E5%8F%8A%E4%BD%9C%E7%94%A8">1、什么是 AOP 以及作用？</a></li>
-<li><a href="#2-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">2、有哪些应用场景？</a></li>
-<li><a href="#3-%E5%88%87%E9%9D%A2-%E5%88%87%E7%82%B9-%E8%BF%9E%E6%8E%A5%E7%82%B9-%E9%80%9A%E7%9F%A5%E4%BB%A5%E5%8F%8A%E5%9B%9B%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB">3、切面、切点、连接点、通知以及四者的关系？</a>
-<ul>
-<li><a href="#1%E8%BF%9E%E6%8E%A5%E7%82%B9-joinpoint">1）连接点 (Joinpoint)</a>
-<ul>
-<li><a href="#%E6%A6%82%E5%BF%B5">概念</a></li>
-<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
-</ul>
-</li>
-<li><a href="#2%E5%88%87%E7%82%B9-pointcut">2）切点 (Pointcut)</a>
-<ul>
-<li><a href="#%E6%A6%82%E5%BF%B5-2">概念</a></li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-2">示例</a></li>
-</ul>
-</li>
-<li><a href="#%E9%80%9A%E7%9F%A5-advice">通知 (Advice)</a>
-<ul>
-<li><a href="#%E6%A6%82%E5%BF%B5-3">概念</a></li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
-</ul>
-</li>
-<li><a href="#%E5%88%87%E9%9D%A2-aspect">切面 (Aspect)</a>
-<ul>
-<li><a href="#%E6%A6%82%E5%BF%B5-4">概念</a></li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-4">示例</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#4-aop-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">4、AOP 的实现原理？</a>
-<ul>
-<li><a href="#jdk-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86">JDK 动态代理</a></li>
-<li><a href="#cglib">CGlib</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-(【Spring】spring 面试题汇总与详解)</p>
-<h2 id="spring的基本概念"><a class="markdownIt-Anchor" href="#spring的基本概念">#</a> Spring 的基本概念</h2>
+    <h2 id="spring的基本概念"><a class="markdownIt-Anchor" href="#spring的基本概念">#</a> Spring 的基本概念</h2>
 <h3 id="1-spring-是什么"><a class="markdownIt-Anchor" href="#1-spring-是什么">#</a> 1、Spring 是什么？</h3>
 <p>Spring 是一个轻量级 Java 开发框架，最早有 Rod Johnson 创建，目的是为了解决企业级应用开发的业务逻辑层和其他各层的耦合问题。它是一个分层的<br>
  JavaSE/JavaEE full-stack（一站式）轻量级开源框架，为开发 Java 应用程序提供全面的基础架构支持。Spring 负责基础架构，因此 Java<br>
@@ -337,7 +253,7 @@ Joker = Joker</title>
  DI（Dependency Injection，依赖注入）来实现的。</p>
 <h3 id="2-ioc-的作用或好处"><a class="markdownIt-Anchor" href="#2-ioc-的作用或好处">#</a> 2、IOC 的作用或好处？</h3>
 <p>实现对象间的解耦，同时降低应用开发的代码量和复杂度，使开发人员更专注业务。</p>
-<h3 id="3-ioc-的实现原里"><a class="markdownIt-Anchor" href="#3-ioc-的实现原里">#</a> 3、IOC 的实现原里？</h3>
+<h3 id="3-ioc-的实现原理"><a class="markdownIt-Anchor" href="#3-ioc-的实现原理">#</a> 3、IOC 的实现原理？</h3>
 <p>Spring 的 IOC 是基于工厂设计模式在加上反射实现。</p>
 <h3 id="4-spring-有哪些容器类"><a class="markdownIt-Anchor" href="#4-spring-有哪些容器类">#</a> 4、Spring 有哪些容器类？</h3>
 <ul>
@@ -693,7 +609,7 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-21 10:05:34" itemprop="dateModified" datetime="2024-09-21T10:05:34+08:00">2024-09-21</time>
+    <time title="修改时间：2024-09-21 11:38:05" itemprop="dateModified" datetime="2024-09-21T11:38:05+08:00">2024-09-21</time>
   </span>
 </div>
 
@@ -758,7 +674,7 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
     <div class="item right">
       
 
-  <a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;api.boxmoe.com&#x2F;random.php?size&#x3D;large?427904" title="【Redis】Redis面试题汇总与详解">
+  <a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;api.boxmoe.com&#x2F;random.php?size&#x3D;large?872157" title="【Redis】Redis面试题汇总与详解">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> Redis</span>
   <h3>【Redis】Redis面试题汇总与详解</h3>
@@ -780,7 +696,7 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> Spring 的基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> 1、Spring 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-spring-%E5%B8%A6%E6%9D%A5%E5%93%AA%E4%BA%9B%E5%A5%BD%E5%A4%84"><span class="toc-number">1.2.</span> <span class="toc-text"> 2、Spring 带来哪些好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AF%B4%E8%AF%B4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%A8%A1%E5%9D%97"><span class="toc-number">1.3.</span> <span class="toc-text"> 3、说说 Spring 有哪些模块？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-spring-%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text"> 4、Spring 中使用了哪些设计模式？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-spring-%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.5.</span> <span class="toc-text"> 5、Spring 中有哪些不同类型事件？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-ioc"><span class="toc-number">2.</span> <span class="toc-text"> Spring IOC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-ioc"><span class="toc-number">2.1.</span> <span class="toc-text"> 1、什么是 IOC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ioc-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%88%96%E5%A5%BD%E5%A4%84"><span class="toc-number">2.2.</span> <span class="toc-text"> 2、IOC 的作用或好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ioc-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E9%87%8C"><span class="toc-number">2.3.</span> <span class="toc-text"> 3、IOC 的实现原里？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%B9%E5%99%A8%E7%B1%BB"><span class="toc-number">2.4.</span> <span class="toc-text"> 4、Spring 有哪些容器类？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-beanfactory-%E5%92%8C-applicationcontext-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.5.</span> <span class="toc-text"> 5、BeanFactory 和 ApplicationContext 的区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E4%BB%A5%E5%8F%8A%E5%8C%BA%E5%88%AB"><span class="toc-number">2.6.</span> <span class="toc-text"> 6、有哪些注入方式以及区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.1.</span> <span class="toc-text"> 构造器注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.2.</span> <span class="toc-text"> 属性注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.3.</span> <span class="toc-text"> 字段注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E4%B8%8A%E7%9A%84%E8%A7%84%E7%BA%A6"><span class="toc-number">2.6.4.</span> <span class="toc-text"> 一些使用上的规约</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-bean"><span class="toc-number">3.</span> <span class="toc-text"> Spring Bean</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-bean-%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">3.1.</span> <span class="toc-text"> 1、Spring Bean 有哪些作用域？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#spring-bean-%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">3.1.1.</span> <span class="toc-text"> Spring Bean 作用域配置方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-spring-%E7%9A%84%E5%8D%95%E4%BE%8B%E6%98%AF%E5%90%A6%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">3.2.</span> <span class="toc-text"> 2、Spring 的单例是否线程安全？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-spring-bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">3.3.</span> <span class="toc-text"> 3、Spring Bean 的生命周期？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-aop"><span class="toc-number">4.</span> <span class="toc-text"> Spring AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-aop-%E4%BB%A5%E5%8F%8A%E4%BD%9C%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text"> 1、什么是 AOP 以及作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.2.</span> <span class="toc-text"> 2、有哪些应用场景？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%87%E9%9D%A2-%E5%88%87%E7%82%B9-%E8%BF%9E%E6%8E%A5%E7%82%B9-%E9%80%9A%E7%9F%A5%E4%BB%A5%E5%8F%8A%E5%9B%9B%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">4.3.</span> <span class="toc-text"> 3、切面、切点、连接点、通知以及四者的关系？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E8%BF%9E%E6%8E%A5%E7%82%B9-joinpoint"><span class="toc-number">4.3.1.</span> <span class="toc-text"> 1）连接点 (Joinpoint)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">4.3.1.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.1.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E5%88%87%E7%82%B9-pointcut"><span class="toc-number">4.3.2.</span> <span class="toc-text"> 2）切点 (Pointcut)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="toc-number">4.3.2.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="toc-number">4.3.2.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E7%9F%A5-advice"><span class="toc-number">4.3.3.</span> <span class="toc-text"> 通知 (Advice)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-3"><span class="toc-number">4.3.3.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-3"><span class="toc-number">4.3.3.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E9%9D%A2-aspect"><span class="toc-number">4.3.4.</span> <span class="toc-text"> 切面 (Aspect)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-4"><span class="toc-number">4.3.4.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-4"><span class="toc-number">4.3.4.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-aop-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.4.</span> <span class="toc-text"> 4、AOP 的实现原理？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#jdk-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">4.4.1.</span> <span class="toc-text"> JDK 动态代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cglib"><span class="toc-number">4.4.2.</span> <span class="toc-text"> CGlib</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> Spring 的基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> 1、Spring 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-spring-%E5%B8%A6%E6%9D%A5%E5%93%AA%E4%BA%9B%E5%A5%BD%E5%A4%84"><span class="toc-number">1.2.</span> <span class="toc-text"> 2、Spring 带来哪些好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AF%B4%E8%AF%B4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%A8%A1%E5%9D%97"><span class="toc-number">1.3.</span> <span class="toc-text"> 3、说说 Spring 有哪些模块？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-spring-%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text"> 4、Spring 中使用了哪些设计模式？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-spring-%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.5.</span> <span class="toc-text"> 5、Spring 中有哪些不同类型事件？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-ioc"><span class="toc-number">2.</span> <span class="toc-text"> Spring IOC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-ioc"><span class="toc-number">2.1.</span> <span class="toc-text"> 1、什么是 IOC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ioc-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%88%96%E5%A5%BD%E5%A4%84"><span class="toc-number">2.2.</span> <span class="toc-text"> 2、IOC 的作用或好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ioc-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text"> 3、IOC 的实现原理？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-spring-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%B9%E5%99%A8%E7%B1%BB"><span class="toc-number">2.4.</span> <span class="toc-text"> 4、Spring 有哪些容器类？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-beanfactory-%E5%92%8C-applicationcontext-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.5.</span> <span class="toc-text"> 5、BeanFactory 和 ApplicationContext 的区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E4%BB%A5%E5%8F%8A%E5%8C%BA%E5%88%AB"><span class="toc-number">2.6.</span> <span class="toc-text"> 6、有哪些注入方式以及区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.1.</span> <span class="toc-text"> 构造器注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.2.</span> <span class="toc-text"> 属性注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E6%B3%A8%E5%85%A5"><span class="toc-number">2.6.3.</span> <span class="toc-text"> 字段注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E4%B8%8A%E7%9A%84%E8%A7%84%E7%BA%A6"><span class="toc-number">2.6.4.</span> <span class="toc-text"> 一些使用上的规约</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-bean"><span class="toc-number">3.</span> <span class="toc-text"> Spring Bean</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-bean-%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">3.1.</span> <span class="toc-text"> 1、Spring Bean 有哪些作用域？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#spring-bean-%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">3.1.1.</span> <span class="toc-text"> Spring Bean 作用域配置方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-spring-%E7%9A%84%E5%8D%95%E4%BE%8B%E6%98%AF%E5%90%A6%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">3.2.</span> <span class="toc-text"> 2、Spring 的单例是否线程安全？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-spring-bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">3.3.</span> <span class="toc-text"> 3、Spring Bean 的生命周期？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-aop"><span class="toc-number">4.</span> <span class="toc-text"> Spring AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-aop-%E4%BB%A5%E5%8F%8A%E4%BD%9C%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text"> 1、什么是 AOP 以及作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.2.</span> <span class="toc-text"> 2、有哪些应用场景？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%87%E9%9D%A2-%E5%88%87%E7%82%B9-%E8%BF%9E%E6%8E%A5%E7%82%B9-%E9%80%9A%E7%9F%A5%E4%BB%A5%E5%8F%8A%E5%9B%9B%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">4.3.</span> <span class="toc-text"> 3、切面、切点、连接点、通知以及四者的关系？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E8%BF%9E%E6%8E%A5%E7%82%B9-joinpoint"><span class="toc-number">4.3.1.</span> <span class="toc-text"> 1）连接点 (Joinpoint)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">4.3.1.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.1.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E5%88%87%E7%82%B9-pointcut"><span class="toc-number">4.3.2.</span> <span class="toc-text"> 2）切点 (Pointcut)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="toc-number">4.3.2.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="toc-number">4.3.2.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E7%9F%A5-advice"><span class="toc-number">4.3.3.</span> <span class="toc-text"> 通知 (Advice)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-3"><span class="toc-number">4.3.3.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-3"><span class="toc-number">4.3.3.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E9%9D%A2-aspect"><span class="toc-number">4.3.4.</span> <span class="toc-text"> 切面 (Aspect)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-4"><span class="toc-number">4.3.4.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-4"><span class="toc-number">4.3.4.2.</span> <span class="toc-text"> 示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-aop-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.4.</span> <span class="toc-text"> 4、AOP 的实现原理？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#jdk-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">4.4.1.</span> <span class="toc-text"> JDK 动态代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cglib"><span class="toc-number">4.4.2.</span> <span class="toc-text"> CGlib</span></a></li></ol></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -903,6 +819,16 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
   <li class="item">
     
 <div class="breadcrumb">
+<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
@@ -917,16 +843,6 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
 </div>
 
     <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
   </li>
 
   </ul>
