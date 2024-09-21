@@ -11,14 +11,14 @@
     <category term="Redis" />
     <category term="MQ" />
     <category term="RocketMQ" />
-    <category term="java" />
-    <category term="spring" />
     <category term="Redisson" />
     <category term="Zookeeper" />
     <category term="分布式锁" />
+    <category term="java" />
+    <category term="spring" />
     <entry>
         <id>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</id>
-        <title>spring面试题汇总</title>
+        <title>【Spring】Spring面试题汇总</title>
         <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/"/>
         <content type="html">&lt;p&gt;&lt;ul class=&#34;markdownIt-TOC&#34;&gt;
 &lt;li&gt;

@@ -102,12 +102,12 @@ Joker = Joker</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?557328"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?115323"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?414583"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?3889"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?268130"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?3787"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?924680"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?235384"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?725499"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?903745"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?52935"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?733804"></li>
         </ul>
       </div>
     </header>
@@ -183,10 +183,30 @@ File）日志两种方式。</li>
 <li>分布式锁：Redis 可以用来实现简单的分布式锁机制，协调多个节点上的并发操作。</li>
 </ul>
 <h2 id="redis-的数据结构"><a class="markdownIt-Anchor" href="#redis-的数据结构">#</a> Redis 的数据结构</h2>
-<h3 id="字符串string"><a class="markdownIt-Anchor" href="#字符串string">#</a> 字符串（String）</h3>
-<p>Redis 中所有的 key 都是字符串，这些字符串是通过一个名为简单动态字符串（SDS） 的抽象数据类型实现的。</p>
-<p>基本类型：最简单的键值对存储形式。</p>
-<p>用途：适用于缓存、计数器、简单的数据存储等场景。</p>
+<h3 id="底层数据结构"><a class="markdownIt-Anchor" href="#底层数据结构">#</a> 底层数据结构</h3>
+<h4 id="redisobject"><a class="markdownIt-Anchor" href="#redisobject">#</a> redisObject</h4>
+<p>定义：redisObject（通常缩写为 robj）是 Redis 中用来表示数据库键值对的一个核心数据结构。每一个键值对在 Redis 内部都会被转化为一个 redisObject 实例进行管理。这个结构体不仅包含了键或值本身的数据，还提供了额外的信息来帮助 Redis 更好地管理和操作这些对象。</p>
+<p>用途：redisObject 是 Redis 中键值对存储的数据结构，它封装了键和值，并提供了额外的元数据，如引用计数、过期时间等。其主要作用在于：</p>
+<ul>
+<li>类型和编码：它使得 Redis 能够灵活地存储不同类型的数据，并且可以根据数据的特点选择最合适的编码方式来存储，从而优化内存使用和访问速度。</li>
+<li>内存管理：通过引用计数，redisObject 支持对象的共享和自动内存回收，减少了不必要的内存分配和释放操作。</li>
+<li>LRU 缓存淘汰：通过记录对象的最后访问时间，Redis 可以实现基于 LRU 算法的对象淘汰，从而在内存资源有限的情况下，优先保留最近使用的对象。</li>
+<li>共享对象：对于一些常用的简单对象（如数字 0 和 1，以及空字符串），Redis 会创建一次并复用，这减少了创建和销毁对象的开销。</li>
+</ul>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> type:<span class="number">4</span>;</span><br><span class="line">    <span class="type">unsigned</span> encoding:<span class="number">4</span>;</span><br><span class="line">    <span class="type">unsigned</span> lru:REDIS_LRU_BITS; <span class="comment">/* LRU time (relative to server.lruclock) */</span></span><br><span class="line">    <span class="type">int</span> refcount;</span><br><span class="line">    <span class="type">void</span> *ptr;</span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+<p>redisObject 的基本结构通常包含以下字段：</p>
+<ul>
+<li>type: 一个 4 位的无符号整数，用来标识对象的类型。Redis 支持多种数据类型，如字符串（string）、列表（list）、集合（set）、哈希（hash）、有序集合（sorted<br>
+set）等，每种类型都有一个对应的标识符。</li>
+<li>encoding: 另一个 4 位的无符号整数，表示对象的编码方式。不同的数据类型有不同的内部编码方式，例如字符串可以是普通的字符串，也可以是压缩后的字符串（embstr），列表可以是链表（list）或者快速列表（quicklist）等。</li>
+<li>lru: 一个时间戳，记录了对象最后一次被访问的时间（相对于服务器的 lruclock）。这个字段用于实现 Redis 的 LRU（Least Recently<br>
+Used）缓存淘汰策略。</li>
+<li>refcount: 引用计数器，用来追踪有多少地方引用了这个对象。当一个对象不再被任何地方引用时，其引用计数器减至零，Redis 可以回收该对象占用的内存。</li>
+<li>ptr: 一个指向实际数据的指针。这个指针指向的具体内容依赖于对象的类型和编码方式。</li>
+</ul>
+<h4 id="动态字符串sds"><a class="markdownIt-Anchor" href="#动态字符串sds">#</a> 动态字符串（SDS）</h4>
+<p>定义：SDS（Simple Dynamic String）是一种动态字符串，它使用一个结构体来保存字符串的指针、长度和未使用的空间。</p>
 <p>底层实现：使用简单动态字符串（SDS）来存储数据，SDS 是为了克服 C 字符串的一些不足而设计的。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span>&#123;</span></span><br><span class="line">    <span class="comment">//记录buf数组中已使用字节的数量</span></span><br><span class="line">    <span class="comment">//等于 SDS 保存字符串的长度</span></span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    <span class="comment">//记录 buf 数组中未使用字节的数量</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>用 SDS 保存字符串 “Redis” 具体图示如下：</p>
@@ -230,30 +250,71 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 <p>虽然 SDS 是二进制安全的，但是一样遵从每个字符串都是以空字符串结尾的惯例，这样可以重用 C 语言库 &lt;string.h&gt; 中的一部分函数。</p>
 </li>
 </ol>
-<p>一般来说，SDS 除了保存数据库中的字符串值以外，SDS 还可以作为缓冲区（buffer</p>
-<h3 id="列表list"><a class="markdownIt-Anchor" href="#列表list">#</a> 列表（List）</h3>
-<p>基本类型：有序的字符串集合，可以从两端进行插入和删除操作。</p>
-<p>用途：实现消息队列、历史记录等功能。</p>
-<p>底层实现：使用双向链表（linked list）来存储数据，因此可以在 O (1) 时间内对列表进行两端的插入和删除操作。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span>&#123;</span></span><br><span class="line">     <span class="comment">//表头节点</span></span><br><span class="line">     listNode *head;</span><br><span class="line">     <span class="comment">//表尾节点</span></span><br><span class="line">     listNode *tail;</span><br><span class="line">     <span class="comment">//链表所包含的节点数量</span></span><br><span class="line">     <span class="type">unsigned</span> <span class="type">long</span> len;</span><br><span class="line">     <span class="comment">//节点值复制函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值释放函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值对比函数</span></span><br><span class="line">     <span class="type">int</span> (*match) (<span class="type">void</span> *ptr,<span class="type">void</span> *key);</span><br><span class="line">&#125;<span class="built_in">list</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span>  <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>&#123;</span></span><br><span class="line">       <span class="comment">//前置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">       <span class="comment">//后置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">       <span class="comment">//节点的值</span></span><br><span class="line">       <span class="type">void</span> *value;  </span><br><span class="line">&#125;listNode</span><br></pre></td></tr></table></figure>
+<p>一般来说，SDS 除了保存数据库中的字符串值以外，SDS 还可以作为缓冲区（buffer）来使用。</p>
+<h4 id="压缩列表zip-list"><a class="markdownIt-Anchor" href="#压缩列表zip-list">#</a> 压缩列表（Zip List）</h4>
+<p>定义：Ziplist 是一种特殊的内存紧凑型数据结构，用于存储多个相邻的元素。它主要用于实现 Redis 中的列表（List）和哈希（Hash）数据类型，当这些数据类型的数据量较小且元素较短时，使用 ziplist 可以节省内存空间。</p>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">char</span> header; <span class="comment">// 标记ziplist的开始，通常是一个固定的字节（例如 0x01）</span></span><br><span class="line">    <span class="type">uint32_t</span> length; <span class="comment">// 整个ziplist的长度，包括所有条目和前缀信息。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Entries</span></span><br><span class="line">    <span class="comment">// Each entry has a length prefix and content</span></span><br><span class="line">    <span class="comment">// The number of entries is determined by the length field</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example entry structure:</span></span><br><span class="line">    <span class="comment">// Length prefix (1 or 5 bytes)</span></span><br><span class="line">    <span class="comment">// Content (variable length)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// End marker</span></span><br><span class="line">    <span class="type">char</span> end; <span class="comment">// 标记ziplist的结束，通常是一个固定的字节（例如 0xff）。</span></span><br><span class="line">&#125; <span class="type">ziplist_t</span>;</span><br></pre></td></tr></table></figure>
+<p>实现细节：</p>
+<ul>
+<li>前缀：每个元素的前缀包含了元素的长度信息，以及元素的类型信息。</li>
+<li>长度编码：ziplist 使用可变长度编码来存储元素的长度，这样可以更高效地利用内存。</li>
+<li>内存紧凑：由于 ziplist 将所有元素存储在一个连续的内存区域中，因此它可以有效地减少内存碎片。</li>
+</ul>
+<p>特点</p>
+<ul>
+<li>连续存储：ziplist 将多个元素存储在一个连续的内存块中。</li>
+<li>元素和长度信息：每个元素的前面都会有一个前缀，这个前缀包含了元素的长度信息。</li>
+<li>支持多种类型：ziplist 可以存储整数或字符串，整数直接存储在前缀中，字符串则存储在前缀之后。</li>
+</ul>
+<h4 id="双向链表linkedlist"><a class="markdownIt-Anchor" href="#双向链表linkedlist">#</a> 双向链表（linkedlist）</h4>
+<p>定义：在 Redis 中，linkedlist（通常指的是 Redis 内部实现的双向链表）是 Redis 用来存储 list 键值对的一种底层数据结构。它允许 Redis 从列表的两端高效地添加和移除元素，</p>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个双向链表节点</span></span><br><span class="line"><span class="keyword">typedef</span>  <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>&#123;</span></span><br><span class="line">       <span class="comment">//前置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">       <span class="comment">//后置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">       <span class="comment">//节点的值</span></span><br><span class="line">       <span class="type">void</span> *value;  </span><br><span class="line">&#125;listNode</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个双向链表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span>&#123;</span></span><br><span class="line">     <span class="comment">//表头节点</span></span><br><span class="line">     listNode *head;</span><br><span class="line">     <span class="comment">//表尾节点</span></span><br><span class="line">     listNode *tail;</span><br><span class="line">     <span class="comment">//链表所包含的节点数量</span></span><br><span class="line">     <span class="type">unsigned</span> <span class="type">long</span> len;</span><br><span class="line">     <span class="comment">//节点值复制函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值释放函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值对比函数</span></span><br><span class="line">     <span class="type">int</span> (*match) (<span class="type">void</span> *ptr,<span class="type">void</span> *key);</span><br><span class="line">&#125;<span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
 <p>数据结构如下图</p>
 <img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png" class="" title="1120165-20180528074403440-111834793.png">
-<p>Redis 链表特性：</p>
-<ol>
-<li>双端：链表具有前置节点和后置节点的引用，获取这两个节点时间复杂度都为 O (1)。</li>
+<p>Redis 的 linkedlist 是由一系列 listNode 节点构成的双向链表。</p>
+<p>每个 listNode 包含三个主要部分：</p>
+<ul>
+<li>prev：指向列表中前一个节点的指针。</li>
+<li>next：指向列表中后一个节点的指针。</li>
+<li>value：存储实际数据的字段，这个字段实际上是指向 redisObject 的指针，redisObject 包含了实际的数据和元数据（如类型、编码等）。</li>
+</ul>
+<p>每个 list 包含三个主要部分：</p>
+<ul>
+<li>head：指向链表的第一个节点。</li>
+<li>tail：指向链表的最后一个节点。</li>
+<li>len：链表的长度，即链表中节点的数量。</li>
+</ul>
+<p>特点</p>
+<ul>
+<li>双向链接：每个节点都包含前驱和后继指针，这使得可以从链表的任一端开始遍历整个链表。</li>
 <li>无环：表头节点的 prev 指针和表尾节点的 next 指针都指向 NULL, 对链表的访问都是以 NULL 结束。</li>
 <li>带链表长度计数器：通过 len 属性获取链表长度的时间复杂度为 O (1)。</li>
 <li>多态：链表节点使用 void* 指针来保存节点值，可以保存各种不同类型的值。</li>
-</ol>
-<h3 id="哈希hash"><a class="markdownIt-Anchor" href="#哈希hash">#</a> 哈希（Hash）</h3>
-<p>基本类型：键值对的集合，其中每个键值对中的键称为域（field），值可以是任意字符串。</p>
-<p>用途：存储复杂对象，如用户信息等。</p>
-<p>底层实现：使用哈希表（hash table）来存储数据，可以提供高效的查找、插入和删除操作。</p>
+<li>动态增长：随着元素的增加，链表可以动态增长。</li>
+</ul>
+<h4 id="哈希表hashtable"><a class="markdownIt-Anchor" href="#哈希表hashtable">#</a> 哈希表（Hashtable）</h4>
+<p>定义：hashtable（哈希表）是一种用于存储键值对的数据结构，它在 Redis 内部用于实现哈希（hash）类型。哈希表允许快速地插入、查找和删除键值对，并且提供了良好的性能。</p>
+<p>底层实现：Redis 中的哈希表实现主要包括两个核心组件：一个数组和一个链表。数组中的每个槽（slot）都可以存储一个链表，链表中的每个节点代表一个键值对。这种设计允许哈希表处理哈希冲突，即多个键映射到同一个数组索引的情况。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictEntry **table; <span class="comment">// 哈希桶数组</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> size; <span class="comment">// 哈希桶数组大小</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> used; <span class="comment">// 已使用的哈希桶数量</span></span><br><span class="line">    dictResizeFunc *resize; <span class="comment">// 重置哈希表大小的函数</span></span><br><span class="line">    <span class="type">void</span> (*rehashidx); <span class="comment">// 当前正在进行的哈希表重置索引</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> states; <span class="comment">// 哈希表状态标志</span></span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure>
-<p>哈希表是由数组 table 组成，table 中每个元素都是指向 dict.h/dictEntry 结构，dictEntry 结构定义如下：</p>
+<p>Redis 中的哈希表结构定义通常包括以下几个部分：</p>
+<ul>
+<li>table：一个数组，数组的每个元素都是一个链表。</li>
+<li>size：数组的大小。</li>
+<li>used：已使用的槽的数量，即存储键值对的链表数量。</li>
+<li>resize_policy：在某些 Redis 版本中，可能还包括用于控制何时进行重新哈希（resizing）的策略。</li>
+</ul>
+<p>哈希表 table 中每个元素都是指向 dict.h/dictEntry 结构，dictEntry 结构定义如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="type">void</span> *val; <span class="comment">// 值</span></span><br><span class="line">        <span class="type">uint64_t</span> ival; <span class="comment">// 整数值</span></span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一个同散列值的dictEntry</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
-<p>key 用来保存键，val 属性用来保存值，值可以是一个指针，也可以是 uint64_t 整数，也可以是 int64_t 整数。</p>
-<p>注意这里还有一个指向下一个哈希表节点的指针，我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过 next 这个指针可以将多个哈希值相同的键值对连接在一起，用来解决哈希冲突。</p>
+<p>每个键值对存储在一个 dictEntry 结构体中，该结构体包含：</p>
+<ul>
+<li>key：键的指针，指向 redisObject。</li>
+<li>val：值的指针，同样指向 redisObject。</li>
+<li>next：指向链表中下一个节点的指针，用于处理哈希冲突。</li>
+</ul>
+<h5 id="哈希冲突的优化"><a class="markdownIt-Anchor" href="#哈希冲突的优化">#</a> 哈希冲突的优化</h5>
+<p>我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过 next 这个指针可以将多个哈希值相同的键值对连接在一起，用来解决哈希冲突。</p>
 <img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png" class="" title="1120165-20180528080655703-1600710948.png">
 <ol>
 <li>
@@ -289,70 +350,167 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 增加操作，一定是在新的哈希表上进行的。</p>
 </li>
 </ol>
-<h3 id="集合set"><a class="markdownIt-Anchor" href="#集合set">#</a> 集合（Set）</h3>
-<p>基本类型：无序的字符串集合，集合中的成员不允许重复。</p>
-<p>用途：用于存储唯一元素的集合，如好友列表、标签集合等。</p>
-<p>底层实现：与 Hash 表类似，使用哈希表来存储数据，但是每个哈希表节点只保存一个键值对，并且不允许重复。</p>
-<h3 id="有序集合sorted-set"><a class="markdownIt-Anchor" href="#有序集合sorted-set">#</a> 有序集合（Sorted Set）</h3>
-<p>基本类型： Redis 中的 sorted set，是在 skiplist, dict 和 ziplist 基础上构建起来的:</p>
-<ul>
-<li>当数据较少时，sorted set 是由一个 ziplist 来实现的。</li>
-<li>当数据多的时候，sorted set 是由一个叫 zset 的数据结构来实现的，这个 zset 包含一个 dict + 一个 skiplist。dict 用来查询数据到分数 (<br>
-score) 的对应关系，而 skiplist 用来根据分数查询数据（可能是范围查找）。</li>
-</ul>
-<p>用途：实现排行榜、优先级队列等功能。</p>
-<p>Zset 底层实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zset</span> &#123;</span></span><br><span class="line">    dict *dict;</span><br><span class="line">    zskiplist *zsl;</span><br><span class="line">&#125; zset;</span><br></pre></td></tr></table></figure>
-<h4 id="压缩列表zip-list"><a class="markdownIt-Anchor" href="#压缩列表zip-list">#</a> 压缩列表（Zip List）</h4>
-<p>Ziplist 是一种特殊的内存紧凑型数据结构，用于存储多个相邻的元素。它主要用于实现 Redis 中的列表（List）和哈希（Hash）数据类型，当这些数据类型的数据量较小且元素较短时，使用 ziplist 可以节省内存空间。</p>
-<p>特点：</p>
-<ul>
-<li>连续存储：ziplist 将多个元素存储在一个连续的内存块中。</li>
-<li>元素和长度信息：每个元素的前面都会有一个前缀，这个前缀包含了元素的长度信息。</li>
-<li>支持多种类型：ziplist 可以存储整数或字符串，整数直接存储在前缀中，字符串则存储在前缀之后。</li>
-</ul>
-<p>实现细节：</p>
-<ul>
-<li>前缀：每个元素的前缀包含了元素的长度信息，以及元素的类型信息。</li>
-<li>长度编码：ziplist 使用可变长度编码来存储元素的长度，这样可以更高效地利用内存。</li>
-<li>内存紧凑：由于 ziplist 将所有元素存储在一个连续的内存区域中，因此它可以有效地减少内存碎片。</li>
-</ul>
-<p>使用场景：</p>
-<p>当列表或哈希中的元素较少且元素本身较短时，Redis 会选择使用 ziplist 来存储数据，以节省内存空间。<br>
-当 ziplist 达到一定长度或包含的元素过大时，Redis 会将其转换为其他数据结构，如双向链表或字典。</p>
+<h4 id="整数集合intset"><a class="markdownIt-Anchor" href="#整数集合intset">#</a> 整数集合（intset）</h4>
+<p>定义：一种特殊的数据结构，主要用于存储整数类型的集合，并且这些整数集合不允许有重复的元素。</p>
 <p>底层实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">char</span> header; <span class="comment">// 标记ziplist的开始，通常是一个固定的字节（例如 0x01）</span></span><br><span class="line">    <span class="type">uint32_t</span> length; <span class="comment">// 整个ziplist的长度，包括所有条目和前缀信息。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Entries</span></span><br><span class="line">    <span class="comment">// Each entry has a length prefix and content</span></span><br><span class="line">    <span class="comment">// The number of entries is determined by the length field</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example entry structure:</span></span><br><span class="line">    <span class="comment">// Length prefix (1 or 5 bytes)</span></span><br><span class="line">    <span class="comment">// Content (variable length)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// End marker</span></span><br><span class="line">    <span class="type">char</span> end; <span class="comment">// 标记ziplist的结束，通常是一个固定的字节（例如 0xff）。</span></span><br><span class="line">&#125; <span class="type">ziplist_t</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="跳表skip-list"><a class="markdownIt-Anchor" href="#跳表skip-list">#</a> 跳表（Skip List）</h4>
-<p>Skiplist 是一种线性数据结构，它提供了比传统平衡树更快的查找性能，同时实现相对简单。Redis 使用 skiplist 来实现有序集合（Sorted<br>
-Set）。</p>
-<p>特点：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span>&#123;</span></span><br><span class="line">     <span class="comment">//编码方式</span></span><br><span class="line">     <span class="type">uint32_t</span> encoding;</span><br><span class="line">     <span class="comment">//集合包含的元素数量</span></span><br><span class="line">     <span class="type">uint32_t</span> length;</span><br><span class="line">     <span class="comment">//保存元素的数组</span></span><br><span class="line">     <span class="type">int8_t</span> contents[];</span><br><span class="line">&#125;intset;</span><br></pre></td></tr></table></figure>
+<p>intset 的数据结构定义通常包括以下几个部分：</p>
 <ul>
-<li>多级索引：skiplist 通过构建多级索引来加速查找，每一级索引都是前一级索引的一个子集。</li>
-<li>随机高度：新插入的元素的高度是随机确定的，通常使用随机化算法来决定新节点的高度。</li>
-<li>高效插入和删除：由于 skiplist 的多级索引结构，插入和删除操作也相当高效。</li>
+<li>length：表示集合中元素的数量。</li>
+<li>encoding：表示集合中元素的类型，可以是 int16_t、int32_t 或 int64_t，具体取决于集合中最大的整数值所需的位数。</li>
+<li>contents：一个动态数组，用于存储实际的整数值。每个整数根据 encoding 字段指定的类型占用相应的字节数。</li>
 </ul>
+<p>动态升级</p>
+<p>当尝试向 intset 中添加一个超出当前整数类型范围的整数时，Redis 会执行一个称为 “编码升级” 的过程。这个过程会将 intset 中的所有元素转换为更大类型的整数，以适应新加入的元素。例如，如果 intset 当前使用的是 int32_t 类型，而尝试插入一个 int64_t 类型的值，则所有现有的 int32_t 值会被转换成 int64_t 类型。</p>
+<h4 id="跳表skip-list"><a class="markdownIt-Anchor" href="#跳表skip-list">#</a> 跳表（Skip List）</h4>
+<p>定义：Skiplist 是一种线性数据结构，它提供了比传统平衡树更快的查找性能，同时实现相对简单。Redis 使用 skiplist 来实现有序集合（Sorted<br>
+Set）。</p>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>;</span> <span class="comment">// 跳表头部</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">tail</span>;</span> <span class="comment">// 跳表尾部</span></span><br><span class="line">    <span class="type">int</span> length; <span class="comment">// 跳表长度</span></span><br><span class="line">    <span class="type">int</span> level; <span class="comment">// 跳表层级</span></span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="type">double</span> score; <span class="comment">// 成员的分数</span></span><br><span class="line">    <span class="type">void</span> *obj; <span class="comment">// 成员对象</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 指向前一个节点的指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 指向后一个节点的指针</span></span><br><span class="line">        <span class="type">int</span> span; <span class="comment">// 跨越的节点数量</span></span><br><span class="line">    &#125; level[]; <span class="comment">// 层级数组</span></span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
 <p>实现细节：</p>
 <ul>
 <li>节点结构：skiplist 中的每个节点包含一个元素、一个分数（用于排序）、一个指向前一个节点的指针以及一个或多个指向下一层节点的指针。</li>
 <li>层级：每个节点可以有多个层级，每个层级对应一个指针，指向下一个具有相同高度的节点。</li>
 <li>查找：查找时，从最高层开始，沿着指针前进直到找到目标元素或到达最低层。</li>
 </ul>
+<p>特点：</p>
+<ul>
+<li>多级索引：skiplist 通过构建多级索引来加速查找，每一级索引都是前一级索引的一个子集。</li>
+<li>随机高度：新插入的元素的高度是随机确定的，通常使用随机化算法来决定新节点的高度。</li>
+<li>高效插入和删除：由于 skiplist 的多级索引结构，插入和删除操作也相当高效。</li>
+</ul>
+<h3 id="数据结构的使用"><a class="markdownIt-Anchor" href="#数据结构的使用">#</a> 数据结构的使用</h3>
+<h4 id="字符串string"><a class="markdownIt-Anchor" href="#字符串string">#</a> 字符串（String）</h4>
+<p>用途：存储字符串数据，如文本、数字、日期等。</p>
+<p>实现：根据不同的情况下字符串对象的 encoding 有三种，分别是：int、raw、embstr。</p>
+<ol>
+<li>
+<p>如果一个字符串对象保存的是整数值，并且这个整数值可以用 long 类型标识，那么字符串对象会讲整数值保存在 ptr 属性中，并将<br>
+ encoding 设置为 int。比如 set number 10086 命令。</p>
+</li>
+<li>
+<p>如果字符串对象保存的是一个字符串值，并且这个字符串的长度大于 44 字节，那么字符串对象将使用一个简单动态字符串（SDS）来保存这个字符串值，并将对象的编码设置为<br>
+ raw。在这种情况下，ptr 字段指向一个 SDS（Simple Dynamic String）结构。S 在这种情况下，ptr 字段指向一个 SDS（Simple Dynamic<br>
+String）结构。</p>
+</li>
+<li>
+<p>如果字符串对象保存的是一个字符串值，并且这个字符串的长度小于等于 44 字节，那么字符串对象将使用 embstr<br>
+ 编码的方式来保存这个字符串。embstr 同样基于 SDS，是一种将 RedisObject 对象头和 SDS 对象连续存在一起，使用 malloc<br>
+ 方法一次分配内存的存储形式。 这种编码方式的一些优点：</p>
+<ol>
+<li>embstr 编码将创建字符串对象所需的内存分配次数从 raw 编码的两次降低为一次。</li>
+<li>释放 embstr 编码的字符串对象只需要调用一次内存释放函数，而释放 raw 编码的字符串对象需要调用两次内存释放函数。</li>
+<li>因为 embstr 编码的字符串对象的所有数据都保存在一块连续的内存里面，所以这种编码的字符串对象比起 raw<br>
+ 编码的字符串对象能够更好地利用缓存带来的优势。</li>
+</ol>
+</li>
+</ol>
+<p>为什么分界线是 44 字节？</p>
+<p>Redis 的 embstr 编码的实现中，字符串对象头和字符串对象本身是连续的，因此需要一个字节来保存字符串的长度。<br>
+embstr 最小占用空间为 19（16+3），而 64-19-1（结尾的 \0）=44，所以 embstr 只能容纳 44 字节。</p>
 <p>使用场景：</p>
 <ul>
-<li>有序集合（Sorted Set）使用 skiplist 来存储元素，这样可以快速地根据元素的分数进行排序和查找。<br>
-Skiplist 的查找性能平均为 O (log N)，插入和删除操作也为 O (log N)，这使得它非常适合用于实现需要频繁排序和查找的数据结构。</li>
+<li>计数器：例如网站的访问计数，可以使用 INCR 或 INCRBY 命令来递增计数器。</li>
+<li>会话存储：存储用户的登录状态或其他临时信息。</li>
+<li>消息队列：使用 LPUSH 和 BRPOP 命令实现简单的消息队列。</li>
+<li>缓存：存储经常访问的数据，减少数据库的访问压力。</li>
 </ul>
-<p>底层实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>;</span> <span class="comment">// 跳表头部</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">tail</span>;</span> <span class="comment">// 跳表尾部</span></span><br><span class="line">    <span class="type">int</span> length; <span class="comment">// 跳表长度</span></span><br><span class="line">    <span class="type">int</span> level; <span class="comment">// 跳表层级</span></span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="type">double</span> score; <span class="comment">// 成员的分数</span></span><br><span class="line">    <span class="type">void</span> *obj; <span class="comment">// 成员对象</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 指向前一个节点的指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 指向后一个节点的指针</span></span><br><span class="line">        <span class="type">int</span> span; <span class="comment">// 跨越的节点数量</span></span><br><span class="line">    &#125; level[]; <span class="comment">// 层级数组</span></span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
-<p><strong>其他数据结构</strong></p>
+<h4 id="列表list"><a class="markdownIt-Anchor" href="#列表list">#</a> 列表（List）</h4>
+<p>用途：用于存储有序的元素列表，如队列、栈等。</p>
+<p>实现：列表对象的 encoding 有 ziplist 和 linkedlist 两种。</p>
 <ul>
-<li>Bitmaps：二进制位数组，适合用于存储大量稀疏数据，如用户访问记录、权限控制等。</li>
-<li>HyperLogLog：用于近似计算不重复元素的数量，非常适合处理大规模数据集。</li>
-<li>Streams：类似于消息队列，用于处理异步消息传递，可以实现类似 Kafka 的功能。</li>
-<li>Geo：用于存储地理位置信息，并提供基于地理位置的查询功能。</li>
+<li>当列表的长度小于 512，并且所有元素的长度都小于 64 字节时，使用压缩列表 (ziplist) 存储</li>
+<li>当列表的长度大于等于 512，或者有元素长度大于 64 字节时，使用链表 (linkedlist) 存储。</li>
 </ul>
-<p><strong>内部编码</strong></p>
-<p>Redis 还支持不同的内部编码来实现数据结构，这些编码的选择会影响到内存的使用和操作的性能。例如，对于字符串类型的键值对，Redis 可能会使用 SDS 或者整数编码（int），而对于列表，可能会使用双向链表或者压缩列表（ziplist）等。理解这些内部编码对于优化内存使用和提高性能非常重要。</p>
+<p>使用场景：</p>
+<ul>
+<li>消息队列：使用 LPUSH 和 BRPOP 命令实现先进先出（FIFO）的消息队列。</li>
+<li>历史记录：保存用户的浏览历史或购买记录，可以使用 RPUSH 和 LPOP 命令。</li>
+<li>排行榜：使用列表存储排名信息，通过 LREM 命令可以移除特定成员。</li>
+</ul>
+<h4 id="哈希hash"><a class="markdownIt-Anchor" href="#哈希hash">#</a> 哈希（Hash）</h4>
+<p>用途：存储键值对，其中键是唯一的，值可以重复。</p>
+<p>实现：哈希对象的 encoding 有 ziplist 和 hashtable 两种。</p>
+<ul>
+<li>当哈希对象保存的键值对数量小于 512，并且所有键值对的长度都小于 64 字节时，使用压缩列表存储；</li>
+<li>当哈希对象保存的键值对数量大于等于 512，或者有键值对长度大于 64 字节时，使用 hashtable 存储。</li>
+</ul>
+<p>使用场景：</p>
+<ul>
+<li>对象存储：存储复杂对象，如用户信息，每个字段对应用户的一个属性。</li>
+<li>购物车：每个用户有一个购物车，购物车中的商品信息可以用哈希表来存储。</li>
+<li>会话管理：存储用户的会话信息，每个会话 ID 对应一个哈希表。</li>
+</ul>
+<h4 id="集合set"><a class="markdownIt-Anchor" href="#集合set">#</a> 集合（Set）</h4>
+<p>用途：存储不重复的元素集合，如集合、去重列表等。</p>
+<p>实现：集合对象的 encoding 有 intset 和 hashtable 两种。</p>
+<ul>
+<li>当集合中元素数量小于 512，并且所有元素的长度都小于 64 字节时，使用 intset 存储；</li>
+<li>当集合中元素数量大于等于 512，或者有元素长度大于 64 字节时，使用 hashtable 存储。</li>
+</ul>
+<p>使用场景：</p>
+<ul>
+<li>去重：例如在一个活动中，确保每个用户只能参与一次。</li>
+<li>标签系统：每个项目可以有多个标签，使用集合来存储项目的标签。</li>
+<li>好友关系：存储用户的好友列表，可以快速判断两个用户是否互为好友。</li>
+</ul>
+<h4 id="有序集合sorted-set"><a class="markdownIt-Anchor" href="#有序集合sorted-set">#</a> 有序集合（Sorted Set）</h4>
+<p>用途：存储有序的元素集合，其中元素是唯一的，并且可以按照一定的顺序排列。</p>
+<p>实现：有序集合对象的 encoding 有 ziplist 和 skiplist 两种。</p>
+<ol>
+<li>当有序集合中的元素数量小于 512，并且所有元素的长度都小于 64 字节时，使用压缩列表 (ziplist) 存储；</li>
+<li>当有序集合中的元素数量大于等于 512，或者有元素长度大于 64 字节时，使用跳表 (skiplist) 存储。</li>
+</ol>
+<p>使用场景：</p>
+<ul>
+<li>排行榜：根据分数排序的排行榜，如游戏得分、用户贡献度等。</li>
+<li>优先级队列：每个元素都有一个优先级，可以按优先级取出元素。</li>
+<li>时间轴：按时间戳排序的消息或帖子显示，如微博、Facebook 的时间线。</li>
+<li>地理信息：存储地理位置信息，并使用 GEO 命令查询附近的地点。</li>
+</ul>
+<h4 id="其他数据结构"><a class="markdownIt-Anchor" href="#其他数据结构">#</a> 其他数据结构</h4>
+<ul>
+<li>
+<p>Bitmaps：二进制位数组，适合用于存储大量稀疏数据，如用户访问记录、权限控制等。</p>
+<p>使用场景：</p>
+<ul>
+<li>统计分析：例如统计某一天有多少独立用户访问了网站，可以使用一个位图来表示每个用户是否访问过。</li>
+<li>权限管理：每个用户可以有多个权限位，使用位图来表示用户的权限。</li>
+</ul>
+</li>
+<li>
+<p>HyperLogLog：用于近似计算不重复元素的数量，非常适合处理大规模数据集。</p>
+<p>使用场景：</p>
+<ul>
+<li>近似计数：用于估算大量数据中的不重复元素数量，例如统计网站的独立访客数。</li>
+</ul>
+</li>
+<li>
+<p>Streams：类似于消息队列，用于处理异步消息传递，可以实现类似 Kafka 的功能。</p>
+<p>使用场景：</p>
+<ul>
+<li>事件日志：记录系统中的事件，如用户行为日志，可以使用 XADD 添加事件，XREAD 读取事件。</li>
+<li>异步处理：作为消息队列的一部分，将事件发布到流中，然后由消费者异步处理。</li>
+</ul>
+</li>
+<li>
+<p>Geo：用于存储地理位置信息，并提供基于地理位置的查询功能。</p>
+<p>使用场景：</p>
+<ul>
+<li>位置服务：存储地理位置信息，并支持基于地理位置的搜索，如查找附近的餐厅或酒店。</li>
+</ul>
+</li>
+</ul>
+<h4 id="redis-综合应用示例"><a class="markdownIt-Anchor" href="#redis-综合应用示例">#</a> Redis 综合应用示例</h4>
+<p>假设我们要构建一个社交网络应用，可以使用 Redis 来实现以下功能：</p>
+<ul>
+<li>用户信息存储：使用 Hash 类型存储每个用户的个人信息，如用户名、头像、生日等。</li>
+<li>好友关系：使用 Set 类型存储每个用户的好友列表。</li>
+<li>动态时间线：使用 Sorted Set 类型存储用户的动态，根据发布时间排序。</li>
+<li>消息通知：使用 List 类型作为消息队列，存储用户收到的通知消息。</li>
+<li>在线状态：使用 BitMap 类型记录每天用户的在线状态。</li>
+<li>热门话题：使用 HyperLogLog 类型来估计参与某个话题讨论的独立用户数量。</li>
+</ul>
 <h2 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题">#</a> 常见问题</h2>
 <h3 id="redis-为何这么快"><a class="markdownIt-Anchor" href="#redis-为何这么快">#</a> Redis 为何这么快</h3>
 <ul>
@@ -819,78 +977,6 @@ DECR, HSET, HGET 等命令在执行时，整个操作过程不会被中断，从
 <li>数据结构的设计: Redis 内部的数据结构设计也是为了支持高效的原子操作。例如，对于有序集合（Sorted<br>
 Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插入、删除和查找操作的数据结构，可以高效地支持原子性操作。</li>
 </ol>
-<h3 id="redis-有哪些应用场景"><a class="markdownIt-Anchor" href="#redis-有哪些应用场景">#</a> Redis 有哪些应用场景？</h3>
-<ol>
-<li>String（字符串）
-<ul>
-<li>计数器：例如网站的访问计数，可以使用 INCR 或 INCRBY 命令来递增计数器。</li>
-<li>会话存储：存储用户的登录状态或其他临时信息。</li>
-<li>消息队列：使用 LPUSH 和 BRPOP 命令实现简单的消息队列。</li>
-<li>缓存：存储经常访问的数据，减少数据库的访问压力。</li>
-</ul>
-</li>
-<li>List（列表）
-<ul>
-<li>消息队列：使用 LPUSH 和 BRPOP 命令实现先进先出（FIFO）的消息队列。</li>
-<li>历史记录：保存用户的浏览历史或购买记录，可以使用 RPUSH 和 LPOP 命令。</li>
-<li>排行榜：使用列表存储排名信息，通过 LREM 命令可以移除特定成员。</li>
-</ul>
-</li>
-<li>Hash（哈希）
-<ul>
-<li>对象存储：存储复杂对象，如用户信息，每个字段对应用户的一个属性。</li>
-<li>购物车：每个用户有一个购物车，购物车中的商品信息可以用哈希表来存储。</li>
-<li>会话管理：存储用户的会话信息，每个会话 ID 对应一个哈希表。</li>
-</ul>
-</li>
-<li>Set（集合）
-<ul>
-<li>去重：例如在一个活动中，确保每个用户只能参与一次。</li>
-<li>标签系统：每个项目可以有多个标签，使用集合来存储项目的标签。</li>
-<li>好友关系：存储用户的好友列表，可以快速判断两个用户是否互为好友。</li>
-</ul>
-</li>
-<li>Sorted Set（有序集合）
-<ul>
-<li>排行榜：根据分数排序的排行榜，如游戏得分、用户贡献度等。</li>
-<li>优先级队列：每个元素都有一个优先级，可以按优先级取出元素。</li>
-<li>时间轴：按时间戳排序的消息或帖子显示，如微博、Facebook 的时间线。</li>
-<li>地理信息：存储地理位置信息，并使用 GEO 命令查询附近的地点。</li>
-</ul>
-</li>
-<li>Bitmaps
-<ul>
-<li>统计分析：例如统计某一天有多少独立用户访问了网站，可以使用一个位图来表示每个用户是否访问过。</li>
-<li>权限管理：每个用户可以有多个权限位，使用位图来表示用户的权限。</li>
-</ul>
-</li>
-<li>HyperLogLog
-<ul>
-<li>近似计数：用于估算大量数据中的不重复元素数量，例如统计网站的独立访客数。</li>
-</ul>
-</li>
-<li>Streams
-<ul>
-<li>事件日志：记录系统中的事件，如用户行为日志，可以使用 XADD 添加事件，XREAD 读取事件。</li>
-<li>异步处理：作为消息队列的一部分，将事件发布到流中，然后由消费者异步处理。</li>
-</ul>
-</li>
-<li>Geo（地理）
-<ul>
-<li>位置服务：存储地理位置信息，并支持基于地理位置的搜索，如查找附近的餐厅或酒店。</li>
-</ul>
-</li>
-</ol>
-<p>综合应用示例</p>
-<p>假设我们要构建一个社交网络应用，可以使用 Redis 来实现以下功能：</p>
-<ul>
-<li>用户信息存储：使用 Hash 类型存储每个用户的个人信息，如用户名、头像、生日等。</li>
-<li>好友关系：使用 Set 类型存储每个用户的好友列表。</li>
-<li>动态时间线：使用 Sorted Set 类型存储用户的动态，根据发布时间排序。</li>
-<li>消息通知：使用 List 类型作为消息队列，存储用户收到的通知消息。</li>
-<li>在线状态：使用 BitMap 类型记录每天用户的在线状态。</li>
-<li>热门话题：使用 HyperLogLog 类型来估计参与某个话题讨论的独立用户数量。</li>
-</ul>
 <h2 id="常用命令"><a class="markdownIt-Anchor" href="#常用命令">#</a> 常用命令</h2>
 <h3 id="cmd访问redis"><a class="markdownIt-Anchor" href="#cmd访问redis">#</a> cmd 访问 redis</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli.exe -h 127.0.0.1 -p 6379</span><br></pre></td></tr></table></figure>
@@ -978,7 +1064,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-13 17:39:03" itemprop="dateModified" datetime="2024-09-13T17:39:03+08:00">2024-09-13</time>
+    <time title="修改时间：2024-09-21 11:28:08" itemprop="dateModified" datetime="2024-09-21T11:28:08+08:00">2024-09-21</time>
   </span>
 </div>
 
@@ -1033,10 +1119,10 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
     <div class="item left">
       
 
-  <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;13&#x2F;%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3&#x2F;26e3bd5f237ab05ae63f5a697805b33b.png" title="spring面试题汇总">
+  <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;13&#x2F;%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3&#x2F;26e3bd5f237ab05ae63f5a697805b33b.png" title="【Spring】Spring面试题汇总">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> spring</span>
-  <h3>spring面试题汇总</h3>
+  <h3>【Spring】Spring面试题汇总</h3>
   </a>
 
     </div>
@@ -1057,7 +1143,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> Redis 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> Redis 的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text"> Redis 的应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text"> Redis 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 字符串（String）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 列表（List）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 哈希（Hash）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 集合（Set）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set"><span class="toc-number">1.4.5.</span> <span class="toc-text"> 有序集合（Sorted Set）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8zip-list"><span class="toc-number">1.4.5.1.</span> <span class="toc-text"> 压缩列表（Zip List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8skip-list"><span class="toc-number">1.4.5.2.</span> <span class="toc-text"> 跳表（Skip List）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.</span> <span class="toc-text"> 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BA%E4%BD%95%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-number">1.5.1.</span> <span class="toc-text"> Redis 为何这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text"> Redis 为何使用单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.5.3.</span> <span class="toc-text"> 缓存三大问题以及解决方案？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8Credis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.5.4.</span> <span class="toc-text"> 如何保证数据库和 Redis 缓存一致性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81-redis-%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-number">1.5.5.</span> <span class="toc-text"> 如何保证 Redis 的高并发？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.5.6.</span> <span class="toc-text"> Redis 如何保证原子性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.7.</span> <span class="toc-text"> Redis 有哪些应用场景？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd%E8%AE%BF%E9%97%AEredis"><span class="toc-number">1.6.1.</span> <span class="toc-text"> cmd 访问 redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text"> 字符串 (String) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.3.</span> <span class="toc-text"> 列表 (List) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.4.</span> <span class="toc-text"> 哈希 (Hash) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.5.</span> <span class="toc-text"> 集合 (Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.6.</span> <span class="toc-text"> 有序集合 (Sorted Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.7.</span> <span class="toc-text"> 通用命令</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> Redis 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> Redis 的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text"> Redis 的应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text"> Redis 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 底层数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redisobject"><span class="toc-number">1.4.1.1.</span> <span class="toc-text"> redisObject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds"><span class="toc-number">1.4.1.2.</span> <span class="toc-text"> 动态字符串（SDS）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8zip-list"><span class="toc-number">1.4.1.3.</span> <span class="toc-text"> 压缩列表（Zip List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8linkedlist"><span class="toc-number">1.4.1.4.</span> <span class="toc-text"> 双向链表（linkedlist）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8hashtable"><span class="toc-number">1.4.1.5.</span> <span class="toc-text"> 哈希表（Hashtable）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">1.4.1.5.1.</span> <span class="toc-text"> 哈希冲突的优化</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset"><span class="toc-number">1.4.1.6.</span> <span class="toc-text"> 整数集合（intset）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8skip-list"><span class="toc-number">1.4.1.7.</span> <span class="toc-text"> 跳表（Skip List）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 数据结构的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string"><span class="toc-number">1.4.2.1.</span> <span class="toc-text"> 字符串（String）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list"><span class="toc-number">1.4.2.2.</span> <span class="toc-text"> 列表（List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash"><span class="toc-number">1.4.2.3.</span> <span class="toc-text"> 哈希（Hash）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E5%90%88set"><span class="toc-number">1.4.2.4.</span> <span class="toc-text"> 集合（Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set"><span class="toc-number">1.4.2.5.</span> <span class="toc-text"> 有序集合（Sorted Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.2.6.</span> <span class="toc-text"> 其他数据结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.7.</span> <span class="toc-text"> Redis 综合应用示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.</span> <span class="toc-text"> 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BA%E4%BD%95%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-number">1.5.1.</span> <span class="toc-text"> Redis 为何这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text"> Redis 为何使用单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.5.3.</span> <span class="toc-text"> 缓存三大问题以及解决方案？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8Credis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.5.4.</span> <span class="toc-text"> 如何保证数据库和 Redis 缓存一致性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81-redis-%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-number">1.5.5.</span> <span class="toc-text"> 如何保证 Redis 的高并发？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.5.6.</span> <span class="toc-text"> Redis 如何保证原子性？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd%E8%AE%BF%E9%97%AEredis"><span class="toc-number">1.6.1.</span> <span class="toc-text"> cmd 访问 redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text"> 字符串 (String) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.3.</span> <span class="toc-text"> 列表 (List) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.4.</span> <span class="toc-text"> 哈希 (Hash) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.5.</span> <span class="toc-text"> 集合 (Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.6.</span> <span class="toc-text"> 有序集合 (Sorted Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.7.</span> <span class="toc-text"> 通用命令</span></a></li></ol></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -1158,16 +1244,6 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="spring面试题汇总">spring面试题汇总</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
 </div>
 
@@ -1178,10 +1254,10 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
   </li>
 
       
@@ -1202,6 +1278,16 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
 </div>
 
     <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
   </li>
 
   </ul>
