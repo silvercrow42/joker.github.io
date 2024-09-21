@@ -216,40 +216,40 @@ Joker = Joker</title>
 一个消费者集群对应一个 Group ID，一个 Group ID 可以订阅多个 Topic，如上图中的 Group 2 所示。Group 和 Topic 的订阅关系可以通过直接在程序中设置即可。</li>
 </ul>
 <h2 id="获取范例项目"><a class="markdownIt-Anchor" href="#获取范例项目">#</a> 获取范例项目</h2>
-<p>在安装文档中涉及到的<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1leHRlcm5hbHM="> GitHub - apache/rocketmq-externals</span> 项目 ReadMe 中也提及到了一个关联 Spring 的 RocketMQ 项目。<br>
-<img data-src="3dff3ecbdea41baddb69e24f1b1508d0.png" alt="拓展项目"></p>
+<p>在安装文档中涉及到的<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1leHRlcm5hbHM="> GitHub - apache/rocketmq-externals</span> 项目 ReadMe 中也提及到了一个关联 Spring 的 RocketMQ 项目。</p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/3dff3ecbdea41baddb69e24f1b1508d0.png" class="" title="拓展项目">
 <p>项目地址如下<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1zcHJpbmc="> GitHub - apache/rocketmq-spring</span>。</p>
-<p><img data-src="7f17ece34decafc3f316002155feaace.png" alt="拓展项目2"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/7f17ece34decafc3f316002155feaace.png" class="" title="拓展项目2">
 <p>在<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FwYWNoZS9yb2NrZXRtcS1zcHJpbmcvdHJlZS9tYXN0ZXIvcm9ja2V0bXEtc3ByaW5nLWJvb3Qtc2FtcGxlcw=="> rocketmq-spring-boot-samples</span> 中则是基于 Spring 搭建的 RocketMQ 的范例项目，包含生产者与消费者 demo，可以进行参考学习。</p>
-<p><img data-src="00ec143cf8ed26fc1976f7b12d66bc0d.png" alt="拓展项目3"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/00ec143cf8ed26fc1976f7b12d66bc0d.png" class="" title="拓展项目3">
 <p>由于该项目未依赖父项目，可以单独将其拉下来运行，也可以将该 rocketmq-spring 项目完整拉取下来使用。</p>
 <h3 id="span-id单独拉取单独拉取span"><a class="markdownIt-Anchor" href="#span-id单独拉取单独拉取span">#</a> <span id="单独拉取">单独拉取</span></h3>
 <p>项目拉取下来后使用 IDE 打开，IDEA 会自动加载 rocketmq-spring-boot-starter 的依赖，此时可能会出现依赖版本问题。</p>
-<p><img data-src="1855df2c2cc50f3a51b2be2fbcec82b3.png" alt="下载样例项目"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/1855df2c2cc50f3a51b2be2fbcec82b3.png" class="" title="下载样例项目">
 <p>当前版本的 pom，此处给 rocketmq-spring-boot-starter 配置的是 2.2.3 快照版本，但是在 maven 仓库中已经修改 2.2.3 为正式的版本号，rocketmq-spring-boot-starter 源码版本也已经定义为 2.2.4-SNAPSHOT，此处应该是版本升级的疏漏。</p>
-<p><img data-src="c6b66903f7110483a2f6fbb565e1611f.png" alt="下载样例项目2"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/c6b66903f7110483a2f6fbb565e1611f.png" class="" title="下载样例项目2">
 <p>对应修改一下版本号即可，修改为 2.2.3 直接重新运行一下 maven 导入。</p>
-<p><img data-src="829c1285ceee1dc98d4b41a5f7df3182.png" alt="下载样例项目3"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/829c1285ceee1dc98d4b41a5f7df3182.png" class="" title="下载样例项目3">
 <p>子项目均被解析为 maven 项目（项目图标右下角带蓝色小方格即表示已被解析为 maven 项目，且其中的文件结构不再是普通的文件夹结构，而是已包结构排列，并且特定的文件夹具有特定图标，如 java、resources、test 等），并且依赖项不报红，代表项目导入成功。</p>
-<p><img data-src="cc2e1fedcb6a16cd07d8f3765e39c30a.png" alt="下载样例项目4"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/cc2e1fedcb6a16cd07d8f3765e39c30a.png" class="" title="下载样例项目4">
 <h3 id="完整拉取"><a class="markdownIt-Anchor" href="#完整拉取">#</a> 完整拉取</h3>
 <p>项目拉取下来之后使用 IDE 打开，等待其安装依赖项，防止依赖项安装失败，或者找不到依赖项可以使用阿里的 maven 镜像。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>项目导入成功。</p>
-<p><img data-src="33ebac62954c73bc818a6b382c3fa99b.png" alt="下载样例项目5"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/33ebac62954c73bc818a6b382c3fa99b.png" class="" title="下载样例项目5">
 <p>编者此处 samples 并没有被解析为 maven，是由于在根目录的 pom.xml 中，该模块被默认注释掉了。</p>
-<p><img data-src="6131a66f3f3e5ef5034e7b983c52b9e4.png" alt="下载样例项目6"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/6131a66f3f3e5ef5034e7b983c52b9e4.png" class="" title="下载样例项目6">
 <p>将 module 标签处的注释放开然后重新跑 maven 一遍，maven 就会去解析 rocketmq-spring-boot-samples 下的 pom.xml 文件。此时可能会遇到与上文<a href="#%E5%8D%95%E7%8B%AC%E6%8B%89%E5%8F%96"> 单独拉取 </a>时相同的情况，进入到 rocketmq-spring-boot-samples 下的 pom 中采用相同方式解决即可。</p>
 <h2 id="补充说明"><a class="markdownIt-Anchor" href="#补充说明">#</a> 补充说明</h2>
 <p>此处补充一些范例项目中出现的不常见的且不涉及 RocketMQ 逻辑的代码的解析，方便对范例项目进行理解。</p>
 <h3 id="commandlinerunner"><a class="markdownIt-Anchor" href="#commandlinerunner">#</a> CommandLineRunner</h3>
 <p>在生产者与消费者项目中都使用了 CommandLineRunner 接口。这里来探究以下该接口的效果。</p>
 <p>在启动 spring 应用时，会使用到如下的基本的 spring 启动代码 <code>SpringApplication.run(ProducerApplication.class, args)</code> ，进入到该方法中可以看到在经过多个默认的 run 方法后最终调用到了一个 run 方法中。</p>
-<p><img data-src="2a07379410e7944edce47ae2826160c1.png" alt="run"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/2a07379410e7944edce47ae2826160c1.png" class="" title="run">
 <p>我们可以看到在该方法中 spring 进行了一系列环境的初始化操作，将 spring 环境运行起来。这部分的逻辑都不重要。</p>
 <p>在 try 代码段的末尾，我们可以看到其调用了一段 <code>callRunners(context, applicationArguments)</code>  方法，传入了 spring 容器对象以及通过启动参数 args 构造出来的 ApplicationArguments 参数对象。</p>
 <p>进入到该方法中可以看到如下方法体。</p>
-<p><img data-src="8b8970858a59e8a0e33e6f90dc0713f3.png" alt="run2"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/8b8970858a59e8a0e33e6f90dc0713f3.png" class="" title="run2">
 <p>可以推出该方法的逻辑是将 ApplicationRunner.class 与 CommandLineRunner.class 构造出来的 Bean 添加到 runners 列表中，排序后依次将运行参数传入然后进行调用。</p>
 <p>简而言之，在启动 Spring 应用后，会在应用装配完毕时，运行 CommandLineRunner 与 ApplicationRunner 中的代码。并且该运行时机是要晚于 InitializingBean 的，能够确保所有 Bean 均已加载完毕。可以用来作为 Spring 应用启动后的初始化数据的方案，因为 bean 已装填完毕，可以正常使用 Spring 的功能。</p>
 <p>需要注意的是此处的代码是影响到 Spring 主线程的，如果出现异常会打断 Spring 应用的启动过程。</p>
@@ -357,7 +357,7 @@ Joker = Joker</title>
 <blockquote>
 <p>图片引用自文章<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pzaDIwNTAvYXJ0aWNsZS9kZXRhaWxzLzEyNDUxNzM1NQ=="> RocketMQ 事务消息机制_rocketmqtransactionlistener</span></p>
 </blockquote>
-<p><img data-src="c2eb61b0adcdc503d4314ecc070e2f25.png" alt="引用图片"></p>
+<img data-src="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/c2eb61b0adcdc503d4314ecc070e2f25.png" class="" title="引用图片">
 <ol>
 <li>在调用 Transaction 相关方法后，会先将消息发送出去，此时采用的是同步方式，即当前线程会被阻塞，直到获取到远端返回过来的发送结果。此时来到远端 broker 中的事务消息并不是一个可用消息，而是一个半消息，是无法被消费者消费的 **（此处对应图中第 1 步）**。</li>
 <li>根据发送结果的状态来进行，最终会提供一个 LocalTransactionState 来作为最终事务处理的依据：
@@ -442,7 +442,7 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-21 11:37:04" itemprop="dateModified" datetime="2024-09-21T11:37:04+08:00">2024-09-21</time>
+    <time title="修改时间：2024-09-21 16:57:44" itemprop="dateModified" datetime="2024-09-21T16:57:44+08:00">2024-09-21</time>
   </span>
 </div>
 
@@ -642,10 +642,10 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
   </li>
 
       
@@ -662,20 +662,20 @@ ser 对象作为响应返回，RocketMQ 将会将该返回值回传给消费者�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
+<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
   </li>
 
       
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
   </li>
 
   </ul>

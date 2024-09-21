@@ -101,7 +101,7 @@ Joker = Joker</title>
 
       </div>
       <div id="imgs" class="pjax">
-          <img src="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/26e3bd5f237ab05ae63f5a697805b33b.png">
+          <img src="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/8674ffb557d9360dfaaf28118b7fbb9e.jpg">
       </div>
     </header>
     <div id="waves">
@@ -167,79 +167,79 @@ Joker = Joker</title>
 </li>
 </ul>
 <h3 id="3-说说-spring-有哪些模块"><a class="markdownIt-Anchor" href="#3-说说-spring-有哪些模块">#</a> 3、说说 Spring 有哪些模块？</h3>
-<p><img data-src="26e3bd5f237ab05ae63f5a697805b33b.png" alt="Spring模块"></p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/26e3bd5f237ab05ae63f5a697805b33b.png" class="" title="Spring模块">
 <p>上图对应的是 Spring 4.x 版本的架构图，主要包括以下八个模块：</p>
 <ul>
 <li>
-<p>Spring Core：基础，提供 IOC 和 DI 能力，可以说 Spring 其他所有的功能都依赖于该类库。</p>
+<p><strong>Spring Core</strong>：基础，提供 IOC 和 DI 能力，可以说 Spring 其他所有的功能都依赖于该类库。</p>
 </li>
 <li>
-<p>Spring Aspects：该模块为集成 AspectJ 提供支持。</p>
+<p><strong>Spring Aspects</strong>：该模块为集成 AspectJ 提供支持。</p>
 </li>
 <li>
-<p>Spring AOP：提供面向方面的编程实现。</p>
+<p><strong>Spring AOP</strong>：提供面向方面的编程实现。</p>
 </li>
 <li>
-<p>Spring JDBC：Java 数据库连接。</p>
+<p><strong>Spring JDBC</strong>：Java 数据库连接。</p>
 </li>
 <li>
-<p>Spring JMS：Java 消息服务。</p>
+<p><strong>Spring JMS</strong>：Java 消息服务。</p>
 </li>
 <li>
-<p>Spring ORM：用于支持 Hibernate、Mybatis 等 ORM 工具。</p>
+<p><strong>Spring ORM</strong>：用于支持 Hibernate、Mybatis 等 ORM 工具。</p>
 </li>
 <li>
-<p>Spring Web：为创建 Web 应用程序提供支持。</p>
+<p><strong>Spring Web</strong>：为创建 Web 应用程序提供支持。</p>
 </li>
 <li>
-<p>Spring Test：提供了对 JUnit 和 TestNG 测试框架的支持。</p>
+<p><strong>Spring Test</strong>：提供了对 JUnit 和 TestNG 测试框架的支持。</p>
 </li>
 </ul>
 <h3 id="4-spring-中使用了哪些设计模式"><a class="markdownIt-Anchor" href="#4-spring-中使用了哪些设计模式">#</a> 4、Spring 中使用了哪些设计模式？</h3>
 <ul>
 <li>
-<p>工厂模式 包括简单工厂和工厂方法，如通过 BeanFactory 或 ApplicationContext 创建 Bean 对象。</p>
+<p><strong>工厂模式</strong>：包括简单工厂和工厂方法，如通过 BeanFactory 或 ApplicationContext 创建 Bean 对象。</p>
 </li>
 <li>
-<p>单例模式：Spring 中的 Bean 对象默认就是单例模式。</p>
+<p><strong>单例模式</strong>：Spring 中的 Bean 对象默认就是单例模式。</p>
 </li>
 <li>
-<p>代理模式：Spring AOP 就是基于代理实现的，包括 JDK 动态代理和 CGlib 技术。</p>
+<p><strong>代理模式</strong>：Spring AOP 就是基于代理实现的，包括 JDK 动态代理和 CGlib 技术。</p>
 </li>
 <li>
-<p>模板方法模式：Spring 中 jdbcTemplate 等以 Template 结尾对数据库操作的类就使用到模板模式。</p>
+<p><strong>模板方法模式</strong>：Spring 中 jdbcTemplate 等以 Template 结尾对数据库操作的类就使用到模板模式。</p>
 </li>
 <li>
-<p>观察者模式：Spring 事件驱动模型就是观察者模式很经典的应用。</p>
+<p><strong>观察者模式</strong>：Spring 事件驱动模型就是观察者模式很经典的应用。</p>
 </li>
 <li>
-<p>适配器模式：Spring MVC 中，DispatcherServlet 根据请求解析到对应的 Handler（也就是我们常说的 Controller）后，开始由<br>
+<p><strong>适配器模式</strong>：Spring MVC 中，DispatcherServlet 根据请求解析到对应的 Handler（也就是我们常说的 Controller）后，开始由<br>
  HandlerAdapter 适配器处理。</p>
 </li>
 <li>
-<p>装饰者模式：使用 DataSource 在不改动代码情况下切换数据源。</p>
+<p><strong>装饰者模式</strong>：使用 DataSource 在不改动代码情况下切换数据源。</p>
 </li>
 <li>
-<p>策略模式：Spring 对资源的访问，如 Resource 接口。</p>
+<p><strong>策略模式</strong>：Spring 对资源的访问，如 Resource 接口。</p>
 </li>
 </ul>
 <h3 id="5-spring-中有哪些不同类型事件"><a class="markdownIt-Anchor" href="#5-spring-中有哪些不同类型事件">#</a> 5、Spring 中有哪些不同类型事件？</h3>
 <p>Spring 提供了以下 5 种标准的事件：</p>
 <ul>
 <li>
-<p>上下文更新事件（ContextRefreshedEvent）：在调用 ConfigurableApplicationContext 接口中的 refresh () 方法时被触发。</p>
+<p><strong>上下文更新事件（ContextRefreshedEvent）</strong>：在调用 ConfigurableApplicationContext 接口中的 refresh () 方法时被触发。</p>
 </li>
 <li>
-<p>上下文开始事件（ContextStartedEvent）：当容器调用 ConfigurableApplicationContext 的 Start () 方法开始 / 重新开始容器时触发该事件。</p>
+<p><strong>上下文开始事件（ContextStartedEvent）</strong>：当容器调用 ConfigurableApplicationContext 的 Start () 方法开始 / 重新开始容器时触发该事件。</p>
 </li>
 <li>
-<p>上下文停止事件（ContextStoppedEvent）：当容器调用 ConfigurableApplicationContext 的 Stop () 方法停止容器时触发该事件。</p>
+<p><strong>上下文停止事件（ContextStoppedEvent）</strong>：当容器调用 ConfigurableApplicationContext 的 Stop () 方法停止容器时触发该事件。</p>
 </li>
 <li>
-<p>上下文关闭事件（ContextClosedEvent）：当 ApplicationContext 被关闭时触发该事件。容器被关闭时，其管理的所有单例 Bean 都被销毁。</p>
+<p><strong>上下文关闭事件（ContextClosedEvent）</strong>：当 ApplicationContext 被关闭时触发该事件。容器被关闭时，其管理的所有单例 Bean 都被销毁。</p>
 </li>
 <li>
-<p>请求处理事件（RequestHandledEvent）：在 Web 应用中，当一个 http 请求（request）结束触发该事件。</p>
+<p><strong>请求处理事件（RequestHandledEvent）</strong>：在 Web 应用中，当一个 http 请求（request）结束触发该事件。</p>
 </li>
 </ul>
 <p>至于如果监听这些事件：</p>
@@ -257,16 +257,16 @@ Joker = Joker</title>
 <p>Spring 的 IOC 是基于工厂设计模式在加上反射实现。</p>
 <h3 id="4-spring-有哪些容器类"><a class="markdownIt-Anchor" href="#4-spring-有哪些容器类">#</a> 4、Spring 有哪些容器类？</h3>
 <ul>
-<li>BeanFactory：这是一个最简单的容器，它主要的功能是为依赖注入（DI）提供支持。</li>
-<li>ApplicationContext：Application Context 是 Spring 中的高级容器。和 BeanFactory 类似，它可以加载和管理配置文件中定义的<br>
+<li><strong>BeanFactory</strong>：这是一个最简单的容器，它主要的功能是为依赖注入（DI）提供支持。</li>
+<li><strong>ApplicationContext</strong>：Application Context 是 Spring 中的高级容器。和 BeanFactory 类似，它可以加载和管理配置文件中定义的<br>
  Bean。 另外，它还增加了企业所需要的功能，比如，从属性文件中解析文本信息和将事件传递给所指定的监听器。</li>
 </ul>
 <p>一些常被使用的 ApplicationContext 实现类：</p>
 <ul>
-<li>FileSystemXmlApplicationContext：该容器从 XML 文件中加载已被定义的 Bean， 需要提供 XML 文件的完整路径。</li>
-<li>ClassPathXmlApplicationContext：同样从 XML 文件中加载已被定义的 Bean，但无需提供完整路径，因为它会从 CLASSPATH<br>
+<li><strong>FileSystemXmlApplicationContext</strong>：该容器从 XML 文件中加载已被定义的 Bean， 需要提供 XML 文件的完整路径。</li>
+<li><strong>ClassPathXmlApplicationContext</strong>：同样从 XML 文件中加载已被定义的 Bean，但无需提供完整路径，因为它会从 CLASSPATH<br>
  中搜索配置文件。</li>
-<li>WebXmlApplicationContext：该容器会在一个 Web 应用程序的范围内加载在 XML 文件中已被定义的 Bean。</li>
+<li><strong>WebXmlApplicationContext</strong>：该容器会在一个 Web 应用程序的范围内加载在 XML 文件中已被定义的 Bean。</li>
 </ul>
 <h3 id="5-beanfactory-和-applicationcontext-的区别"><a class="markdownIt-Anchor" href="#5-beanfactory-和-applicationcontext-的区别">#</a> 5、BeanFactory 和 ApplicationContext 的区别？</h3>
 <p>二者都是 Spring 框架的两大核心接口，都可以当做 Spring 的容器。其中 ApplicationContext 是 BeanFactory 的子接口。</p>
@@ -392,7 +392,7 @@ Joker = Joker</title>
 <li>使用 ThreadLocal：对于某些特定场景，可以使用 ThreadLocal 来实现线程之间的隔离，确保每个线程都有自己的独立副本。</li>
 </ul>
 <h3 id="3-spring-bean-的生命周期"><a class="markdownIt-Anchor" href="#3-spring-bean-的生命周期">#</a> 3、Spring Bean 的生命周期？</h3>
-<p><img data-src="0cb7664ed7f4ec62270c528f298e03a3.png" alt="Spring Bean 生命周期"></p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/0cb7664ed7f4ec62270c528f298e03a3.png" class="" title="Spring Bean 生命周期">
 <p>Bean 在 Spring 容器中从创建到销毁经历了若干阶段，每一阶段都可以进行个性化定制。</p>
 <ol>
 <li>
@@ -609,7 +609,7 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-21 11:38:05" itemprop="dateModified" datetime="2024-09-21T11:38:05+08:00">2024-09-21</time>
+    <time title="修改时间：2024-09-21 16:57:44" itemprop="dateModified" datetime="2024-09-21T16:57:44+08:00">2024-09-21</time>
   </span>
 </div>
 
@@ -799,30 +799,20 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
     <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
   </li>
 
       
@@ -843,6 +833,16 @@ Concern）模块化为独立的组件。切面包含了多个通知（Advice）�
 </div>
 
     <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
   </li>
 
   </ul>

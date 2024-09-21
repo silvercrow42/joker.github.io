@@ -8,14 +8,14 @@
         <pubDate>Fri, 13 Sep 2024 11:24:41 +0800</pubDate>
         <lastBuildDate>Fri, 13 Sep 2024 11:24:41 +0800</lastBuildDate>
         <category>后端</category>
+        <category>java</category>
+        <category>spring</category>
+        <category>MQ</category>
+        <category>RocketMQ</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
         <category>Redis</category>
-        <category>MQ</category>
-        <category>RocketMQ</category>
-        <category>java</category>
-        <category>spring</category>
         <category>Redisson</category>
         <category>Zookeeper</category>
         <category>分布式锁</category>
@@ -48,79 +48,79 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;3-说说-spring-有哪些模块&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-说说-spring-有哪些模块&#34;&gt;#&lt;/a&gt; 3、说说 Spring 有哪些模块？&lt;/h3&gt;
-&lt;p&gt;&lt;img data-src=&#34;26e3bd5f237ab05ae63f5a697805b33b.png&#34; alt=&#34;Spring模块&#34;&gt;&lt;/p&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/26e3bd5f237ab05ae63f5a697805b33b.png&#34; class=&#34;&#34; title=&#34;Spring模块&#34;&gt;
 &lt;p&gt;上图对应的是 Spring 4.x 版本的架构图，主要包括以下八个模块：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Spring Core：基础，提供 IOC 和 DI 能力，可以说 Spring 其他所有的功能都依赖于该类库。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring Core&lt;/strong&gt;：基础，提供 IOC 和 DI 能力，可以说 Spring 其他所有的功能都依赖于该类库。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring Aspects：该模块为集成 AspectJ 提供支持。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring Aspects&lt;/strong&gt;：该模块为集成 AspectJ 提供支持。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring AOP：提供面向方面的编程实现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring AOP&lt;/strong&gt;：提供面向方面的编程实现。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring JDBC：Java 数据库连接。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring JDBC&lt;/strong&gt;：Java 数据库连接。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring JMS：Java 消息服务。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring JMS&lt;/strong&gt;：Java 消息服务。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring ORM：用于支持 Hibernate、Mybatis 等 ORM 工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring ORM&lt;/strong&gt;：用于支持 Hibernate、Mybatis 等 ORM 工具。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring Web：为创建 Web 应用程序提供支持。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring Web&lt;/strong&gt;：为创建 Web 应用程序提供支持。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Spring Test：提供了对 JUnit 和 TestNG 测试框架的支持。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spring Test&lt;/strong&gt;：提供了对 JUnit 和 TestNG 测试框架的支持。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;4-spring-中使用了哪些设计模式&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4-spring-中使用了哪些设计模式&#34;&gt;#&lt;/a&gt; 4、Spring 中使用了哪些设计模式？&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;工厂模式 包括简单工厂和工厂方法，如通过 BeanFactory 或 ApplicationContext 创建 Bean 对象。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;工厂模式&lt;/strong&gt;：包括简单工厂和工厂方法，如通过 BeanFactory 或 ApplicationContext 创建 Bean 对象。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;单例模式：Spring 中的 Bean 对象默认就是单例模式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;单例模式&lt;/strong&gt;：Spring 中的 Bean 对象默认就是单例模式。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;代理模式：Spring AOP 就是基于代理实现的，包括 JDK 动态代理和 CGlib 技术。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;代理模式&lt;/strong&gt;：Spring AOP 就是基于代理实现的，包括 JDK 动态代理和 CGlib 技术。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;模板方法模式：Spring 中 jdbcTemplate 等以 Template 结尾对数据库操作的类就使用到模板模式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;模板方法模式&lt;/strong&gt;：Spring 中 jdbcTemplate 等以 Template 结尾对数据库操作的类就使用到模板模式。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;观察者模式：Spring 事件驱动模型就是观察者模式很经典的应用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;观察者模式&lt;/strong&gt;：Spring 事件驱动模型就是观察者模式很经典的应用。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;适配器模式：Spring MVC 中，DispatcherServlet 根据请求解析到对应的 Handler（也就是我们常说的 Controller）后，开始由&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;适配器模式&lt;/strong&gt;：Spring MVC 中，DispatcherServlet 根据请求解析到对应的 Handler（也就是我们常说的 Controller）后，开始由&lt;br&gt;
  HandlerAdapter 适配器处理。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;装饰者模式：使用 DataSource 在不改动代码情况下切换数据源。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;装饰者模式&lt;/strong&gt;：使用 DataSource 在不改动代码情况下切换数据源。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;策略模式：Spring 对资源的访问，如 Resource 接口。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;策略模式&lt;/strong&gt;：Spring 对资源的访问，如 Resource 接口。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;5-spring-中有哪些不同类型事件&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#5-spring-中有哪些不同类型事件&#34;&gt;#&lt;/a&gt; 5、Spring 中有哪些不同类型事件？&lt;/h3&gt;
 &lt;p&gt;Spring 提供了以下 5 种标准的事件：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;上下文更新事件（ContextRefreshedEvent）：在调用 ConfigurableApplicationContext 接口中的 refresh () 方法时被触发。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;上下文更新事件（ContextRefreshedEvent）&lt;/strong&gt;：在调用 ConfigurableApplicationContext 接口中的 refresh () 方法时被触发。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;上下文开始事件（ContextStartedEvent）：当容器调用 ConfigurableApplicationContext 的 Start () 方法开始 / 重新开始容器时触发该事件。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;上下文开始事件（ContextStartedEvent）&lt;/strong&gt;：当容器调用 ConfigurableApplicationContext 的 Start () 方法开始 / 重新开始容器时触发该事件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;上下文停止事件（ContextStoppedEvent）：当容器调用 ConfigurableApplicationContext 的 Stop () 方法停止容器时触发该事件。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;上下文停止事件（ContextStoppedEvent）&lt;/strong&gt;：当容器调用 ConfigurableApplicationContext 的 Stop () 方法停止容器时触发该事件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;上下文关闭事件（ContextClosedEvent）：当 ApplicationContext 被关闭时触发该事件。容器被关闭时，其管理的所有单例 Bean 都被销毁。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;上下文关闭事件（ContextClosedEvent）&lt;/strong&gt;：当 ApplicationContext 被关闭时触发该事件。容器被关闭时，其管理的所有单例 Bean 都被销毁。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;请求处理事件（RequestHandledEvent）：在 Web 应用中，当一个 http 请求（request）结束触发该事件。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;请求处理事件（RequestHandledEvent）&lt;/strong&gt;：在 Web 应用中，当一个 http 请求（request）结束触发该事件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;至于如果监听这些事件：&lt;/p&gt;
@@ -138,16 +138,16 @@
 &lt;p&gt;Spring 的 IOC 是基于工厂设计模式在加上反射实现。&lt;/p&gt;
 &lt;h3 id=&#34;4-spring-有哪些容器类&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4-spring-有哪些容器类&#34;&gt;#&lt;/a&gt; 4、Spring 有哪些容器类？&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;BeanFactory：这是一个最简单的容器，它主要的功能是为依赖注入（DI）提供支持。&lt;/li&gt;
-&lt;li&gt;ApplicationContext：Application Context 是 Spring 中的高级容器。和 BeanFactory 类似，它可以加载和管理配置文件中定义的&lt;br&gt;
+&lt;li&gt;&lt;strong&gt;BeanFactory&lt;/strong&gt;：这是一个最简单的容器，它主要的功能是为依赖注入（DI）提供支持。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ApplicationContext&lt;/strong&gt;：Application Context 是 Spring 中的高级容器。和 BeanFactory 类似，它可以加载和管理配置文件中定义的&lt;br&gt;
  Bean。 另外，它还增加了企业所需要的功能，比如，从属性文件中解析文本信息和将事件传递给所指定的监听器。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;一些常被使用的 ApplicationContext 实现类：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;FileSystemXmlApplicationContext：该容器从 XML 文件中加载已被定义的 Bean， 需要提供 XML 文件的完整路径。&lt;/li&gt;
-&lt;li&gt;ClassPathXmlApplicationContext：同样从 XML 文件中加载已被定义的 Bean，但无需提供完整路径，因为它会从 CLASSPATH&lt;br&gt;
+&lt;li&gt;&lt;strong&gt;FileSystemXmlApplicationContext&lt;/strong&gt;：该容器从 XML 文件中加载已被定义的 Bean， 需要提供 XML 文件的完整路径。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ClassPathXmlApplicationContext&lt;/strong&gt;：同样从 XML 文件中加载已被定义的 Bean，但无需提供完整路径，因为它会从 CLASSPATH&lt;br&gt;
  中搜索配置文件。&lt;/li&gt;
-&lt;li&gt;WebXmlApplicationContext：该容器会在一个 Web 应用程序的范围内加载在 XML 文件中已被定义的 Bean。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;WebXmlApplicationContext&lt;/strong&gt;：该容器会在一个 Web 应用程序的范围内加载在 XML 文件中已被定义的 Bean。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;5-beanfactory-和-applicationcontext-的区别&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#5-beanfactory-和-applicationcontext-的区别&#34;&gt;#&lt;/a&gt; 5、BeanFactory 和 ApplicationContext 的区别？&lt;/h3&gt;
 &lt;p&gt;二者都是 Spring 框架的两大核心接口，都可以当做 Spring 的容器。其中 ApplicationContext 是 BeanFactory 的子接口。&lt;/p&gt;
@@ -273,7 +273,7 @@
 &lt;li&gt;使用 ThreadLocal：对于某些特定场景，可以使用 ThreadLocal 来实现线程之间的隔离，确保每个线程都有自己的独立副本。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;3-spring-bean-的生命周期&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-spring-bean-的生命周期&#34;&gt;#&lt;/a&gt; 3、Spring Bean 的生命周期？&lt;/h3&gt;
-&lt;p&gt;&lt;img data-src=&#34;0cb7664ed7f4ec62270c528f298e03a3.png&#34; alt=&#34;Spring Bean 生命周期&#34;&gt;&lt;/p&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/0cb7664ed7f4ec62270c528f298e03a3.png&#34; class=&#34;&#34; title=&#34;Spring Bean 生命周期&#34;&gt;
 &lt;p&gt;Bean 在 Spring 容器中从创建到销毁经历了若干阶段，每一阶段都可以进行个性化定制。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
