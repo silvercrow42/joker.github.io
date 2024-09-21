@@ -1,0 +1,1268 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/joker.github.io/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/joker.github.io/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="Joker" href="https://silvercrow42.github.io/joker.github.io/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="Joker" href="https://silvercrow42.github.io/joker.github.io/atom.xml" />
+<link rel="alternate" type="application/json" title="Joker" href="https://silvercrow42.github.io/joker.github.io/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/joker.github.io/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="后端,数据库,NoSQL,缓存,Redis" />
+
+
+<link rel="canonical" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/">
+
+
+
+  <title>
+【Redis】Redis面试题汇总与详解 - Redis |
+Joker = Joker</title>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">【Redis】Redis面试题汇总与详解
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2024-09-13 13:52:28">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2024-09-13T13:52:28+08:00">2024-09-13</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/joker.github.io/" rel="start">Joker</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?557328"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?115323"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?414583"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?3889"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?268130"></li>
+          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?3787"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/joker.github.io/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/joker.github.io/categories/Redis/" itemprop="item" rel="index" title="分类于 Redis"><span itemprop="name">Redis</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/joker.github.io/images/avatar.png">
+    <meta itemprop="name" content="Joker">
+    <meta itemprop="description" content=", ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Joker">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="概念"><a class="markdownIt-Anchor" href="#概念">#</a> 概念</h1>
+<h2 id="redis-是什么"><a class="markdownIt-Anchor" href="#redis-是什么">#</a> Redis 是什么</h2>
+<p>Redis（Remote Dictionary Server）是一个开源的键值存储系统，以其高性能和低延迟著称。它最初由 Salvatore<br>
+Sanfilippo 编写，并于 2009 年首次发布。Redis 不仅可以作为数据库使用，还可以作为缓存和消息代理。Redis 支持多种数据结构，如字符串（strings）、散列（hashes）、列表（lists）、集合（sets）、有序集合（sorted<br>
+sets）等，这使得它非常适合用于多种应用场景</p>
+<h2 id="redis-的特点"><a class="markdownIt-Anchor" href="#redis-的特点">#</a> Redis 的特点</h2>
+<ul>
+<li>内存存储：Redis 将所有数据都存储在内存中，这使得它能够提供非常高的读写速度，通常能够达到数十万次每秒的读写操作（QPS）。</li>
+<li>持久化：尽管 Redis 主要是一个内存数据库，但它也提供了数据持久化的机制，包括 RDB（Redis Database Backup）快照和 AOF（Append Only<br>
+File）日志两种方式。</li>
+<li>数据结构丰富：除了基本的键值对存储之外，Redis 还支持多种复杂的数据结构，如列表、集合、有序集合等，这使得它非常适合用于构建复杂的数据模型。</li>
+<li>网络透明：Redis 使用 TCP 协议，客户端可以通过网络访问 Redis 服务器，支持跨平台部署。</li>
+<li>主从复制：Redis 支持主从复制机制，可以轻松地设置数据备份和读写分离。</li>
+<li>Lua 脚本：Redis 支持在服务器端执行 Lua 脚本，允许用户将复杂的操作封装成一个原子性的操作。</li>
+<li>事务：Redis 支持事务，允许用户将一系列操作打包成一个单独的命令序列执行。</li>
+<li>发布 / 订阅模式：Redis 支持发布 / 订阅模式，可以用于构建消息队列或事件驱动的应用程序。</li>
+<li>集群：Redis 3.0 之后版本支持官方的集群模式，可以实现数据的水平扩展。</li>
+<li>多线程：Redis 6.0 版本引入了多线程模型，用于异步处理 I/O 和其他耗时操作，进一步提升了性能。</li>
+</ul>
+<h2 id="redis-的应用场景"><a class="markdownIt-Anchor" href="#redis-的应用场景">#</a> Redis 的应用场景</h2>
+<p>由于其高性能和灵活性，Redis 被广泛应用于多种场景中：</p>
+<ul>
+<li>缓存：由于 Redis 的高速读写能力，它经常被用作 Web 应用的缓存层，以减轻后端数据库的压力。</li>
+<li>会话存储：Redis 可以用来存储用户的会话信息，支持快速的读取和更新操作。</li>
+<li>排行榜：Redis 的有序集合非常适合用来构建排行榜，可以高效地进行排序和范围查询。</li>
+<li>消息队列：通过发布 / 订阅模式，Redis 可以作为一个轻量级的消息队列系统。</li>
+<li>实时数据分析：Redis 的数据结构非常适合用于处理实时数据流，如实时统计、监控等。</li>
+<li>分布式锁：Redis 可以用来实现简单的分布式锁机制，协调多个节点上的并发操作。</li>
+</ul>
+<h2 id="redis-的数据结构"><a class="markdownIt-Anchor" href="#redis-的数据结构">#</a> Redis 的数据结构</h2>
+<h3 id="字符串string"><a class="markdownIt-Anchor" href="#字符串string">#</a> 字符串（String）</h3>
+<p>Redis 中所有的 key 都是字符串，这些字符串是通过一个名为简单动态字符串（SDS） 的抽象数据类型实现的。</p>
+<p>基本类型：最简单的键值对存储形式。</p>
+<p>用途：适用于缓存、计数器、简单的数据存储等场景。</p>
+<p>底层实现：使用简单动态字符串（SDS）来存储数据，SDS 是为了克服 C 字符串的一些不足而设计的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span>&#123;</span></span><br><span class="line">    <span class="comment">//记录buf数组中已使用字节的数量</span></span><br><span class="line">    <span class="comment">//等于 SDS 保存字符串的长度</span></span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    <span class="comment">//记录 buf 数组中未使用字节的数量</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用 SDS 保存字符串 “Redis” 具体图示如下：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528075607627-218845583.png" class="" title="1120165-20180528075607627-218845583.png">
+<p>图片来源：《Redis 设计与实现》</p>
+<p>我们看上面对于 SDS 数据类型的定义：</p>
+<ul>
+<li>len 保存了 SDS 保存字符串的长度</li>
+<li>buf [] 数组用来保存字符串的每个元素</li>
+<li>free j 记录了 buf 数组中未使用的字节数量</li>
+</ul>
+<p>上面的定义相对于 C 语言对于字符串的定义，有什么好处？</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180527234349672-568401853.png" class="" title="1120165-20180528075607627-218845583.png">
+<ol>
+<li>
+<p>常数复杂度获取字符串长度：由于 len 属性的存在，我们获取 SDS 字符串的长度只需要读取 len 属性，时间复杂度为 O (1)。而对于 C<br>
+ 语言，获取字符串的长度通常是经过遍历计数来实现的，时间复杂度为 O (n)。通过 strlen key 命令可以获取 key 的字符串长度。</p>
+</li>
+<li>
+<p>杜绝缓冲区溢出：我们知道在 C 语言中使用 strcat 函数来进行两个字符串的拼接，一旦没有分配足够长度的内存空间，就会造成缓冲区溢出。而对于<br>
+ SDS 数据类型，在进行字符修改的时候，会首先根据记录的 len 属性检查内存空间是否满足需求。如果不满足，会进行相应的空间扩展，然后在进行修改操作，所以不会出现缓冲区溢出。</p>
+</li>
+<li>
+<p>减少修改字符串的内存重新分配次数:<br>
+C 语言由于不记录字符串的长度，所以如果要修改字符串，必须要重新分配内存（先释放再申请），因为如果没有重新分配，字符串长度增大时会造成内存缓冲区溢出，字符串长度减小时会造成内存泄露。</p>
+<p>而对于 SDS，由于 len 属性和 free 属性的存在，对于修改字符串 SDS 实现了空间预分配和惰性空间释放两种策略：</p>
+<ol>
+<li>空间预分配：对字符串进行空间扩展的时候，扩展的内存比实际需要的多，这样可以减少连续执行字符串增长操作所需的内存重分配次数。</li>
+<li>惰性空间释放：对字符串进行缩短操作时，程序不立即使用内存重新分配来回收缩短后多余的字节，而是使用 free<br>
+ 属性将这些字节的数量记录下来，等待后续使用。（当然 SDS 也提供了相应的 API，当我们有需要时，也可以手动释放这些未使用的空间。）</li>
+</ol>
+</li>
+<li>
+<p>二进制安全</p>
+<p>因为 C 字符串以空字符作为字符串结束的标识，而对于一些二进制文件（如图片等），内容可能包括空字符串，因此 C 字符串无法正确存取；而所有<br>
+ SDS 的 API 都是以处理二进制的方式来处理 buf 里面的元素，并且 SDS 不是以空字符串来判断是否结束，而是以 len<br>
+ 属性表示的长度来判断字符串是否结束。</p>
+</li>
+<li>
+<p>兼容部分 C 字符串函数</p>
+<p>虽然 SDS 是二进制安全的，但是一样遵从每个字符串都是以空字符串结尾的惯例，这样可以重用 C 语言库 &lt;string.h&gt; 中的一部分函数。</p>
+</li>
+</ol>
+<p>一般来说，SDS 除了保存数据库中的字符串值以外，SDS 还可以作为缓冲区（buffer</p>
+<h3 id="列表list"><a class="markdownIt-Anchor" href="#列表list">#</a> 列表（List）</h3>
+<p>基本类型：有序的字符串集合，可以从两端进行插入和删除操作。</p>
+<p>用途：实现消息队列、历史记录等功能。</p>
+<p>底层实现：使用双向链表（linked list）来存储数据，因此可以在 O (1) 时间内对列表进行两端的插入和删除操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span>&#123;</span></span><br><span class="line">     <span class="comment">//表头节点</span></span><br><span class="line">     listNode *head;</span><br><span class="line">     <span class="comment">//表尾节点</span></span><br><span class="line">     listNode *tail;</span><br><span class="line">     <span class="comment">//链表所包含的节点数量</span></span><br><span class="line">     <span class="type">unsigned</span> <span class="type">long</span> len;</span><br><span class="line">     <span class="comment">//节点值复制函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值释放函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值对比函数</span></span><br><span class="line">     <span class="type">int</span> (*match) (<span class="type">void</span> *ptr,<span class="type">void</span> *key);</span><br><span class="line">&#125;<span class="built_in">list</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span>  <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>&#123;</span></span><br><span class="line">       <span class="comment">//前置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">       <span class="comment">//后置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">       <span class="comment">//节点的值</span></span><br><span class="line">       <span class="type">void</span> *value;  </span><br><span class="line">&#125;listNode</span><br></pre></td></tr></table></figure>
+<p>数据结构如下图</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png" class="" title="1120165-20180528074403440-111834793.png">
+<p>Redis 链表特性：</p>
+<ol>
+<li>双端：链表具有前置节点和后置节点的引用，获取这两个节点时间复杂度都为 O (1)。</li>
+<li>无环：表头节点的 prev 指针和表尾节点的 next 指针都指向 NULL, 对链表的访问都是以 NULL 结束。</li>
+<li>带链表长度计数器：通过 len 属性获取链表长度的时间复杂度为 O (1)。</li>
+<li>多态：链表节点使用 void* 指针来保存节点值，可以保存各种不同类型的值。</li>
+</ol>
+<h3 id="哈希hash"><a class="markdownIt-Anchor" href="#哈希hash">#</a> 哈希（Hash）</h3>
+<p>基本类型：键值对的集合，其中每个键值对中的键称为域（field），值可以是任意字符串。</p>
+<p>用途：存储复杂对象，如用户信息等。</p>
+<p>底层实现：使用哈希表（hash table）来存储数据，可以提供高效的查找、插入和删除操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictEntry **table; <span class="comment">// 哈希桶数组</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> size; <span class="comment">// 哈希桶数组大小</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> used; <span class="comment">// 已使用的哈希桶数量</span></span><br><span class="line">    dictResizeFunc *resize; <span class="comment">// 重置哈希表大小的函数</span></span><br><span class="line">    <span class="type">void</span> (*rehashidx); <span class="comment">// 当前正在进行的哈希表重置索引</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> states; <span class="comment">// 哈希表状态标志</span></span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure>
+<p>哈希表是由数组 table 组成，table 中每个元素都是指向 dict.h/dictEntry 结构，dictEntry 结构定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="type">void</span> *val; <span class="comment">// 值</span></span><br><span class="line">        <span class="type">uint64_t</span> ival; <span class="comment">// 整数值</span></span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一个同散列值的dictEntry</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+<p>key 用来保存键，val 属性用来保存值，值可以是一个指针，也可以是 uint64_t 整数，也可以是 int64_t 整数。</p>
+<p>注意这里还有一个指向下一个哈希表节点的指针，我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过 next 这个指针可以将多个哈希值相同的键值对连接在一起，用来解决哈希冲突。</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png" class="" title="1120165-20180528080655703-1600710948.png">
+<ol>
+<li>
+<p>哈希算法：Redis 计算哈希值和索引值方法如下：</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">1</span>、使用字典设置的哈希函数，计算键 key 的哈希值</span><br><span class="line">hash = dict-&gt;type-&gt;hashFunction(key);</span><br><span class="line">#<span class="number">2</span>、使用哈希表的sizemask属性和第一步得到的哈希值，计算索引值</span><br><span class="line">index = hash &amp; dict-&gt;ht[x].sizemask;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>解决哈希冲突：这个问题上面我们介绍了，方法是链地址法。通过字典里面的 *next 指针指向下一个具有相同索引值的哈希表节点。</p>
+</li>
+<li>
+<p>扩容和收缩：当哈希表保存的键值对太多或者太少时，就要通过 rerehash (重新散列）来对哈希表进行相应的扩展或者收缩。具体步骤：</p>
+<ol>
+<li>如果执行扩展操作，会基于原哈希表创建一个大小等于 ht [0].used*2n 的哈希表（也就是每次扩展都是根据原哈希表已使用的空间扩大一倍创建另一个哈希表）。<br>
+相反如果执行的是收缩操作，每次收缩是根据已使用空间缩小一倍创建一个新的哈希表。</li>
+<li>重新利用上面的哈希算法，计算索引值，然后将键值对放到新的哈希表位置上。</li>
+<li>所有键值对都迁徙完毕后，释放原哈希表的内存空间。</li>
+</ol>
+</li>
+<li>
+<p>触发扩容的条件：</p>
+<ol>
+<li>服务器目前没有执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且负载因子大于等于 1。</li>
+<li>服务器目前正在执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且负载因子大于等于 5。</li>
+</ol>
+<p>ps：负载因子 = 哈希表已保存节点数量 / 哈希表大小。</p>
+</li>
+<li>
+<p>渐近式 rehash</p>
+<p>什么叫渐进式 rehash？ 也就是说扩容和收缩操作不是一次性、集中式完成的，而是分多次、渐进式完成的。如果保存在 Redis 中的键值对只有几个几十个，那么<br>
+ rehash 操作可以瞬间完成，但是如果键值对有几百万，几千万甚至几亿，那么要一次性的进行<br>
+ rehash，势必会造成 Redis 一段时间内不能进行别的操作。所以 Redis 采用渐进式<br>
+ rehash, 这样在进行渐进式 rehash 期间，字典的删除查找更新等操作可能会在两个哈希表上进行，第一个哈希表没有找到，就会去第二个哈希表上进行查找。但是进行<br>
+增加操作，一定是在新的哈希表上进行的。</p>
+</li>
+</ol>
+<h3 id="集合set"><a class="markdownIt-Anchor" href="#集合set">#</a> 集合（Set）</h3>
+<p>基本类型：无序的字符串集合，集合中的成员不允许重复。</p>
+<p>用途：用于存储唯一元素的集合，如好友列表、标签集合等。</p>
+<p>底层实现：与 Hash 表类似，使用哈希表来存储数据，但是每个哈希表节点只保存一个键值对，并且不允许重复。</p>
+<h3 id="有序集合sorted-set"><a class="markdownIt-Anchor" href="#有序集合sorted-set">#</a> 有序集合（Sorted Set）</h3>
+<p>基本类型： Redis 中的 sorted set，是在 skiplist, dict 和 ziplist 基础上构建起来的:</p>
+<ul>
+<li>当数据较少时，sorted set 是由一个 ziplist 来实现的。</li>
+<li>当数据多的时候，sorted set 是由一个叫 zset 的数据结构来实现的，这个 zset 包含一个 dict + 一个 skiplist。dict 用来查询数据到分数 (<br>
+score) 的对应关系，而 skiplist 用来根据分数查询数据（可能是范围查找）。</li>
+</ul>
+<p>用途：实现排行榜、优先级队列等功能。</p>
+<p>Zset 底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zset</span> &#123;</span></span><br><span class="line">    dict *dict;</span><br><span class="line">    zskiplist *zsl;</span><br><span class="line">&#125; zset;</span><br></pre></td></tr></table></figure>
+<h4 id="压缩列表zip-list"><a class="markdownIt-Anchor" href="#压缩列表zip-list">#</a> 压缩列表（Zip List）</h4>
+<p>Ziplist 是一种特殊的内存紧凑型数据结构，用于存储多个相邻的元素。它主要用于实现 Redis 中的列表（List）和哈希（Hash）数据类型，当这些数据类型的数据量较小且元素较短时，使用 ziplist 可以节省内存空间。</p>
+<p>特点：</p>
+<ul>
+<li>连续存储：ziplist 将多个元素存储在一个连续的内存块中。</li>
+<li>元素和长度信息：每个元素的前面都会有一个前缀，这个前缀包含了元素的长度信息。</li>
+<li>支持多种类型：ziplist 可以存储整数或字符串，整数直接存储在前缀中，字符串则存储在前缀之后。</li>
+</ul>
+<p>实现细节：</p>
+<ul>
+<li>前缀：每个元素的前缀包含了元素的长度信息，以及元素的类型信息。</li>
+<li>长度编码：ziplist 使用可变长度编码来存储元素的长度，这样可以更高效地利用内存。</li>
+<li>内存紧凑：由于 ziplist 将所有元素存储在一个连续的内存区域中，因此它可以有效地减少内存碎片。</li>
+</ul>
+<p>使用场景：</p>
+<p>当列表或哈希中的元素较少且元素本身较短时，Redis 会选择使用 ziplist 来存储数据，以节省内存空间。<br>
+当 ziplist 达到一定长度或包含的元素过大时，Redis 会将其转换为其他数据结构，如双向链表或字典。</p>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">char</span> header; <span class="comment">// 标记ziplist的开始，通常是一个固定的字节（例如 0x01）</span></span><br><span class="line">    <span class="type">uint32_t</span> length; <span class="comment">// 整个ziplist的长度，包括所有条目和前缀信息。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Entries</span></span><br><span class="line">    <span class="comment">// Each entry has a length prefix and content</span></span><br><span class="line">    <span class="comment">// The number of entries is determined by the length field</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example entry structure:</span></span><br><span class="line">    <span class="comment">// Length prefix (1 or 5 bytes)</span></span><br><span class="line">    <span class="comment">// Content (variable length)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// End marker</span></span><br><span class="line">    <span class="type">char</span> end; <span class="comment">// 标记ziplist的结束，通常是一个固定的字节（例如 0xff）。</span></span><br><span class="line">&#125; <span class="type">ziplist_t</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="跳表skip-list"><a class="markdownIt-Anchor" href="#跳表skip-list">#</a> 跳表（Skip List）</h4>
+<p>Skiplist 是一种线性数据结构，它提供了比传统平衡树更快的查找性能，同时实现相对简单。Redis 使用 skiplist 来实现有序集合（Sorted<br>
+Set）。</p>
+<p>特点：</p>
+<ul>
+<li>多级索引：skiplist 通过构建多级索引来加速查找，每一级索引都是前一级索引的一个子集。</li>
+<li>随机高度：新插入的元素的高度是随机确定的，通常使用随机化算法来决定新节点的高度。</li>
+<li>高效插入和删除：由于 skiplist 的多级索引结构，插入和删除操作也相当高效。</li>
+</ul>
+<p>实现细节：</p>
+<ul>
+<li>节点结构：skiplist 中的每个节点包含一个元素、一个分数（用于排序）、一个指向前一个节点的指针以及一个或多个指向下一层节点的指针。</li>
+<li>层级：每个节点可以有多个层级，每个层级对应一个指针，指向下一个具有相同高度的节点。</li>
+<li>查找：查找时，从最高层开始，沿着指针前进直到找到目标元素或到达最低层。</li>
+</ul>
+<p>使用场景：</p>
+<ul>
+<li>有序集合（Sorted Set）使用 skiplist 来存储元素，这样可以快速地根据元素的分数进行排序和查找。<br>
+Skiplist 的查找性能平均为 O (log N)，插入和删除操作也为 O (log N)，这使得它非常适合用于实现需要频繁排序和查找的数据结构。</li>
+</ul>
+<p>底层实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>;</span> <span class="comment">// 跳表头部</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">tail</span>;</span> <span class="comment">// 跳表尾部</span></span><br><span class="line">    <span class="type">int</span> length; <span class="comment">// 跳表长度</span></span><br><span class="line">    <span class="type">int</span> level; <span class="comment">// 跳表层级</span></span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="type">double</span> score; <span class="comment">// 成员的分数</span></span><br><span class="line">    <span class="type">void</span> *obj; <span class="comment">// 成员对象</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 指向前一个节点的指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 指向后一个节点的指针</span></span><br><span class="line">        <span class="type">int</span> span; <span class="comment">// 跨越的节点数量</span></span><br><span class="line">    &#125; level[]; <span class="comment">// 层级数组</span></span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+<p><strong>其他数据结构</strong></p>
+<ul>
+<li>Bitmaps：二进制位数组，适合用于存储大量稀疏数据，如用户访问记录、权限控制等。</li>
+<li>HyperLogLog：用于近似计算不重复元素的数量，非常适合处理大规模数据集。</li>
+<li>Streams：类似于消息队列，用于处理异步消息传递，可以实现类似 Kafka 的功能。</li>
+<li>Geo：用于存储地理位置信息，并提供基于地理位置的查询功能。</li>
+</ul>
+<p><strong>内部编码</strong></p>
+<p>Redis 还支持不同的内部编码来实现数据结构，这些编码的选择会影响到内存的使用和操作的性能。例如，对于字符串类型的键值对，Redis 可能会使用 SDS 或者整数编码（int），而对于列表，可能会使用双向链表或者压缩列表（ziplist）等。理解这些内部编码对于优化内存使用和提高性能非常重要。</p>
+<h2 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题">#</a> 常见问题</h2>
+<h3 id="redis-为何这么快"><a class="markdownIt-Anchor" href="#redis-为何这么快">#</a> Redis 为何这么快</h3>
+<ul>
+<li>内存存储：Redis 将所有数据存储在内存中，而不是磁盘上。内存的读写速度远超磁盘，这使得 Redis 能够实现极低的延迟和高吞吐量。内存中的数据访问速度几乎是瞬时的，而磁盘则需要等待机械臂移动到正确的位置才能开始读写，这大大降低了速度。</li>
+<li>高效的数据结构：Redis 提供了多种高效的数据结构，如跳跃表（skiplist）用于实现有序集合（Sorted<br>
+Set），压缩列表（ziplist）用于节省空间，哈希表（hashtable）用于实现散列（Hash）等。这些数据结构经过优化，能够在内存中高效地存储和检索数据。</li>
+<li>合理的数据编码：Redis 根据数据的不同类型和大小，使用不同的编码格式来存储数据。例如，短字符串可能会使用更为紧凑的编码方式，从而减少内存占用并加快处理速度。</li>
+<li>单线程模型：Redis 采用单线程模型来处理客户端的所有请求。这意味着在任何给定的时间内，只有一个客户端请求正在被执行。虽然这限制了并发处理能力，但也消除了多线程之间上下文切换和锁的竞争，从而减少了不必要的开销。</li>
+<li>非阻塞 I/O：Redis 使用事件驱动模型来处理客户端连接和请求。它使用了类似于 epoll 的 I/O 多路复用技术来监听多个客户端连接上的事件，<br>
+当有事件发生时（例如，客户端发送了一个命令），Redis 会立即处理这个事件。这种方式使得 Redis 可以同时处理大量的客户端连接，而不会因为一个客户端的阻塞而影响其他客户端的响应速度。</li>
+<li>异步持久化：为了防止持久化操作影响 Redis 的性能，Redis 提供了异步持久化选项。例如，RDB 快照和 AOF 日志都可以在后台进程执行，不会阻塞主线程处理客户端请求。</li>
+<li>线程分离：Redis 6.0 引入了多线程处理部分 I/O 密集型任务，如 AOF 重写和 RDB 持久化，这样可以进一步提高 Redis 的性能，因为这些任务不再完全阻塞单一线程。</li>
+</ul>
+<h3 id="redis为何使用单线程"><a class="markdownIt-Anchor" href="#redis为何使用单线程">#</a> Redis 为何使用单线程</h3>
+<p>Redis 选择单线程模型的原因有以下几个方面：</p>
+<ul>
+<li>内存操作速度快：Redis 的所有数据都存储在内存中，内存的读写速度非常快。因此，对于基于内存的操作而言，CPU 并不是性能瓶颈。如果使用多线程，反而需要解决多线程同步的问题，这可能会增加额外的 CPU 负担。</li>
+<li>数据结构简单：Redis 中的数据结构相对简单，操作也较为迅速，这使得单线程就能够高效地处理大量的客户端请求。</li>
+<li>非阻塞 I/O 模型：Redis 使用了非阻塞的 I/O 模型，即多路复用 I/O 机制（如 epoll、select 等）。<br>
+这种机制使得单线程可以同时监听多个客户端连接的请求，并在有请求到达时异步地处理这些请求，从而有效地利用了单线程的能力来处理高并发连接。</li>
+<li>简化设计：单线程模型简化了 Redis 的设计和实现。由于不存在多线程间的竞争和同步问题，Redis 的代码更加简洁易懂，同时也减少了潜在的 bug。</li>
+<li>避免上下文切换开销：多线程模型会导致频繁的上下文切换，这会消耗大量的 CPU 资源。单线程模型避免了这种开销，使得 Redis 可以更加高效地使用 CPU 资源。</li>
+<li>易于实现高一致性：单线程模型下，数据的一致性更容易保证，因为不存在多线程并发修改同一份数据的问题。</li>
+<li>避免锁的竞争：在多线程环境下，为了避免数据冲突，通常需要使用锁机制。而锁的竞争会导致一部分线程处于等待状态，从而降低了系统的整体吞吐量。单线程模型避免了这种锁的竞争。</li>
+</ul>
+<p>然而，单线程模型也有其局限性。例如，对于 CPU 密集型的任务，单线程模型可能不是最佳选择，因为这样的任务会阻塞主线程，影响 Redis 处理其他请求的能力。为了解决这个问题，Redis 在后来的版本中引入了多线程来处理 I/O 密集型任务，如 AOF 重写和 RDB 持久化，以此来提升性能。</p>
+<h3 id="缓存三大问题以及解决方案"><a class="markdownIt-Anchor" href="#缓存三大问题以及解决方案">#</a> 缓存三大问题以及解决方案？</h3>
+<ol>
+<li>
+<p>缓存击穿：指的是当某个 key 非常热点，在并发访问量大的情况下，如果这个 key 恰好在这个时刻失效了，那么所有请求都会落到数据库上，造成数据库瞬间压力过大。</p>
+<p>解决方案：</p>
+<ul>
+<li>设置热点数据永不过期：对于热点数据，可以将其设置为永不过期，或者设置一个较长的过期时间。
+<ul>
+<li>优点：
+<ol>
+<li>减少了因缓存失效导致的数据库压力。</li>
+<li>简单易实施。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>可能会导致缓存中的数据长时间不更新，影响数据的新鲜度。</li>
+<li>如果数据量很大，可能会占用较多的内存资源。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>数据更新频率较低，且数据新鲜度要求不高的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>互斥锁：使用互斥锁（Mutex）机制来控制缓存更新的过程。当缓存失效时，先获取锁，然后检查数据库中是否有数据，如果有则更新缓存，最后释放锁。
+<ul>
+<li>优点：
+<ol>
+<li>可以确保在缓存失效时，只有一部分请求会真正落到数据库上，减少了数据库的压力。</li>
+<li>数据更新及时。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>锁的使用会增加系统的复杂性。</li>
+<li>如果并发量极高，可能会出现锁竞争激烈的情况。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>数据更新频繁，且数据新鲜度要求较高的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>懒加载：当缓存失效后，可以先返回旧数据或占位符，然后异步加载最新数据并更新缓存。
+<ul>
+<li>优点：
+<ol>
+<li>用户体验较好，不会立即感知到数据陈旧。</li>
+<li>减少了数据库的瞬时压力。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>数据更新可能有延迟。</li>
+<li>实现复杂度较高。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>数据更新频率适中，对用户体验有一定要求的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>缓存穿透：是指查询一个一定不存在的数据，这个数据在缓存中不存在，同时在数据库中也不存在，每次请求都会直接穿透缓存去查询数据库，造成数据库压力巨大。</p>
+<p>解决方案：</p>
+<ul>
+<li>设置空值缓存：当查询到数据库中不存在的数据时，可以将这个查询结果（通常是 null 或特殊标识）缓存起来，设置一定的过期时间。
+<ul>
+<li>优点：
+<ol>
+<li>直接解决了缓存穿透问题，减少了对数据库的无效请求。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>如果恶意攻击者利用不存在的 key 频繁请求，可能会导致缓存中存储大量无效数据。</li>
+<li>需要合理设置过期时间，避免长期占用缓存空间。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于存在大量无效查询请求的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>布隆过滤器（Bloom Filter）：使用布隆过滤器来判断数据是否存在，可以有效地拦截那些一定不存在的数据查询。
+<ul>
+<li>优点：
+<ol>
+<li>有效拦截不存在的数据查询，减少无效请求。</li>
+<li>占用空间小，查询速度快。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>存在一定的误判率，即可能存在少量的假阳性（False Positive）。</li>
+<li>需要合理设计布隆过滤器的容量和哈希函数数量。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于数据量大且对数据精确性有一定容忍度的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>API 层面的验证：在业务逻辑层面增加对输入数据的校验，提前过滤掉非法或无效的查询请求。
+<ul>
+<li>优点：
+<ol>
+<li>从源头上过滤掉非法请求，减轻后续处理层的压力。</li>
+<li>提升系统的安全性。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>需要在业务逻辑中增加额外的验证步骤，增加了开发工作量。</li>
+<li>可能需要维护一份合法 key 的列表或规则。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于存在非法请求可能性的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>缓存雪崩：是指当缓存中的数据集中过期，导致大量请求同时穿透缓存去查询数据库，造成数据库压力剧增甚至崩溃。</p>
+<p>解决方案：</p>
+<ul>
+<li>分散缓存过期时间：避免大量数据同时过期，可以通过随机化设置过期时间来分散数据的过期时间。
+<ul>
+<li>优点：
+<ol>
+<li>有效避免了大量数据同时过期的情况，降低了数据库的压力。</li>
+<li>实现简单。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>需要合理设置随机过期时间，以确保数据分布均匀。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于数据量较大且有过期时间一致性的风险的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>限流降级：在缓存失效前，通过限流算法来控制请求的流量，一旦超过阈值则进行降级处理，返回默认值或缓存中的旧数据。
+<ul>
+<li>优点：
+<ol>
+<li>通过限流机制保护了后端系统，避免了突发流量的影响。</li>
+<li>可以根据实际情况调整限流策略。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>需要设计合理的降级策略，以确保用户体验不受太大影响。</li>
+<li>实现复杂度较高。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于流量波动较大的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>备用缓存：准备一个备用缓存系统，当主缓存系统出现故障或过载时，可以切换到备用缓存继续服务。
+<ul>
+<li>优点：
+<ol>
+<li>提供了冗余保障，增强了系统的可用性。</li>
+<li>可以平滑地切换到备用系统，减少服务中断时间。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>需要维护两套缓存系统，增加了运维成本。</li>
+<li>切换逻辑需要考虑数据同步问题。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于对系统可用性要求较高的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>异步更新：当缓存失效时，可以先返回旧数据或占位符，然后异步加载最新数据并更新缓存。
+<ul>
+<li>优点：
+<ol>
+<li>用户体验较好，不会立即感知到数据陈旧。</li>
+<li>减少了数据库的瞬时压力。</li>
+</ol>
+</li>
+<li>缺点：
+<ol>
+<li>数据更新可能有延迟。</li>
+<li>实现复杂度较高。</li>
+</ol>
+</li>
+<li>适用场景：
+<ol>
+<li>适用于数据更新频率适中，对用户体验有一定要求的场景。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="如何保证数据库和redis缓存一致性"><a class="markdownIt-Anchor" href="#如何保证数据库和redis缓存一致性">#</a> 如何保证数据库和 Redis 缓存一致性？</h3>
+<ol>
+<li>
+<p>最终一致性（Eventual Consistency）</p>
+<p>在分布式系统中，通常追求的是最终一致性而非强一致性。最终一致性意味着在一段时间后，所有数据副本将收敛到同一个状态。对于缓存和数据库来说，这意味着在数据更新后，缓存最终会反映数据库中的最新状态。</p>
+</li>
+<li>
+<p>双写策略</p>
+<ol>
+<li>
+<p>先更新数据库，再删除缓存（Update Database First, Invalidate Cache）</p>
+<p>原理：当数据发生变化时，首先更新数据库中的数据，然后再删除缓存中的对应条目。当下次请求该数据时，由于缓存中没有该数据，所以会重新从数据库中读取并更新缓存。</p>
+<ul>
+<li>优点：
+<ul>
+<li>简单易实现。</li>
+<li>可以避免数据不一致的问题。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>如果删除缓存失败，则可能导致缓存中的数据比数据库中的数据旧。</li>
+<li>删除缓存操作可能会失败，需要有重试机制。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>更新操作较少，且对数据一致性要求较高的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>先删除缓存，再更新数据库（Invalidate Cache First, Update Database）</p>
+<p>原理：当数据发生变化时，先删除缓存中的数据，然后再更新数据库中的数据。</p>
+<ul>
+<li>优点：
+<ul>
+<li>可以避免缓存击穿问题。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>如果更新数据库失败，而缓存已经被删除，那么这段时间内将无法从缓存中获取数据，导致请求直接访问数据库，增加数据库压力。</li>
+<li>如果删除缓存和更新数据库之间有延迟，可能会导致短暂的数据不一致。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>更新操作频繁，但对数据一致性要求稍低的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>延迟双删策略（Double Eviction with Delay）</p>
+<p>原理：当数据更新时，先删除缓存中的数据，然后立即设置一个临时缓存项（如使用 Redis 的 EXPIRE 命令设置一个很短的过期时间），再更新数据库。当临时缓存项过期后，真正的更新操作完成。</p>
+<ul>
+<li>优点：
+<ul>
+<li>减少了直接访问数据库的概率。</li>
+<li>通过设置临时缓存项，可以减少更新数据库失败导致的数据不一致问题。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>实现相对复杂。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>高并发场景下，对数据一致性要求较高的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>使用消息队列</p>
+<p>原理：当数据在数据库中更新后，发送一个消息到消息队列中，由另一个消费者监听消息队列并更新缓存。</p>
+<ul>
+<li>优点：
+<ul>
+<li>解耦数据库和缓存更新操作。</li>
+<li>可以异步处理缓存更新，减少数据库更新时的延迟。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>增加了系统的复杂性。</li>
+<li>需要处理消息队列的可靠性和消息重复消费问题。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>高并发、大数据量的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>缓存预热</p>
+<p>原理：在系统启动或数据更新后，主动将数据加载到缓存中。</p>
+<ul>
+<li>优点：
+<ul>
+<li>避免冷启动时大量请求直接访问数据库。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>需要额外的机制来触发预热操作。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>系统启动或数据更新后，希望尽快恢复服务的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>乐观锁或版本号</p>
+<p>原理：在数据库中为数据添加一个版本号字段，每次更新时都需要检查版本号是否匹配。如果不匹配，则说明数据已被其他操作更新，需要重新获取最新数据并再次尝试更新。</p>
+<ul>
+<li>优点：
+<ul>
+<li>保证了数据的一致性。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>可能会出现更新冲突，需要重试机制。</li>
+</ul>
+</li>
+<li>适用场景：
+<ul>
+<li>对数据一致性要求极高的场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="如何保证-redis-的高并发"><a class="markdownIt-Anchor" href="#如何保证-redis-的高并发">#</a> 如何保证 Redis 的高并发？</h3>
+<ol>
+<li>单机优化
+<ul>
+<li>硬件优化：选择高性能的硬件设备，如 SSD 硬盘、高速网络接口卡以及足够的内存。</li>
+<li>内存管理：合理设置 Redis 的最大内存限制，避免内存溢出导致的服务不可用。</li>
+<li>持久化策略：选择合适的持久化方式（RDB 或 AOF），并调整相关的配置，以减少对性能的影响。</li>
+<li>数据结构选择：根据应用场景选择合适的数据结构，以减少内存使用并提高访问效率。</li>
+</ul>
+</li>
+<li>主从复制
+<ul>
+<li>读写分离：通过主从复制实现读写分离，主节点负责写操作，从节点负责读操作，可以显著提高并发处理能力。</li>
+<li>自动故障转移：使用 Redis Sentinel（哨兵）机制来监控主从节点的状态，并在主节点发生故障时自动进行故障转移，保证高可用性。</li>
+</ul>
+</li>
+<li>分布式集群
+<ul>
+<li>Redis Cluster：使用 Redis 集群来水平扩展 Redis，集群可以自动将数据分片存储在不同的节点上，并提供数据复制功能。这样可以支持更高的并发量和更大的数据集。</li>
+<li>数据分片：手动将数据分片存储在不同的 Redis 实例上，可以减轻单个节点的压力。</li>
+</ul>
+</li>
+<li>客户端优化
+<ul>
+<li>连接池：使用连接池来复用客户端连接，减少建立和销毁连接的开销。</li>
+<li>批处理：批量处理请求，例如使用 MGET、MSET 等命令来一次处理多个键值对，减少网络往返次数。</li>
+<li>命令管道：使用 Redis 的命令管道（pipelining）特性，将多个命令一次性发送给 Redis 服务器，减少网络延迟。</li>
+</ul>
+</li>
+<li>调整配置
+<ul>
+<li>网络配置：优化网络配置，例如调整 TCP 缓冲区大小、禁用 Nagle 算法等，以提高网络传输效率。</li>
+<li>I/O 多路复用：Redis 使用事件驱动模型来处理客户端请求，可以处理大量的并发连接。确保操作系统和 Redis 的事件处理机制配置得当。</li>
+</ul>
+</li>
+<li>监控与调优
+<ul>
+<li>性能监控：定期监控 Redis 的性能指标，如 CPU 使用率、内存使用情况、网络延迟等，以便及时发现性能瓶颈。</li>
+<li>负载均衡：使用负载均衡器来分配客户端请求，确保各个 Redis 节点的负载均衡。</li>
+</ul>
+</li>
+<li>避免热点 Key
+<ul>
+<li>Key 的设计：合理设计 Key，避免热点 Key 的产生，例如使用哈希分片（Hash Ring）来分散请求。</li>
+<li>过期时间：为热点 Key 设置合理的过期时间，并且可以使用随机化过期时间来避免雪崩效应。</li>
+</ul>
+</li>
+<li>异步处理
+<ul>
+<li>异步持久化：使用异步的方式进行持久化操作，避免阻塞主线程。</li>
+<li>多线程处理：Redis 6.0 引入了多线程模型来处理部分 I/O 密集型任务，如 AOF 重写和 RDB 持久化，可以进一步提升性能。</li>
+</ul>
+</li>
+</ol>
+<h3 id="redis-如何保证原子性"><a class="markdownIt-Anchor" href="#redis-如何保证原子性">#</a> Redis 如何保证原子性？</h3>
+<ol>
+<li>单线程模型: Redis 采用单线程模型来处理所有的客户端请求。这意味着在同一时间内，只有一个客户端请求被处理，因此消除了并发竞争条件，保证了命令执行的顺序性和原子性。</li>
+<li>命令级别的原子性: Redis 中的大多数命令都是原子性的，这意味着它们在执行过程中不会被其他操作打断。例如，SET, GET, INCR,<br>
+DECR, HSET, HGET 等命令在执行时，整个操作过程不会被中断，从而保证了操作的完整性。</li>
+<li>事务机制: Redis 提供了事务机制，允许用户将多个命令打包成一个事务，通过 MULTI 命令开启事务，然后执行一系列命令，最后通过 EXEC 命令提交事务。<br>
+在事务中，Redis 会将这些命令放入队列中，等到事务提交时，这些命令会按照顺序依次执行，从而保证了事务内的操作的原子性。</li>
+<li>WATCH 命令: WATCH 命令可以监视一个或多个键，如果监视的键在执行 EXEC 之前被其他客户端修改了，那么事务会被取消。这实际上是一种乐观锁机制，用来保证在某些特定场景下的数据一致性。</li>
+<li>Lua 脚本: Redis 允许在服务器端执行 Lua 脚本来处理复杂的操作。Lua 脚本在执行时具有原子性，即整个脚本作为一个整体执行，期间不会被打断。<br>
+这意味着脚本中的多个 Redis 命令会被作为一个单独的操作来执行，从而保证了操作的原子性。</li>
+<li>数据结构的设计: Redis 内部的数据结构设计也是为了支持高效的原子操作。例如，对于有序集合（Sorted<br>
+Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插入、删除和查找操作的数据结构，可以高效地支持原子性操作。</li>
+</ol>
+<h3 id="redis-有哪些应用场景"><a class="markdownIt-Anchor" href="#redis-有哪些应用场景">#</a> Redis 有哪些应用场景？</h3>
+<ol>
+<li>String（字符串）
+<ul>
+<li>计数器：例如网站的访问计数，可以使用 INCR 或 INCRBY 命令来递增计数器。</li>
+<li>会话存储：存储用户的登录状态或其他临时信息。</li>
+<li>消息队列：使用 LPUSH 和 BRPOP 命令实现简单的消息队列。</li>
+<li>缓存：存储经常访问的数据，减少数据库的访问压力。</li>
+</ul>
+</li>
+<li>List（列表）
+<ul>
+<li>消息队列：使用 LPUSH 和 BRPOP 命令实现先进先出（FIFO）的消息队列。</li>
+<li>历史记录：保存用户的浏览历史或购买记录，可以使用 RPUSH 和 LPOP 命令。</li>
+<li>排行榜：使用列表存储排名信息，通过 LREM 命令可以移除特定成员。</li>
+</ul>
+</li>
+<li>Hash（哈希）
+<ul>
+<li>对象存储：存储复杂对象，如用户信息，每个字段对应用户的一个属性。</li>
+<li>购物车：每个用户有一个购物车，购物车中的商品信息可以用哈希表来存储。</li>
+<li>会话管理：存储用户的会话信息，每个会话 ID 对应一个哈希表。</li>
+</ul>
+</li>
+<li>Set（集合）
+<ul>
+<li>去重：例如在一个活动中，确保每个用户只能参与一次。</li>
+<li>标签系统：每个项目可以有多个标签，使用集合来存储项目的标签。</li>
+<li>好友关系：存储用户的好友列表，可以快速判断两个用户是否互为好友。</li>
+</ul>
+</li>
+<li>Sorted Set（有序集合）
+<ul>
+<li>排行榜：根据分数排序的排行榜，如游戏得分、用户贡献度等。</li>
+<li>优先级队列：每个元素都有一个优先级，可以按优先级取出元素。</li>
+<li>时间轴：按时间戳排序的消息或帖子显示，如微博、Facebook 的时间线。</li>
+<li>地理信息：存储地理位置信息，并使用 GEO 命令查询附近的地点。</li>
+</ul>
+</li>
+<li>Bitmaps
+<ul>
+<li>统计分析：例如统计某一天有多少独立用户访问了网站，可以使用一个位图来表示每个用户是否访问过。</li>
+<li>权限管理：每个用户可以有多个权限位，使用位图来表示用户的权限。</li>
+</ul>
+</li>
+<li>HyperLogLog
+<ul>
+<li>近似计数：用于估算大量数据中的不重复元素数量，例如统计网站的独立访客数。</li>
+</ul>
+</li>
+<li>Streams
+<ul>
+<li>事件日志：记录系统中的事件，如用户行为日志，可以使用 XADD 添加事件，XREAD 读取事件。</li>
+<li>异步处理：作为消息队列的一部分，将事件发布到流中，然后由消费者异步处理。</li>
+</ul>
+</li>
+<li>Geo（地理）
+<ul>
+<li>位置服务：存储地理位置信息，并支持基于地理位置的搜索，如查找附近的餐厅或酒店。</li>
+</ul>
+</li>
+</ol>
+<p>综合应用示例</p>
+<p>假设我们要构建一个社交网络应用，可以使用 Redis 来实现以下功能：</p>
+<ul>
+<li>用户信息存储：使用 Hash 类型存储每个用户的个人信息，如用户名、头像、生日等。</li>
+<li>好友关系：使用 Set 类型存储每个用户的好友列表。</li>
+<li>动态时间线：使用 Sorted Set 类型存储用户的动态，根据发布时间排序。</li>
+<li>消息通知：使用 List 类型作为消息队列，存储用户收到的通知消息。</li>
+<li>在线状态：使用 BitMap 类型记录每天用户的在线状态。</li>
+<li>热门话题：使用 HyperLogLog 类型来估计参与某个话题讨论的独立用户数量。</li>
+</ul>
+<h2 id="常用命令"><a class="markdownIt-Anchor" href="#常用命令">#</a> 常用命令</h2>
+<h3 id="cmd访问redis"><a class="markdownIt-Anchor" href="#cmd访问redis">#</a> cmd 访问 redis</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli.exe -h 127.0.0.1 -p 6379</span><br></pre></td></tr></table></figure>
+<h3 id="字符串string相关命令"><a class="markdownIt-Anchor" href="#字符串string相关命令">#</a> 字符串 (String) 相关命令</h3>
+<ul>
+<li>SET key value：设置键 key 的值为 value。</li>
+<li>GET key：获取键 key 的值。</li>
+<li>GETSET key value：设置键 key 的值为 value，并返回键 key 的旧值。</li>
+<li>INCR key：将键 key 的值加一，仅支持整数值。</li>
+<li>INCRBY key increment：将键 key 的值加上指定的增量 increment。</li>
+<li>DECR key：将键 key 的值减一。</li>
+<li>DECRBY key decrement：将键 key 的值减去指定的减量 decrement。</li>
+<li>APPEND key value：将 value 追加到键 key 的值后面。</li>
+<li>STRLEN key：返回键 key 的值的长度。</li>
+</ul>
+<h3 id="列表list相关命令"><a class="markdownIt-Anchor" href="#列表list相关命令">#</a> 列表 (List) 相关命令</h3>
+<ul>
+<li>LPUSH key value [value …]：将一个或多个值 value 插入到键 key 的列表头部。</li>
+<li>RPUSH key value [value …]：将一个或多个值 value 插入到键 key 的列表尾部。</li>
+<li>LPOP key：移除并返回键 key 的列表的第一个元素。</li>
+<li>RPOP key：移除并返回键 key 的列表的最后一个元素。</li>
+<li>LRANGE key start stop：返回键 key 的列表中指定范围内的元素。</li>
+<li>LREM key count value：移除键 key 的列表中等于 value 的元素，count 参数决定了移除的数量。</li>
+<li>LSET key index value：将键 key 的列表中的指定位置 index 的值设为 value。</li>
+<li>LLEN key：返回键 key 的列表的长度。</li>
+</ul>
+<h3 id="哈希hash相关命令"><a class="markdownIt-Anchor" href="#哈希hash相关命令">#</a> 哈希 (Hash) 相关命令</h3>
+<ul>
+<li>HSET key field value：将哈希表 key 中的域 field 的值设为 value。</li>
+<li>HGET key field：返回哈希表 key 中域 field 的值。</li>
+<li>HGETALL key：返回哈希表 key 中所有域的值。</li>
+<li>HDEL key field [field …]：删除一个或多个哈希表 key 中的域 field。</li>
+<li>HEXISTS key field：查看哈希表 key 中指定域 field 是否存在。</li>
+<li>HLEN key：返回哈希表 key 中域的数量。</li>
+<li>HKEYS key：返回哈希表 key 中所有域的列表。</li>
+<li>HVALS key：返回哈希表 key 中所有值的列表。</li>
+</ul>
+<h3 id="集合set相关命令"><a class="markdownIt-Anchor" href="#集合set相关命令">#</a> 集合 (Set) 相关命令</h3>
+<ul>
+<li>SADD key member [member …]：将一个或多个成员 member 加入到集合 key 中。</li>
+<li>SMEMBERS key：返回集合 key 中的所有成员。</li>
+<li>SCARD key：返回集合 key 中的成员数。</li>
+<li>SREM key member [member …]：将一个或多个成员 member 从集合 key 中移除。</li>
+<li>SISMEMBER key member：判断成员 member 是否是集合 key 的成员。</li>
+<li>SINTER key [key …]：返回给定多个集合的交集成员。</li>
+<li>SUNION key [key …]：返回给定多个集合的并集成员。</li>
+<li>SDIFF key [key …]：返回给定多个集合的差集成员。</li>
+</ul>
+<h3 id="有序集合sorted-set相关命令"><a class="markdownIt-Anchor" href="#有序集合sorted-set相关命令">#</a> 有序集合 (Sorted Set) 相关命令</h3>
+<ul>
+<li>ZADD key score member [score member …]：将一个或多个成员 member 及其分数 score 加入到有序集合 key 中。</li>
+<li>ZRANGE key start stop [WITHSCORES]：返回有序集合 key 中指定范围内的成员。</li>
+<li>ZREVRANGE key start stop [WITHSCORES]：返回有序集合 key 中指定范围内的成员，成员按分数值递减排列。</li>
+<li>ZREM key member [member …]：将一个或多个成员 member 从有序集合 key 中移除。</li>
+<li>ZCARD key：返回有序集合 key 中的成员数。</li>
+<li>ZSCORE key member：返回有序集合 key 中成员 member 的分数值。</li>
+<li>ZCOUNT key min max：计算在有序集合 key 中指定区间分数的成员数。</li>
+</ul>
+<h3 id="通用命令"><a class="markdownIt-Anchor" href="#通用命令">#</a> 通用命令</h3>
+<ul>
+<li>EXPIRE key seconds：为键 key 设置生存时间。</li>
+<li>TTL key：返回键 key 剩余的生存时间。</li>
+<li>DEL key [key …]：删除一个或多个键 key。</li>
+<li>SELECT index：选择编号为 index 的数据库。</li>
+<li>FLUSHDB：清除当前数据库中的所有数据。</li>
+<li>FLUSHALL：清除所有数据库中的所有数据。</li>
+<li>KEYS pattern：返回匹配 pattern 的所有键。</li>
+<li>TYPE key：返回键 key 的类型。</li>
+</ul>
+
+      <div class="tags">
+          <a href="/joker.github.io/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
+          <a href="/joker.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"><i class="ic i-tag"></i> 数据库</a>
+          <a href="/joker.github.io/tags/NoSQL/" rel="tag"><i class="ic i-tag"></i> NoSQL</a>
+          <a href="/joker.github.io/tags/%E7%BC%93%E5%AD%98/" rel="tag"><i class="ic i-tag"></i> 缓存</a>
+          <a href="/joker.github.io/tags/Redis/" rel="tag"><i class="ic i-tag"></i> Redis</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2024-09-13 17:39:03" itemprop="dateModified" datetime="2024-09-13T17:39:03+08:00">2024-09-13</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/joker.github.io/images/wechatpay.png" alt="Joker 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/joker.github.io/images/alipay.png" alt="Joker 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/joker.github.io/images/paypal.png" alt="Joker 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Joker <i class="ic i-at"><em>@</em></i>Joker
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">https://silvercrow42.github.io/joker.github.io/2024/09/13/【Redis】Redis面试题汇总与详解/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;13&#x2F;%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3&#x2F;26e3bd5f237ab05ae63f5a697805b33b.png" title="spring面试题汇总">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> spring</span>
+  <h3>spring面试题汇总</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> Redis 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> Redis 的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text"> Redis 的应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text"> Redis 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 字符串（String）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 列表（List）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 哈希（Hash）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 集合（Set）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set"><span class="toc-number">1.4.5.</span> <span class="toc-text"> 有序集合（Sorted Set）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8zip-list"><span class="toc-number">1.4.5.1.</span> <span class="toc-text"> 压缩列表（Zip List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8skip-list"><span class="toc-number">1.4.5.2.</span> <span class="toc-text"> 跳表（Skip List）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.</span> <span class="toc-text"> 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BA%E4%BD%95%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-number">1.5.1.</span> <span class="toc-text"> Redis 为何这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text"> Redis 为何使用单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.5.3.</span> <span class="toc-text"> 缓存三大问题以及解决方案？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8Credis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.5.4.</span> <span class="toc-text"> 如何保证数据库和 Redis 缓存一致性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81-redis-%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-number">1.5.5.</span> <span class="toc-text"> 如何保证 Redis 的高并发？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.5.6.</span> <span class="toc-text"> Redis 如何保证原子性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.7.</span> <span class="toc-text"> Redis 有哪些应用场景？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd%E8%AE%BF%E9%97%AEredis"><span class="toc-number">1.6.1.</span> <span class="toc-text"> cmd 访问 redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text"> 字符串 (String) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.3.</span> <span class="toc-text"> 列表 (List) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.4.</span> <span class="toc-text"> 哈希 (Hash) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.5.</span> <span class="toc-text"> 集合 (Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.6.</span> <span class="toc-text"> 有序集合 (Sorted Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.7.</span> <span class="toc-text"> 通用命令</span></a></li></ol></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li class="active"><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" rel="bookmark" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Joker"
+      data-src="/joker.github.io/images/avatar.png">
+  <p class="name" itemprop="name">Joker</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/joker.github.io/archives/">
+        <span class="count">5</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/joker.github.io/categories/">
+        <span class="count">4</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/joker.github.io/tags/">
+        <span class="count">12</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/joker.github.io/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/joker.github.io/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/joker.github.io/categories/" rel="section"><i class="ic i-th"></i>分类</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/joker.github.io/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="spring面试题汇总">spring面试题汇总</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joker @ Joker</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2024/09/13/【Redis】Redis面试题汇总与详解/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/joker.github.io/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

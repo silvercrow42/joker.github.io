@@ -8,9 +8,14 @@
         <pubDate>Tue, 10 Sep 2024 10:00:01 +0800</pubDate>
         <lastBuildDate>Tue, 10 Sep 2024 10:00:01 +0800</lastBuildDate>
         <category>后端</category>
+        <category>数据库</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
+        <category>Redis</category>
         <category>MQ</category>
         <category>RocketMQ</category>
-        <category>Redis</category>
+        <category>java</category>
+        <category>spring</category>
         <category>Redisson</category>
         <category>Zookeeper</category>
         <category>分布式锁</category>
