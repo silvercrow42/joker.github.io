@@ -899,6 +899,296 @@ SETEX 命令将会替换旧的值。</li>
 <li>适用性：多线程功能最适合在网络 I/O 成为性能瓶颈的情况下使用。如果 Redis 实例的 CPU 占用率已经很高，那么开启多线程可能并不会带来显著的性能提升。</li>
 <li>兼容性：在 Redis 的其他模式（如集群模式）中，多线程功能可能不完全适用，因此在使用时需要谨慎。</li>
 </ul>
+<h2 id="redis-集群"><a class="markdownIt-Anchor" href="#redis-集群">#</a> Redis 集群</h2>
+<h3 id="redis-主从"><a class="markdownIt-Anchor" href="#redis-主从">#</a> Redis 主从</h3>
+<p>和 MySQL 需要主从复制的原因一样，Redis 虽然读取写入的速度都特别快，但是也会产生性能瓶颈，特别是在读压力上，为了分担压力，Redis 支持主从复制。<br>
+Redis 的主从结构包括一主一从，一主多从或级联结构，复制类型分为全量同步和增量同步。<br>
+下图为级联结构：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png" class="" title="1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png">
+<h4 id="全量同步"><a class="markdownIt-Anchor" href="#全量同步">#</a> 全量同步</h4>
+<p>Redis 全量复制一般发生在 slave 的初始阶段，这时 slave 需要将 master 上的数据都复制一份，具体步骤如下：</p>
+<ol>
+<li>slave 连接 master，发送 SYNC 命令；</li>
+<li>master 街道 SYNC 命令后，执行 BGSAVE 命令生产 RDB 文件并使用缓冲区记录此后执行的所有写命令；</li>
+<li>master 的 BGSAVE 执行完成后，向所有的 slave 发送快照文件，并在发送过程中继续记录执行的写命令；</li>
+<li>slave 收到快照后，丢弃所有的旧数据，载入收到的数据；</li>
+<li>master 快照发送完成后就会开始向 slave 发送缓冲区的写命令；</li>
+<li>slave 完成对快照的载入，并开始接受命令请求，执行来自 master 缓冲区的写命令；</li>
+<li>slave 完成上面的数据初始化后就可以开始接受用户的读请求了。</li>
+</ol>
+<p>大致流程图如下：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png" class="" title="1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png">
+<h4 id="增量复制"><a class="markdownIt-Anchor" href="#增量复制">#</a> 增量复制</h4>
+<p>增量复制实际上就是在 slave 初始化完成后开始正常工作时 master 发生写操作同步到 slave 的过程。增量复制的具体步骤如下：</p>
+<ol>
+<li>主节点记录复制偏移量：<br>
+在全量复制完成后，主节点开始记录其发送给从节点的所有写命令，并维护一个复制偏移量（replication<br>
+offset），这个偏移量表示了主节点已发送了多少字节的数据给从节点。</li>
+<li>从节点记录复制偏移量：<br>
+同时，从节点也会记录接收到的命令及其对应的偏移量。这使得从节点能够知道它已经处理了多少数据。</li>
+<li>主节点维护积压队列：<br>
+为了支持增量复制，主节点会维护一个 “积压队列”（backlog）。这是一个固定大小的环形缓冲区，用来存储最近的写入命令。这样即使从节点暂时断开连接，也能在重新连接后获取到断开期间丢失的数据。</li>
+<li>从节点请求增量数据：<br>
+当从节点重新连接到主节点时，它会发送一个 PSYNC 命令，附带它最后已知的复制偏移量和主节点的运行 ID（run<br>
+ID）。主节点会检查这个信息，并决定是否进行增量复制。</li>
+<li>增量复制：
+<ul>
+<li>如果主节点发现从节点提供的偏移量在积压队列的有效范围内，则主节点会从该偏移量开始向从节点发送所有后续的写命令，这就是增量复制。</li>
+<li>如果偏移量不在有效范围内，或者从节点提供的运行 ID 与主节点当前的运行 ID 不符（可能是因为主节点重启过），那么主节点会选择进行一次全量复制。</li>
+</ul>
+</li>
+<li>从节点应用增量数据：<br>
+从节点接收到增量数据后，会将其应用到自己的数据集上，使自己的数据与主节点保持一致。</li>
+</ol>
+<p>Redis 主从同步的特点</p>
+<ol>
+<li>采用异步复制；</li>
+<li>可以一主多从；</li>
+<li>主从复制对于 master 来说是非阻塞的，也就是说 slave 在进行主从复制的过程中，master 依然可以处理请求；</li>
+<li>主从复制对于 slave 来说也是非阻塞的，也就是说 slave 在进行主从复制的过程中也可以接受外界的查询请求，只不过这时候返回的数据不一定是正确的。为了避免这种情况发生，可以在 slave 的配置文件中配置，在同步过程中阻止查询；</li>
+<li>每个 slave 可以接受来自其他 slave 的连接；</li>
+<li>主从复制提高了 Redis 服务的扩展性，避免单节点问题，另外也为数据备份冗余提供了一种解决方案；</li>
+</ol>
+<p>为了降低主 redis 服务器写磁盘压力带来的开销，可以配置让主 redis 不在将数据持久化到磁盘，而是通过连接让一个配置的从 redis 服务器及时的将相关数据持久化到磁盘，不过这样会存在一个问题，就是主 redis 服务器一旦重启，因为主 redis 服务器数据为空，这时候通过主从同步可能导致从 redis 服务器上的数据也被清空；</p>
+<h4 id="redis主从复制搭建"><a class="markdownIt-Anchor" href="#redis主从复制搭建">#</a> Redis 主从复制搭建</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载软件包</span></span><br><span class="line">wget http://download.redis.io/releases/redis-4.0.10.tar.gz</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压软件包，主从都需要做（本次是单机多实例来做主从）</span></span><br><span class="line">tar xf redis-4.0.10.tar.gz -C /home/redis/6379/</span><br><span class="line">tar xf redis-4.0.10.tar.gz -C /home/redis/6380/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编译安装</span></span><br><span class="line">yum install -y gcc gcc++</span><br><span class="line">make MALLOC=libc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动Redis（修改了Redis运行方式为守护进程方式）</span></span><br><span class="line">/home/redis/6379/redis-4.0.10/src/redis-server /home/redis/6379/redis-4.0.10/redis.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从库做相同的操作，由于是单机多实例，所以修改从库的port为6380，启动从库</span></span><br><span class="line">/home/redis/6380/redis-4.0.10/src/redis-server /home/redis/6380/redis-4.0.10/redis.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Redis测试</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master：</span></span><br><span class="line">./src/redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set name 111</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;111&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">slave：</span></span><br><span class="line">./src/redis-cli -p 6380</span><br><span class="line">127.0.0.1:6380&gt; set name slave</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6380&gt; get name</span><br><span class="line">&quot;slave&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">主从搭建</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1、只需要配置slave，指明master的IP地址和port就可以了，配置完后重启实例</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">slaveof &lt;masterip&gt; &lt;masterport&gt;</span></span><br><span class="line">slaveof 127.0.0.1 6379</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试：</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master：</span></span><br><span class="line">./src/redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set password 123456</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get password</span><br><span class="line">&quot;123456&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">slave：</span></span><br><span class="line">./src/redis-cli -p 6380</span><br><span class="line">127.0.0.1:6380&gt; get password</span><br><span class="line">&quot;123456&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">在master上设定键值对，在slave上能够准确的查出来，主从配置成功</span></span><br></pre></td></tr></table></figure>
+<h3 id="redis-哨兵"><a class="markdownIt-Anchor" href="#redis-哨兵">#</a> Redis 哨兵</h3>
+<p>在主从复制实现之后，如果想对 master 进行监控，Redis 提供了一种哨兵机制，哨兵的含义就是监控 Redis 系统的运行状态，并做相应的响应。</p>
+<p>其主要的功能有以下两点：</p>
+<ol>
+<li>监控所有 Redis 节点是否正常运行；</li>
+<li>master 故障后可以通过投票机制，从 slave 中选举出新的 master，保证集群正常运行。</li>
+</ol>
+<p>在一个一主多从的集群中，可以启用多个哨兵进行监控以保证集群足够稳健，这种情况下，哨兵不仅监控主从服务，哨兵之间也会相互监控，建议哨兵至少 3 个并且是奇数。</p>
+<p>哨兵主要用于管理多个 Redis 服务器，主要有以下三个任务：</p>
+<ol>
+<li>监控：哨兵会不断的检测 master 和 slave 之间是否运行正常；</li>
+<li>提醒：当监控的某个 Redis 出现问题，哨兵可以通过 API 向管理员或其他应用程序发送通知；</li>
+<li>故障迁移：当一个 master 不能正常工作时，哨兵会开始一次自动故障迁移操作，它会将失效 master 的其中一个 slave 提升为 master，并让失效 master 和其他 slave 该为复制新的 master。<br>
+当客户端试图连接失效的 master 时，集群也会向客户端返回新的 master 地址，使得集群可以使用新的 master 代替失效的 master。</li>
+</ol>
+<h4 id="redis-哨兵的工作原理"><a class="markdownIt-Anchor" href="#redis-哨兵的工作原理">#</a> Redis 哨兵的工作原理</h4>
+<p>Redis 哨兵（Sentinel）是一个分布式系统，用于监控 Redis 主节点和从节点的健康状况，并在主节点发生故障时自动进行故障转移。<br>
+哨兵系统由一组哨兵进程组成，它们相互协作来完成监控、通知、选举以及故障转移的任务。下面详细介绍哨兵的工作原理：</p>
+<ol>
+<li>监控（Monitoring）
+<ul>
+<li>心跳检测：每个哨兵（Sentinel）会定期向主节点、从节点以及其他哨兵发送心跳消息，以此来监控这些节点的健康状况。</li>
+<li>配置文件：哨兵的配置文件中定义了需要监控的主节点的信息，包括名称、IP 地址和端口号等。</li>
+</ul>
+</li>
+<li>选举（Election）
+<ul>
+<li>选举机制：当某个哨兵发现主节点不可用时，它会向其他哨兵发起询问，以确认主节点是否真的出现了故障。</li>
+<li>投票过程：每个哨兵都有机会投票选出一个领导者（leader），领导者负责执行实际的故障转移操作。</li>
+<li>多数原则：为了防止脑裂现象（Split-brain 指的是系统的一部分节点认为另一部分节点已经失败，而实际上那些被认为失败的节点仍在正常工作。），哨兵系统采用多数原则来决定是否进行故障转移。<br>
+只有当超过半数的哨兵同意主节点已经失效时，才会执行故障转移。</li>
+</ul>
+</li>
+<li>故障转移（Failover）
+<ul>
+<li>选择从节点：一旦确定主节点失效，领导者哨兵会选择一个合适的从节点来升级为主节点。</li>
+<li>数据同步：被选中的从节点会被提升为主节点，并且其他从节点会重新连接到新的主节点。</li>
+<li>客户端通知：完成故障转移后，哨兵会更新客户端的配置文件，使客户端能够连接到新的主节点。</li>
+</ul>
+</li>
+<li>配置更新（Configuration Updates）
+<ul>
+<li>自动配置更新：哨引不仅会更新客户端的配置文件，还会自动更新从节点的配置，使它们指向新的主节点。</li>
+<li>持续监控：故障转移完成后，哨兵将继续监控新的主节点和从节点的健康状况。</li>
+</ul>
+</li>
+<li>客户端通知
+<ul>
+<li>通知机制：哨兵会通知客户端新的主节点地址，以便客户端可以继续正常工作。</li>
+<li>透明切换：这一过程对客户端来说应该是透明的，即客户端不需要做任何额外的操作即可继续访问 Redis 服务。</li>
+</ul>
+</li>
+</ol>
+<p>实现细节如下：</p>
+<ul>
+<li>哨兵通信：哨兵之间通过发布 / 订阅模式进行通信，确保所有哨兵都能及时了解系统状态的变化。</li>
+<li>命令交互：哨兵使用特定的命令（如 SENTINEL 命令）来查询和管理哨兵系统。</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>主从服务器的数据要经常进行主从复制，这样会造成性能下降；</li>
+<li>当主服务器宕机后，从服务器切换成主服务器的那段时间，服务是不可用的。</li>
+</ul>
+<h4 id="redis哨兵模式搭建"><a class="markdownIt-Anchor" href="#redis哨兵模式搭建">#</a> Redis 哨兵模式搭建</h4>
+<p>主从模式搭建看上面的步骤，以下主要是在主从搭建完的基础上搭建哨兵模式。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置sentinel.conf文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">工作路径，注意路径不要和主重复</span></span><br><span class="line">dir &quot;/tmp/23679&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">哨兵监控的master，主从配置一样，这里只用输入redis主节点的ip/port和法定人数。</span></span><br><span class="line">sentinel monitor mymaster 192.168.125.128 6379 1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master或slave多长时间（默认30秒）不能使用后标记为s_down状态。</span></span><br><span class="line">sentinel down-after-milliseconds mymaster 5000</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">若sentinel在该配置值内未能完成failover操作（即故障时master/slave自动切换），则认为本次failover失败。</span></span><br><span class="line">sentinel failover-timeout mymaster 18000</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定了在执行故障转移时， 最多可以有多少个从服务器同时对新的主服务器进行同步，有几个slave就设置几个</span></span><br><span class="line">sentinel parallel-syncs mymaster 2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动哨兵</span></span><br><span class="line">/home/redis/26379/redis-4.0.10/src/redis-server /home/redis/26379/redis-4.0.10/sentinel.conf --sentinel</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过哨兵查看集群状态</span></span><br><span class="line">./src/redis-cli -p 26379</span><br><span class="line">127.0.0.1:26379&gt; sentinel master mymaster</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;mymaster&quot;</span><br><span class="line">3) &quot;ip&quot;</span><br><span class="line">4) &quot;172.16.0.169&quot;</span><br><span class="line">5) &quot;port&quot;</span><br><span class="line">6) &quot;6379&quot;</span><br><span class="line">7) &quot;runid&quot;</span><br><span class="line"></span><br><span class="line">127.0.0.1:26379&gt; sentinel slaves mymaster</span><br><span class="line">1)  1) &quot;name&quot;                                           # slave 1</span><br><span class="line">    2) &quot;127.0.0.1:6381&quot;</span><br><span class="line">    3) &quot;ip&quot;</span><br><span class="line">    4) &quot;127.0.0.1&quot;</span><br><span class="line">    5) &quot;port&quot;</span><br><span class="line">    6) &quot;6381&quot;</span><br><span class="line">    7) &quot;runid&quot;</span><br><span class="line">    8) &quot;0419f313098f6af1b4ccdb189d6beb22edf27a1c&quot;</span><br><span class="line"></span><br><span class="line">2)  1) &quot;name&quot;                                            # slave2</span><br><span class="line">    2) &quot;127.0.0.1:6380&quot;</span><br><span class="line">    3) &quot;ip&quot;</span><br><span class="line">    4) &quot;127.0.0.1&quot;</span><br><span class="line">    5) &quot;port&quot;</span><br><span class="line">    6) &quot;6380&quot;</span><br><span class="line">    7) &quot;runid&quot;</span><br><span class="line">    8) &quot;5b00b502a93245f7916efd1f564bd40b16aa7b22&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">模拟主down掉</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">观察sentinel的状态</span></span><br><span class="line">127.0.0.1:26379&gt; sentinel master mymaster</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;mymaster&quot;</span><br><span class="line">3) &quot;ip&quot;</span><br><span class="line">4) &quot;127.0.0.1&quot;</span><br><span class="line">5) &quot;port&quot;</span><br><span class="line">6) &quot;6381&quot;                # 已经从6379切换到6381</span><br><span class="line">7) &quot;runid&quot;</span><br><span class="line">8) &quot;0419f313098f6af1b4ccdb189d6beb22edf27a1c&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">相应的slave也做了切换</span></span><br><span class="line">127.0.0.1:26379&gt; sentinel slaves mymaster</span><br><span class="line">1)  1) &quot;name&quot;</span><br><span class="line">    2) &quot;127.0.0.1:6379&quot;</span><br><span class="line">    3) &quot;ip&quot;</span><br><span class="line">    4) &quot;127.0.0.1&quot;</span><br><span class="line">    5) &quot;port&quot;</span><br><span class="line">    6) &quot;6379&quot;</span><br><span class="line">    7) &quot;runid&quot;</span><br><span class="line">    8) &quot;&quot;</span><br><span class="line">    9) &quot;flags&quot;</span><br><span class="line">   10) &quot;s_down,slave,disconnected&quot;</span><br><span class="line"></span><br><span class="line">2)  1) &quot;name&quot;</span><br><span class="line">    2) &quot;127.0.0.1:6380&quot;</span><br><span class="line">    3) &quot;ip&quot;</span><br><span class="line">    4) &quot;127.0.0.1&quot;</span><br><span class="line">    5) &quot;port&quot;</span><br><span class="line">    6) &quot;6380&quot;</span><br><span class="line">    7) &quot;runid&quot;</span><br><span class="line">    8) &quot;5b00b502a93245f7916efd1f564bd40b16aa7b22&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="redis集群"><a class="markdownIt-Anchor" href="#redis集群">#</a> Redis 集群</h3>
+<p>Redis 在 3.0 版本开始正式引入集群特性。Redis 集群是一个分布式，高容错的内存 K/V 系统，集群可以使用的功能是普通单机 Redis 所使用的功能的一个子集。比如，Redis 集群并不支持处理多个 keys 的命令，因为这需要在不同节点间移动数据，从而达不到像 Redis 那样的性能，在高负载的情况下可能会出现无法预估的错误。</p>
+<p>Redis 集群有以下几个重要的特征：</p>
+<ol>
+<li>Redis 集群的分片特征在于将空间拆分为 16384 个槽位，某一个节点负责其中一些槽位；</li>
+<li>Redis 集群提供一定程度的可用性，可以在某个节点宕机或者不可达的情况继续处理命令；</li>
+<li>Redis 集群不存在中心节点或代理节点，集群的其中一个最重要的设计目标是达到线性可扩展性；</li>
+</ol>
+<p>其架构如下：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png" class="" title="1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png">
+<p>其中每一个圆代表一个节点，任何两个节点是互通的，可以归纳以下几点：</p>
+<ul>
+<li>所有的节点相互连接；</li>
+<li>集群消息通信通过集群总线通信，，集群总线端口大小为客户端服务端口 + 10000，这个 10000 是固定值；</li>
+<li>节点与节点之间通过二进制协议进行通信；</li>
+<li>客户端和集群节点之间通信和通常一样，通过文本协议进行；</li>
+<li>集群节点不会代理查询；</li>
+</ul>
+<h4 id="redis集群的原理"><a class="markdownIt-Anchor" href="#redis集群的原理">#</a> Redis 集群的原理</h4>
+<p>Redis 集群是一种分布式存储解决方案，旨在通过数据分片和复制来实现高可用性和可扩展性。以下是 Redis 集群的详细运行原理：</p>
+<ol>
+<li>
+<p>哈希槽（Hash Slots）<br>
+Redis 集群中有一个长度为 16384 的哈希槽列表，编号为 0 到 16383。这些哈希槽是虚拟的，并不是真实存在的物理实体。</p>
+<ul>
+<li>哈希计算：当一个键（Key）被存储时，Redis 会计算该键的哈希值，并将哈希值映射到 0 到 16383 之间的某个哈希槽上。<br>
+具体映射公式为：slot = CRC16 (key) mod 16384，其中 CRC16 是一个循环冗余校验算法。</li>
+</ul>
+</li>
+<li>
+<p>数据分片</p>
+<ul>
+<li>槽分配：集群中的每个 Master 节点负责一部分哈希槽。例如，如果集群中有 3 个 Master 节点，它们可能会分别负责以下槽范围：
+<ul>
+<li>Master 1: 槽 0-5461</li>
+<li>Master 2: 槽 5462-10923</li>
+<li>Master 3: 槽 10924-16383</li>
+</ul>
+</li>
+<li>键的分配：每个键根据其哈希值被分配到相应的槽上，进而确定存储在哪个 Master 节点上。</li>
+</ul>
+<p>这里值得一提的是，在 Redis Cluster 中，只有 Master 才拥有槽的所有权。如果是某个 Master 的 slave，这个 slave 只负责槽的使用，但是没有所有权。<br>
+槽与节点结构如下所示：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png" class="" title="1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png">
+</li>
+<li>
+<p>主从复制</p>
+<ul>
+<li>主节点（Master）：每个 Master 节点负责处理写操作，并拥有槽的所有权。</li>
+<li>从节点（Slave）：每个 Master 节点可以有多个从节点，从节点负责处理读操作，并作为 Master 节点的备份。</li>
+<li>数据同步：从节点通过复制机制与 Master 节点保持数据一致。</li>
+</ul>
+</li>
+<li>
+<p>故障转移</p>
+<ul>
+<li>自动故障转移：当一个 Master 节点失效时，集群会自动选择一个从节点提升为主节点，以保持集群的服务可用性。</li>
+<li>选举机制：集群中的其他节点会通过 Gossip 协议来协商并选举一个新的 Master 节点。</li>
+</ul>
+</li>
+<li>
+<p>集群间的通信</p>
+<ul>
+<li>Gossip 协议：Redis 集群使用 Gossip 协议来交换节点状态信息。每个节点周期性地与其他节点交换信息，以了解集群中其他节点的状态。</li>
+<li>状态同步：通过 Gossip 协议，节点可以得知集群中的其他节点是否在线、是否有新的节点加入等信息。</li>
+</ul>
+</li>
+<li>
+<p>命令路由</p>
+<ul>
+<li>客户端路由：客户端可以连接到任何一个节点，集群内部会根据键的哈希值来确定该键所在的节点，并将请求路由到正确的节点。</li>
+<li>命令转发：如果客户端请求的键不在当前节点上，那么该节点会将请求转发到正确的节点上。</li>
+</ul>
+</li>
+<li>
+<p>初始化与配置</p>
+<ul>
+<li>初始化脚本：使用 redis-trib.rb 脚本来初始化集群。该脚本会自动分配槽到各个 Master 节点，并配置从节点。</li>
+<li>配置文件：每个节点的配置文件中需要指定集群模式和其他相关参数。</li>
+</ul>
+</li>
+<li>
+<p>投票机制</p>
+<ul>
+<li>投票过程：集群中所有 Master 节点参与投票。如果超过半数的 Master 节点与某个 Master 节点通信超时（cluster-node-timeout），则认为该<br>
+ Master 节点已挂掉。</li>
+<li>集群不可用状态：
+<ul>
+<li>单个 Master 挂掉：如果某个 Master 节点挂掉，并且没有从节点，集群进入 fail 状态。</li>
+<li>多数 Master 挂掉：如果超过半数的 Master 节点挂掉，无论是否有从节点，集群也进入 fail 状态。</li>
+</ul>
+</li>
+</ul>
+<p>投票机制原理图如下：</p>
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png" class="" title="1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png">
+</li>
+</ol>
+<h4 id="redis集群搭建"><a class="markdownIt-Anchor" href="#redis集群搭建">#</a> Redis 集群搭建</h4>
+<p>要求：至少 6 个节点，3 主 3 从。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Redis.conf配置：大致如下</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">port 7000</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">cluster-enabled <span class="built_in">yes</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">cluster-config-file nodes.conf</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">cluster-node-timeout 5000</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">appendonly <span class="built_in">yes</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建集群</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">redis集群的命令工具redis-trib可以让我们创建集群变得非常简单。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">redis-trib是一个用ruby写的脚本，用于给各节点发指令创建集群、检查集群状态或给集群重新分片等。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">redis-trib在Redis源码的src目录下，需要gem redis来运行redis-trib。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装ruby环境</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">yum install rubygems -y</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1.安装curl</span></span><br><span class="line">sudo yum install curl</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 安装RVM</span></span><br><span class="line">curl -L get.rvm.io | bash -s stable </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3.</span> </span><br><span class="line">source /usr/local/rvm/scripts/rvm</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4. 查看rvm库中已知的ruby版本</span></span><br><span class="line">rvm list known</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">5. 安装一个ruby版本</span></span><br><span class="line">rvm install 2.3.3</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">6. 使用一个ruby版本</span></span><br><span class="line">rvm use 2.3.3</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">7. 设置默认版本</span></span><br><span class="line">rvm remove 2.0.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">8. 卸载一个已知版本</span></span><br><span class="line">ruby --version</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">9. 再安装redis就可以了</span></span><br><span class="line">gem install redis</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动集群</span></span><br><span class="line">./redis-trib.rb create --replicas 1 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试集群</span></span><br><span class="line">7000/redis-4.0.10/src/redis-cli -c -p 7000</span><br><span class="line">127.0.0.1:7000&gt; set name alex</span><br><span class="line"><span class="meta prompt_">-&gt; </span><span class="language-bash">Redirected to slot [5798] located at 127.0.0.1:7001</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:7001&gt; get name</span><br><span class="line">&quot;alex&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="redis集群迁移"><a class="markdownIt-Anchor" href="#redis集群迁移">#</a> Redis 集群迁移</h4>
+<p>Redis 集群迁移是指将现有的 Redis 集群中的数据移动到另一个集群或新的硬件环境中的过程。<br>
+这种迁移可能是因为需要扩大容量、更换硬件、迁移至新的数据中心或云平台等原因。迁移过程中需要考虑数据的一致性、服务的连续性以及最小化对现有业务的影响。<br>
+迁移方法</p>
+<ol>
+<li>
+<p>使用 RDB 或 AOF 文件进行离线迁移</p>
+<ul>
+<li>RDB 方式：停止集群服务，执行 bgsave 命令生成 RDB 快照文件，然后将 RDB 文件复制到新的集群中，并重启服务。</li>
+<li>AOF 方式：暂停写服务，将 AOF 文件导出到新的 Redis 集群中完成数据迁移。<br>
+这种方式简单直接，但会导致服务中断一段时间，并且适用于数据量不大或能接受短暂服务中断的情况。</li>
+</ul>
+</li>
+<li>
+<p>使用 Redis-Shake 进行在线迁移</p>
+<ul>
+<li>Redis-Shake：这是一个开源工具，专为在线迁移设计，可以在不停止服务的情况下迁移数据。<br>
+Redis-Shake 支持多种迁移场景，包括 Redis 集群之间的数据迁移。</li>
+<li>实时迁移：在迁移过程中，Redis-Shake 会持续同步源集群和目标集群之间的数据变化，以保证数据的一致性。</li>
+</ul>
+<p>这种方式可以减少服务中断的时间，适合于数据量大且要求服务连续性的场景。</p>
+</li>
+<li>
+<p>利用 Sentinel 或其他工具进行故障转移式迁移</p>
+<ul>
+<li>利用 Sentinel：如果当前集群启用了 Sentinel，可以先将数据复制到新集群中，然后通过 Sentinel 触发故障转移，将流量逐渐转移到新集群。</li>
+<li>逐步迁移：这种方式可以在不影响现有服务的情况下，逐步将数据和服务转移到新的集群中。</li>
+</ul>
+<p>这种方式适合于已经有 Sentinel 架构的场景，并且可以灵活控制迁移的节奏。</p>
+</li>
+</ol>
+<p>迁移步骤</p>
+<ol>
+<li>准备阶段
+<ol>
+<li>评估迁移需求：明确迁移的目的地、迁移的规模、时间窗口等。</li>
+<li>备份现有集群：在迁移前对现有集群进行全量备份，以防迁移失败需要回滚。</li>
+<li>准备新集群：搭建新集群环境，包括硬件准备、软件安装、网络配置等。</li>
+</ol>
+</li>
+<li>执行阶段
+<ol>
+<li>
+<p>数据同步：根据选择的方法，开始数据同步或迁移。</p>
+<ul>
+<li>如果使用 Redis-Shake，启动迁移工具并配置源集群和目标集群的信息。</li>
+<li>如果使用 RDB 或 AOF，执行必要的命令生成快照文件，并将其导入到新集群。</li>
+</ul>
+</li>
+<li>
+<p>验证数据一致性：在迁移完成后，检查新集群的数据完整性，确保没有数据丢失或损坏。</p>
+</li>
+<li>
+<p>切换流量：当数据迁移完成并且验证无误后，开始将客户端流量切换到新集群。</p>
+</li>
+</ol>
+</li>
+<li>后期阶段
+<ol>
+<li>监控与优化：迁移完成后，持续监控新集群的性能指标，确保一切正常。</li>
+<li>清理旧集群：如果不再需要旧集群，可以安全地卸载或关闭旧集群的相关资源。</li>
+</ol>
+</li>
+</ol>
+<p>注意事项</p>
+<ul>
+<li>迁移窗口：尽量选择业务低谷时段进行迁移，以减少对业务的影响。</li>
+<li>数据一致性：确保在整个迁移过程中数据的一致性，尤其是在实时迁移过程中。</li>
+<li>测试验证：在正式迁移之前，最好在一个测试环境中模拟迁移过程，确保迁移脚本和工具的正确性。</li>
+<li>回滚计划：准备好回滚计划，以便在迁移过程中出现问题时能够迅速恢复到迁移前的状态。</li>
+</ul>
 <h2 id="常见面试问题"><a class="markdownIt-Anchor" href="#常见面试问题">#</a> 常见面试问题</h2>
 <h3 id="redis-为何这么快"><a class="markdownIt-Anchor" href="#redis-为何这么快">#</a> Redis 为何这么快</h3>
 <ul>
@@ -1452,7 +1742,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-21 16:33:28" itemprop="dateModified" datetime="2024-09-21T16:33:28+08:00">2024-09-21</time>
+    <time title="修改时间：2024-09-22 01:19:39" itemprop="dateModified" datetime="2024-09-22T01:19:39+08:00">2024-09-22</time>
   </span>
 </div>
 
@@ -1531,7 +1821,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> Redis 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> Redis 的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text"> Redis 的应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text"> Redis 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 底层数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redisobject"><span class="toc-number">1.4.1.1.</span> <span class="toc-text"> redisObject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds"><span class="toc-number">1.4.1.2.</span> <span class="toc-text"> 动态字符串（SDS）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8zip-list"><span class="toc-number">1.4.1.3.</span> <span class="toc-text"> 压缩列表（Zip List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8linkedlist"><span class="toc-number">1.4.1.4.</span> <span class="toc-text"> 双向链表（linkedlist）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8hashtable"><span class="toc-number">1.4.1.5.</span> <span class="toc-text"> 哈希表（Hashtable）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">1.4.1.5.1.</span> <span class="toc-text"> 哈希冲突的优化</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset"><span class="toc-number">1.4.1.6.</span> <span class="toc-text"> 整数集合（intset）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8skip-list"><span class="toc-number">1.4.1.7.</span> <span class="toc-text"> 跳表（Skip List）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 数据结构的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string"><span class="toc-number">1.4.2.1.</span> <span class="toc-text"> 字符串（String）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list"><span class="toc-number">1.4.2.2.</span> <span class="toc-text"> 列表（List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash"><span class="toc-number">1.4.2.3.</span> <span class="toc-text"> 哈希（Hash）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E5%90%88set"><span class="toc-number">1.4.2.4.</span> <span class="toc-text"> 集合（Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set"><span class="toc-number">1.4.2.5.</span> <span class="toc-text"> 有序集合（Sorted Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.2.6.</span> <span class="toc-text"> 其他数据结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.7.</span> <span class="toc-text"> Redis 综合应用示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.5.</span> <span class="toc-text"> Redis 的持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb%E6%9C%BA%E5%88%B6"><span class="toc-number">1.5.1.</span> <span class="toc-text"> RDB 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof%E6%9C%BA%E5%88%B6"><span class="toc-number">1.5.2.</span> <span class="toc-text"> AOF 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-number">1.5.3.</span> <span class="toc-text"> 持久化机制的选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%86%85%E5%AD%98%E8%B0%83%E5%BA%A6"><span class="toc-number">1.6.</span> <span class="toc-text"> Redis 的内存调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E7%9A%84%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="toc-number">1.6.1.</span> <span class="toc-text"> Redis 的过期策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">1.6.1.1.</span> <span class="toc-text"> 设置过期时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="toc-number">1.6.1.2.</span> <span class="toc-text"> 过期策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%AD%E7%9A%84%E8%BF%87%E6%9C%9F"><span class="toc-number">1.6.1.3.</span> <span class="toc-text"> 持久化中的过期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pipeline"><span class="toc-number">1.7.</span> <span class="toc-text"> Pipeline</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.8.</span> <span class="toc-text"> Redis 事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.9.</span> <span class="toc-text"> Redis 多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98"><span class="toc-number">1.10.</span> <span class="toc-text"> 常见面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BA%E4%BD%95%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-number">1.10.1.</span> <span class="toc-text"> Redis 为何这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.10.2.</span> <span class="toc-text"> Redis 为何使用单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.10.3.</span> <span class="toc-text"> 缓存三大问题以及解决方案？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8Credis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.10.4.</span> <span class="toc-text"> 如何保证数据库和 Redis 缓存一致性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81-redis-%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-number">1.10.5.</span> <span class="toc-text"> 如何保证 Redis 的高并发？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.10.6.</span> <span class="toc-text"> Redis 如何保证原子性？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd%E8%AE%BF%E9%97%AEredis"><span class="toc-number">1.11.1.</span> <span class="toc-text"> cmd 访问 redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.2.</span> <span class="toc-text"> 字符串 (String) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.3.</span> <span class="toc-text"> 列表 (List) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.4.</span> <span class="toc-text"> 哈希 (Hash) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.5.</span> <span class="toc-text"> 集合 (Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.6.</span> <span class="toc-text"> 有序集合 (Sorted Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.11.7.</span> <span class="toc-text"> 通用命令</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text"> Redis 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> Redis 的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text"> Redis 的应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text"> Redis 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 底层数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redisobject"><span class="toc-number">1.4.1.1.</span> <span class="toc-text"> redisObject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds"><span class="toc-number">1.4.1.2.</span> <span class="toc-text"> 动态字符串（SDS）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8zip-list"><span class="toc-number">1.4.1.3.</span> <span class="toc-text"> 压缩列表（Zip List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8linkedlist"><span class="toc-number">1.4.1.4.</span> <span class="toc-text"> 双向链表（linkedlist）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8hashtable"><span class="toc-number">1.4.1.5.</span> <span class="toc-text"> 哈希表（Hashtable）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">1.4.1.5.1.</span> <span class="toc-text"> 哈希冲突的优化</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset"><span class="toc-number">1.4.1.6.</span> <span class="toc-text"> 整数集合（intset）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8skip-list"><span class="toc-number">1.4.1.7.</span> <span class="toc-text"> 跳表（Skip List）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 数据结构的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string"><span class="toc-number">1.4.2.1.</span> <span class="toc-text"> 字符串（String）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list"><span class="toc-number">1.4.2.2.</span> <span class="toc-text"> 列表（List）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash"><span class="toc-number">1.4.2.3.</span> <span class="toc-text"> 哈希（Hash）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E5%90%88set"><span class="toc-number">1.4.2.4.</span> <span class="toc-text"> 集合（Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set"><span class="toc-number">1.4.2.5.</span> <span class="toc-text"> 有序集合（Sorted Set）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.2.6.</span> <span class="toc-text"> 其他数据结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.7.</span> <span class="toc-text"> Redis 综合应用示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.5.</span> <span class="toc-text"> Redis 的持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb%E6%9C%BA%E5%88%B6"><span class="toc-number">1.5.1.</span> <span class="toc-text"> RDB 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof%E6%9C%BA%E5%88%B6"><span class="toc-number">1.5.2.</span> <span class="toc-text"> AOF 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-number">1.5.3.</span> <span class="toc-text"> 持久化机制的选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%9A%84%E5%86%85%E5%AD%98%E8%B0%83%E5%BA%A6"><span class="toc-number">1.6.</span> <span class="toc-text"> Redis 的内存调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E7%9A%84%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="toc-number">1.6.1.</span> <span class="toc-text"> Redis 的过期策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">1.6.1.1.</span> <span class="toc-text"> 设置过期时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="toc-number">1.6.1.2.</span> <span class="toc-text"> 过期策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%AD%E7%9A%84%E8%BF%87%E6%9C%9F"><span class="toc-number">1.6.1.3.</span> <span class="toc-text"> 持久化中的过期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pipeline"><span class="toc-number">1.7.</span> <span class="toc-text"> Pipeline</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.8.</span> <span class="toc-text"> Redis 事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.9.</span> <span class="toc-text"> Redis 多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%9B%86%E7%BE%A4"><span class="toc-number">1.10.</span> <span class="toc-text"> Redis 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BB%E4%BB%8E"><span class="toc-number">1.10.1.</span> <span class="toc-text"> Redis 主从</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%90%8C%E6%AD%A5"><span class="toc-number">1.10.1.1.</span> <span class="toc-text"> 全量同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6"><span class="toc-number">1.10.1.2.</span> <span class="toc-text"> 增量复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%90%AD%E5%BB%BA"><span class="toc-number">1.10.1.3.</span> <span class="toc-text"> Redis 主从复制搭建</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%93%A8%E5%85%B5"><span class="toc-number">1.10.2.</span> <span class="toc-text"> Redis 哨兵</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis-%E5%93%A8%E5%85%B5%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.10.2.1.</span> <span class="toc-text"> Redis 哨兵的工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E6%90%AD%E5%BB%BA"><span class="toc-number">1.10.2.2.</span> <span class="toc-text"> Redis 哨兵模式搭建</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%9B%86%E7%BE%A4"><span class="toc-number">1.10.3.</span> <span class="toc-text"> Redis 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E9%9B%86%E7%BE%A4%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.10.3.1.</span> <span class="toc-text"> Redis 集群的原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.10.3.2.</span> <span class="toc-text"> Redis 集群搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E9%9B%86%E7%BE%A4%E8%BF%81%E7%A7%BB"><span class="toc-number">1.10.3.3.</span> <span class="toc-text"> Redis 集群迁移</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98"><span class="toc-number">1.11.</span> <span class="toc-text"> 常见面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%B8%BA%E4%BD%95%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-number">1.11.1.</span> <span class="toc-text"> Redis 为何这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.11.2.</span> <span class="toc-text"> Redis 为何使用单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.11.3.</span> <span class="toc-text"> 缓存三大问题以及解决方案？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8Credis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.11.4.</span> <span class="toc-text"> 如何保证数据库和 Redis 缓存一致性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81-redis-%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-number">1.11.5.</span> <span class="toc-text"> 如何保证 Redis 的高并发？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.11.6.</span> <span class="toc-text"> Redis 如何保证原子性？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd%E8%AE%BF%E9%97%AEredis"><span class="toc-number">1.12.1.</span> <span class="toc-text"> cmd 访问 redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2string%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.2.</span> <span class="toc-text"> 字符串 (String) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8list%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.3.</span> <span class="toc-text"> 列表 (List) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8Chash%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.4.</span> <span class="toc-text"> 哈希 (Hash) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.5.</span> <span class="toc-text"> 集合 (Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88sorted-set%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.6.</span> <span class="toc-text"> 有序集合 (Sorted Set) 相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.7.</span> <span class="toc-text"> 通用命令</span></a></li></ol></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -1632,26 +1922,6 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
@@ -1672,10 +1942,30 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
 <a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
 </div>
 
     <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
   </li>
 
   </ul>
