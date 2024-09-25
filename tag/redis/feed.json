@@ -27,8 +27,8 @@
             "tags": [
                 "后端",
                 "Redis",
-                "Redisson",
                 "Zookeeper",
+                "Redisson",
                 "分布式锁"
             ]
         }

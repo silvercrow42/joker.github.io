@@ -1,0 +1,20 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Joker • All posts by \"zookeeper\" category",
+    "description": "",
+    "home_page_url": "https://silvercrow42.github.io/joker.github.io",
+    "items": [
+        {
+            "id": "https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/",
+            "url": "https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/",
+            "title": "【Zookeeper】Zookeeper面试题汇总与详解",
+            "date_published": "2024-09-24T03:39:53.000Z",
+            "content_html": "<h2 id=\"什么是zookeeper\"><a class=\"markdownIt-Anchor\" href=\"#什么是zookeeper\">#</a> 什么是 Zookeeper</h2>\n<p>Zookeeper 是一个开源的协调服务，用于分布式应用程序，提供了诸如配置维护、域名服务、分布式同步、组服务等功能。它是一个为分布式应用提供一致性服务的软件，其内部使用了一种称为<br>\n Zab 的协议（在选举过程中使用 Paxos 协议）来保证分布式环境中不同节点之间的数据一致性。</p>\n<p>Zookeeper 的主要特点包括：</p>\n<ul>\n<li>高可用性：Zookeeper 可以构建为集群模式，通过多数派存活原则来保证服务的高可用性。</li>\n<li>顺序一致性：客户端请求按照发起顺序进行处理。</li>\n<li>原子性：所有事务要么全部成功，要么全部失败。</li>\n<li>单一视图：无论客户端连接到集群中的哪个服务器，看到的服务视图都是一样的。</li>\n<li>可靠性：一旦一个更新被应用并确认，该更新将一直有效，即使此时 Zookeeper 发生故障。</li>\n</ul>\n<p>Zookeeper 的应用场景：</p>\n<ul>\n<li>\n<p>数据发布与订阅</p>\n<p>顾名思义就是将数据发布到 ZooKeeper 节点上，供订阅者动态获取数据，实现配置信息的集中式管理和动态更新。例如全局的配置信息，地址列表等就非常适合使用。<br>\n数据发布 / 订阅的一个常见的场景是配置中心，发布者把数据发布到 ZooKeeper 的一个或一系列的节点上，供订阅者进行数据订阅，达到动态获取数据的目的。<br>\n配置信息一般有几个特点:</p>\n<ol>\n<li>数据量小的 KV</li>\n<li>数据内容在运行时会发生动态变化</li>\n<li>集群机器共享，配置一致</li>\n</ol>\n<p>ZooKeeper 采用的是推拉结合的方式。</p>\n<ol>\n<li>推：服务端会推给注册了监控节点的客户端 Wathcer 事件通知</li>\n<li>拉：客户端获得通知后，然后主动到服务端拉取最新的数据</li>\n</ol>\n</li>\n<li>\n<p>命名服务</p>\n<p>作为分布式命名服务，命名服务是指通过指定的名字来获取资源或者服务的地址，利用 ZooKeeper 创建一个全局的路径，这个路径就可以作为一个名字，指向集群中的集群，提供的服务的地址，或者一个远程的对象等等。统一命名服务的命名结构图如下所示：</p>\n<ol>\n<li>在分布式环境下，经常需要对应用 / 服务进行统一命名，便于识别不同服务。类似于域名与 IP 之间对应关系，IP 不容易记住，而域名容易记住。通过名称来获取资源或服务的地址，提供者等信息。</li>\n<li>按照层次结构组织服务 / 应用名称。可将服务名称以及地址信息写到 ZooKeeper 上，客户端通过 ZooKeeper 获取可用服务列表类。</li>\n</ol>\n</li>\n<li>\n<p>分布式锁</p>\n<p>处于不同节点上不同的服务，它们可能需要顺序的访问一些资源，这里需要一把分布式的锁。<br>\n分布式锁具有以下特性：写锁、读锁、时序锁。</p>\n<ul>\n<li>写锁：在 zk 上创建的一个临时的无编号的节点。由于是无序编号，在创建时不会自动编号，导致只能客户端有一个客户端得到锁，然后进行写入。</li>\n<li>读锁：在 zk 上创建一个临时的有编号的节点，这样即使下次有客户端加入是同时创建相同的节点时，他也会自动编号，也可以获得锁对象，然后对其进行读取。</li>\n<li>时序锁：在 zk 上创建的一个临时的有编号的节点根据编号的大小控制锁。</li>\n</ul>\n</li>\n<li>\n<p>集群管理</p>\n<p>所谓集群管理就是：是否有机器退出和加入、选举 master。<br>\n集群管理主要指集群监控和集群控制两个方面。前者侧重于集群运行时的状态的收集，后者则是对集群进行操作与控制。开发和运维中，面对集群，经常有如下需求:</p>\n<ol>\n<li>希望知道集群中究竟有多少机器在工作</li>\n<li>对集群中的每台机器的运行时状态进行数据收集</li>\n<li>对集群中机器进行上下线的操作</li>\n</ol>\n<p>集群管理结构如下所示：</p>\n<ol>\n<li>\n<p>分布式环境中，实时掌握每个节点的状态是必要的，可根据节点实时状态做出一些调整。</p>\n</li>\n<li>\n<p>可交由 ZooKeeper 实现。<br>\n可将节点信息写入 ZooKeeper 上的一个 Znode。<br>\n监听这个 Znode 可获取它的实时状态变化。</p>\n</li>\n<li>\n<p>典型应用</p>\n<p>Hbase 中 Master 状态监控与选举。<br>\n利用 ZooKeeper 的强一致性，能够保证在分布式高并发情况下节点创建的全局唯一性，即：同时有多个客户端请求创建<br>\n /currentMaster<br>\n 节点，最终一定只有一个客户端请求能够创建成功</p>\n</li>\n</ol>\n</li>\n<li>\n<p>分布式通知与协调</p>\n<ol>\n<li>分布式环境中，经常存在一个服务需要知道它所管理的子服务的状态。\n<ol>\n<li>NameNode 需知道各个 Datanode 的状态。</li>\n<li>JobTracker 需知道各个 TaskTracker 的状态。</li>\n</ol>\n</li>\n<li>心跳检测机制可通过 ZooKeeper 来实现。</li>\n<li>信息推送可由 ZooKeeper 来实现，ZooKeeper 相当于一个发布 / 订阅系统。</li>\n</ol>\n</li>\n<li>\n<p>分布式队列管理</p>\n<p>分布式队列分为两种：</p>\n<ol>\n<li>当一个队列的成员都聚齐时，这个队列才可用，否则一直等待所有成员到达，这种是同步队列。\n<ol>\n<li>一个 job 由多个 task 组成，只有所有任务完成后，job 才运行完成。</li>\n<li>可为 job 创建一个 /job 目录，然后在该目录下，为每个完成的 task 创建一个临时的 Znode，一旦临时节点数目达到 task 总数，则表明 job 运行完成。</li>\n</ol>\n</li>\n<li>队列按照 FIFO 方式进行入队和出队操作，例如实现生产者和消费者模型</li>\n</ol>\n</li>\n</ul>\n",
+            "tags": [
+                "后端",
+                "java",
+                "Zookeeper"
+            ]
+        }
+    ]
+}
