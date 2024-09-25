@@ -277,7 +277,7 @@ w）和执行（execute, x）。</p>
 <li>使用 Ctrl+D：如果没有输入任何命令就按 Ctrl+D，将会退出当前的 Shell 会话。如果不想退出，可以在按 Ctrl+D 之前输入一些字符，比如空格，然后再按<br>
  Ctrl+D。</li>
 </ul>
-<h3 id="常用命令"><a class="markdownIt-Anchor" href="#常用命令">#</a> 常用命令</h3>
+<h3 id="基础操作命令"><a class="markdownIt-Anchor" href="#基础操作命令">#</a> 基础操作命令</h3>
 <h4 id="命令手册man"><a class="markdownIt-Anchor" href="#命令手册man">#</a> 命令手册（man）</h4>
 <p>man 命令用于查看系统命令、实用工具、库函数以及其他系统组件的手册页。手册页提供了详细的文档，包括命令的使用方法、参数、环境变量、文件位置、退出状态、错误信息等信息。<br>
 以下是 man 命令的一些基本用法和参数：</p>
@@ -501,6 +501,488 @@ w）和执行（execute, x）。</p>
 <li>命令执行：使用 sudo 时，注意命令的引号包围问题，确保命令能够正确执行。</li>
 <li>日志记录：sudo 命令通常会被记录在系统日志中，便于审计和追踪。</li>
 </ul>
+<h3 id="目录命令"><a class="markdownIt-Anchor" href="#目录命令">#</a> 目录命令</h3>
+<h4 id="查看目录ls"><a class="markdownIt-Anchor" href="#查看目录ls">#</a> 查看目录（ls）</h4>
+<p>ls（list directory contents）命令在 Linux 和 Unix-like 操作系统中用于列出目录的内容，包括文件、目录和其他文件系统对象。<br>
+它是一个非常基础且常用的命令，几乎在任何 Linux 系统管理任务中都会用到。</p>
+<p>基本语法： <code>ls [选项] [文件或目录]</code></p>
+<p>参数</p>
+<ul>
+<li>文件或目录：指定要列出的文件或目录。如果省略，则默认列出当前目录的内容。</li>
+</ul>
+<p>常用选项</p>
+<ul>
+<li>-a：显示所有文件，包括隐藏文件（以。开头的文件）。</li>
+<li>-l：以长格式输出，显示文件的详细信息（权限、链接数、所有者、组、大小、修改时间）。</li>
+<li>-h：以人类可读的格式显示文件大小（KB、MB、GB 等）。</li>
+<li>-r：反向排序（默认为正序）。</li>
+<li>-R：递归列出子目录的内容。</li>
+<li>-t：按照文件的最后修改时间排序。</li>
+<li>-S：按照文件大小排序。</li>
+<li>-1：每行只显示一个文件名。</li>
+<li>-d：显示目录本身而不是其内容。</li>
+<li>-i：显示文件的索引节点（inode）号。</li>
+<li>-s：显示文件的块大小。</li>
+<li>-A：显示除当前目录（.）和父目录（…）之外的所有文件。</li>
+<li>-F：在文件名末尾添加指示符（如 / 表示目录，* 表示可执行文件）。</li>
+<li>-X：按扩展属性排序。</li>
+</ul>
+<p>其他选项</p>
+<ul>
+<li>–color：使用颜色高亮显示不同类型的文件。</li>
+<li>–time-style=STYLE：指定时间格式（如 long-iso 显示完整日期和时间）。</li>
+<li>–group-directories-first：首先列出目录，然后列出文件。</li>
+<li>–almost-all：同 -A，显示除当前目录（.）和父目录（…）之外的所有文件。</li>
+<li>–help：显示帮助信息。</li>
+<li>–version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>列出当前目录的内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br></pre></td></tr></table></figure>
+</li>
+<li>列出所有文件，包括隐藏文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -a</span><br></pre></td></tr></table></figure>
+</li>
+<li>以长格式列出文件详细信息：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l</span><br></pre></td></tr></table></figure>
+</li>
+<li>以长格式并以人类可读的格式显示文件大小：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -R</span><br></pre></td></tr></table></figure>
+</li>
+<li>递归列出子目录的内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -R</span><br></pre></td></tr></table></figure>
+</li>
+<li>按照文件的最后修改时间排序：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -lt</span><br></pre></td></tr></table></figure>
+</li>
+<li>按照文件大小排序：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -lS</span><br></pre></td></tr></table></figure>
+</li>
+<li>每行只显示一个文件名：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -1</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示目录本身而不是其内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -d /path/to/directory</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示文件的索引节点号：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -li</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示文件的块大小：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -ls</span><br></pre></td></tr></table></figure>
+</li>
+<li>在文件名末尾添加指示符：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -F</span><br></pre></td></tr></table></figure>
+</li>
+<li>使用颜色高亮显示不同类型的文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls --color</span><br></pre></td></tr></table></figure>
+</li>
+<li>指定时间格式：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls --time-style=long-iso</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>隐藏文件：使用 -a 选项可以显示隐藏文件（以。开头的文件）。在日常使用中，经常需要查看隐藏文件，特别是在配置文件和系统文件夹中。</li>
+<li>长格式输出：使用 -l 选项可以显示文件的详细信息，这对于了解文件的权限、所有者、大小等非常有用。</li>
+<li>递归列出子目录：使用 -R 选项可以递归列出子目录的内容，这对于查看复杂目录结构非常有帮助。</li>
+<li>排序方式：可以根据需要选择不同的排序方式，如按时间 (-t)、按大小 (-S) 等。</li>
+<li>颜色高亮：使用 --color 选项可以让不同类型的文件以不同的颜色显示，便于快速识别。</li>
+<li>文件大小：使用 -h 选项可以将文件大小转换为人类可读的格式，如 KB、MB、GB 等。</li>
+<li>目录本身：使用 -d 选项可以显示目录本身而不是其内容，这对于处理目录路径非常有用。</li>
+</ul>
+<h4 id="切换目录cd"><a class="markdownIt-Anchor" href="#切换目录cd">#</a> 切换目录（cd）</h4>
+<p>cd（change directory）命令在 Linux 和 Unix-like 操作系统中用于更改当前工作目录。这是一个非常基础且常用的命令，用于导航文件系统中的不同目录。</p>
+<p>基本语法： <code>cd [目录路径]</code></p>
+<p>参数</p>
+<ul>
+<li>目录路径：指定要切换到的目录路径。如果省略，则默认切换到用户的主目录。</li>
+</ul>
+<p>选项</p>
+<p>cd 命令本身没有太多选项，但有一些特殊的路径符号和约定：</p>
+<ul>
+<li>~：表示用户的主目录。</li>
+<li>-：表示上次所在的目录。</li>
+<li>…：表示当前目录的父目录。</li>
+<li>.：表示当前目录。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>切换到用户的主目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到指定目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /path/to/directory</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到当前目录的父目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ..</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到当前目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd .</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到上次所在的目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd -</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到多个目录层级：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ../../directory</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到相对路径：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd relative/path/to/directory</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到绝对路径：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /absolute/path/to/directory</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到特定用户的主目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~username</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换到当前目录的上两级目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ../../../</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>路径解析：cd 命令会解析相对路径和绝对路径。相对路径是从当前目录开始计算的路径，而绝对路径是从根目录 / 开始的路径。</li>
+<li>主目录：使用～符号可以方便地切换到用户的主目录。如果后面跟一个用户名，如～username，则切换到指定用户的主目录。</li>
+<li>父目录：使用 … 符号可以方便地切换到当前目录的父目录。</li>
+<li>当前目录：使用。符号可以方便地切换到当前目录，尽管这样做通常没有实际意义。</li>
+<li>上次目录：使用 - 符号可以切换到上次所在的目录，这对于快速在多个目录之间切换非常有用。</li>
+<li>路径错误：如果指定的路径不存在或者没有权限访问，cd 命令将会失败，并显示相应的错误信息。</li>
+<li>环境变量：可以使用环境变量来构建路径。例如，cd $HOME/project 可以切换到 $HOME 目录下的 project 子目录。</li>
+<li>多级路径：可以使用多个 … 符号来切换到多级父目录，如 cd …/…/…/。</li>
+<li>相对路径：相对路径可以简化路径表达，尤其是在脚本中使用时。</li>
+<li>绝对路径：绝对路径从根目录 / 开始，可以明确指定任何目录路径。</li>
+</ul>
+<h4 id="创建目录mkdir"><a class="markdownIt-Anchor" href="#创建目录mkdir">#</a> 创建目录（mkdir）</h4>
+<p>mkdir（make directory）命令在 Linux 和 Unix-like 操作系统中用于创建新的目录。这是一个非常基础且常用的命令，用于组织文件系统中的文件和目录结构。</p>
+<p>基本语法： <code>mkdir [选项] 目录路径...</code></p>
+<p>参数</p>
+<ul>
+<li>目录路径：指定要创建的一个或多个目录路径。可以是相对路径或绝对路径。</li>
+</ul>
+<p>选项</p>
+<ul>
+<li>-p 或 --parents：即使中间目录不存在，也创建整个路径。<br>
+例如，mkdir -p /path/to/newdir 会创建 /path、/path/to 和 /path/to/newdir。</li>
+<li>-m 或 --mode = 模式：指定新目录的权限模式。例如，mkdir -m 755 newdir 将新目录的权限设置为 755。</li>
+<li>-v 或 --verbose：详细输出每个操作的结果。</li>
+<li>-Z 或 --context = 上下文：设置 SELinux 上下文。</li>
+<li>-h 或 --help：显示帮助信息。</li>
+<li>-V 或 --version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>创建单个目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建多个目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir dir1 dir2 dir3</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建带有父目录的目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /path/to/newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建带有特定权限的目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 755 newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建多个带有特定权限的目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 755 dir1 dir2</span><br></pre></td></tr></table></figure>
+</li>
+<li>详细输出创建结果：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -v newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建带有 SELinux 上下文的目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -Z unconfined_u:object_r:admin_home_t:s0 newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建多级目录结构：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /path/to/subdir1/subdir2</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建多个多级目录结构：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /path/to/subdir1 /path/to/subdir2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>目录存在性检查：如果指定的目录已经存在，mkdir 命令不会创建新的目录，并且会显示错误信息。使用 -p 选项可以避免这种错误。</li>
+<li>权限问题：如果当前用户没有足够的权限创建目录，mkdir 命令会失败并显示错误信息。</li>
+<li>相对路径和绝对路径：可以使用相对路径或绝对路径来创建目录。相对路径相对于当前工作目录，而绝对路径从根目录 / 开始。</li>
+<li>多级目录：使用 -p 选项可以创建多级目录结构，即使中间目录不存在也会自动创建。</li>
+<li>权限设置：使用 -m 选项可以设置新目录的权限模式。例如，755 表示所有用户都有读和执行权限，但只有所有者有写权限。</li>
+<li>详细输出：使用 -v 选项可以详细输出每个操作的结果，这对于调试和确认创建过程非常有用。</li>
+<li>SELinux 上下文：在使用 SELinux 的系统中，可以使用 -Z 选项设置新目录的 SELinux 上下文。</li>
+<li>帮助信息：使用 -h 选项可以显示帮助信息，了解更多的选项和用法。</li>
+<li>版本信息：使用 -V 选项可以显示 mkdir 命令的版本信息。</li>
+</ul>
+<h4 id="移动目录mv"><a class="markdownIt-Anchor" href="#移动目录mv">#</a> 移动目录（mv）</h4>
+<p>mv（move or rename files）命令在 Linux 和 Unix-like 操作系统中用于移动或重命名文件和目录。这是一个非常基础且常用的命令，用于文件系统的管理和组织。</p>
+<p>基本语法： <code>mv [选项] 源路径 目标路径</code></p>
+<p>参数</p>
+<ul>
+<li>源路径：要移动或重命名的文件或目录路径。</li>
+<li>目标路径：移动后的新位置或重命名后的新名称。</li>
+</ul>
+<p>选项</p>
+<ul>
+<li>-i 或 --interactive：在覆盖现有文件之前提示用户确认。</li>
+<li>-f 或 --force：强制覆盖现有文件，不提示用户确认。</li>
+<li>-u 或 --update：仅当源文件比目标文件更新时才移动。</li>
+<li>-v 或 --verbose：详细输出每个操作的结果。</li>
+<li>-t 或 --target-directory=DIR：指定目标目录。</li>
+<li>-T 或 --no-target-directory：即使目标看起来像目录，也不将其视为目录。</li>
+<li>-b 或 --backup=CONTROL：在覆盖现有文件时创建备份。</li>
+<li>-n 或 --no-clobber：禁止覆盖现有文件。</li>
+<li>-h 或 --help：显示帮助信息。</li>
+<li>-V 或 --version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>重命名文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv oldfile newfile</span><br></pre></td></tr></table></figure>
+</li>
+<li>移动文件到另一个目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>重命名目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv olddir newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>移动目录到另一个目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv dir1 /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>交互式确认覆盖：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -i file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>强制覆盖现有文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -f file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>仅当源文件更新时移动：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -u file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>详细输出每个操作的结果：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -v file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>指定目标目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -t /path/to/newdir/ file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>不将目标视为目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -T file.txt newdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建备份文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -b file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>禁止覆盖现有文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv -n file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>重命名文件：使用 mv 命令可以轻松地重命名文件或目录。例如，mv oldfile newfile 将 oldfile 重命名为 newfile。</li>
+<li>移动文件或目录：使用 mv 命令可以将文件或目录移动到另一个位置。<br>
+例如，mv file.txt/path/to/newdir/ 将 file.txt 移动到 /path/to/newdir/。</li>
+<li>覆盖现有文件：默认情况下，如果目标文件已存在，mv 命令会提示用户确认是否覆盖。<br>
+使用 -i 选项可以启用交互式确认，使用 -f 选项可以强制覆盖。</li>
+<li>仅当源文件更新时移动：使用 -u 选项可以仅当源文件比目标文件更新时才移动。</li>
+<li>详细输出：使用 -v 选项可以详细输出每个操作的结果，这对于调试和确认移动过程非常有用。</li>
+<li>指定目标目录：使用 -t 选项可以指定目标目录，例如 mv -t /path/to/newdir/file.txt。</li>
+<li>不将目标视为目录：使用 -T 选项可以防止将目标视为目录，即使目标看起来像目录。</li>
+<li>创建备份文件：使用 -b 选项可以在覆盖现有文件时创建备份文件。</li>
+<li>禁止覆盖现有文件：使用 -n 选项可以禁止覆盖现有文件。</li>
+<li>路径问题：确保提供的路径是正确的，否则 mv 命令可能会失败或产生意外的结果。</li>
+<li>权限问题：如果当前用户没有足够的权限移动文件或目录，mv 命令会失败并显示错误信息。</li>
+</ul>
+<h4 id="删除文件rm"><a class="markdownIt-Anchor" href="#删除文件rm">#</a> 删除文件（rm）</h4>
+<p>rm（remove）命令在 Linux 和 Unix-like 操作系统中用于删除文件或目录。这是一个非常基础且常用的命令，用于清理文件系统中的文件和目录。</p>
+<p>基本语法： <code>rm [选项] 文件或目录...</code></p>
+<p>参数</p>
+<ul>
+<li>文件或目录：指定要删除的一个或多个文件或目录路径。可以是相对路径或绝对路径。</li>
+</ul>
+<p>选项</p>
+<ul>
+<li>-i 或 --interactive：在删除每个文件前提示用户确认。</li>
+<li>-f 或 --force：强制删除文件，忽略不存在的文件，不提示用户确认。</li>
+<li>-r 或 --recursive：递归删除目录及其内容。</li>
+<li>-R 或 --recursive：与 -r 相同，递归删除目录及其内容。</li>
+<li>-v 或 --verbose：详细输出每个操作的结果。</li>
+<li>-P 或 --preserve-root：禁止删除 / 目录。</li>
+<li>-W 或 --no-wildcards：禁用通配符扩展。</li>
+<li>-h 或 --help：显示帮助信息。</li>
+<li>-V 或 --version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>删除单个文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>删除多个文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm file1.txt file2.txt file3.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>删除目录及其内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -r dir1</span><br></pre></td></tr></table></figure>
+</li>
+<li>删除目录及其内容（使用 -R 选项）：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -R dir1</span><br></pre></td></tr></table></figure>
+</li>
+<li>交互式确认删除：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -i file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>强制删除文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -f file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>详细输出删除结果：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -v file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>递归删除多个目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -r dir1 dir2</span><br></pre></td></tr></table></figure>
+</li>
+<li>删除多个文件和目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf file1.txt file2.txt dir1</span><br></pre></td></tr></table></figure>
+</li>
+<li>禁用通配符扩展：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -W file*.txt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>交互式确认：使用 -i 选项会在删除每个文件前提示用户确认，这有助于防止误删重要文件。</li>
+<li>强制删除：使用 -f 选项可以强制删除文件，忽略不存在的文件，不提示用户确认。这在批量删除文件时非常有用，但也容易导致误删。</li>
+<li>递归删除目录：使用 -r 或 -R 选项可以递归删除目录及其内容。这在删除整个目录树时非常有用，但也容易导致误删。</li>
+<li>详细输出：使用 -v 选项可以详细输出每个操作的结果，这对于调试和确认删除过程非常有用。</li>
+<li>路径问题：确保提供的路径是正确的，否则 rm 命令可能会删除错误的文件或目录。</li>
+<li>权限问题：如果当前用户没有足够的权限删除文件或目录，rm 命令会失败并显示错误信息。</li>
+<li>通配符扩展：默认情况下，rm 命令会扩展通配符（如 file*.txt）。使用 -W 选项可以禁用通配符扩展。</li>
+<li>保护根目录：使用 -P 选项可以禁止删除 / 目录。</li>
+<li>帮助信息：使用 -h 选项可以显示帮助信息，了解更多的选项和用法。</li>
+<li>版本信息：使用 -V 选项可以显示 rm 命令的版本信息。</li>
+</ul>
+<h4 id="拷贝目录cp"><a class="markdownIt-Anchor" href="#拷贝目录cp">#</a> 拷贝目录（cp）</h4>
+<p>cp（copy）命令在 Linux 和 Unix-like 操作系统中用于复制文件或目录。这是一个非常基础且常用的命令，用于备份文件、创建副本或复制整个目录结构。</p>
+<p>基本语法： <code>cp [选项] 源路径 目标路径</code></p>
+<p>参数</p>
+<ul>
+<li>源路径：要复制的文件或目录路径。</li>
+<li>目标路径：复制后的目标位置或新名称。</li>
+</ul>
+<p>选项</p>
+<ul>
+<li>-i 或 --interactive：在覆盖现有文件之前提示用户确认。</li>
+<li>-f 或 --force：强制覆盖现有文件，不提示用户确认。</li>
+<li>-r 或 --recursive：递归复制目录及其内容。</li>
+<li>-p 或 --preserve = 属性：保留源文件的属性（如权限、时间戳等）。</li>
+<li>-v 或 --verbose：详细输出每个操作的结果。</li>
+<li>-l 或 --link：创建硬链接而不是复制文件。</li>
+<li>-s 或 --symbolic-link：创建符号链接而不是复制文件。</li>
+<li>-u 或 --update：仅当源文件比目标文件更新时才复制。</li>
+<li>-a 或 --archive：等价于 -dpR，用于递归复制并保留所有属性。</li>
+<li>-H 或 --dereference-argument-directories：将目标目录视为普通文件。</li>
+<li>-L 或 --dereference：递归复制符号链接的目标。</li>
+<li>-S 或 --suffix=SUFFIX：指定备份文件的后缀。</li>
+<li>-n 或 --no-clobber：禁止覆盖现有文件。</li>
+<li>-h 或 --help：显示帮助信息。</li>
+<li>-V 或 --version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>复制单个文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp file.txt newfile.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>复制多个文件到同一目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp file1.txt file2.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>复制目录及其内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r dir1 /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>复制目录及其内容（使用 -R 选项）：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -R dir1 /path/to/newdir/   </span><br></pre></td></tr></table></figure>
+</li>
+<li>交互式确认覆盖：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -i file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>强制覆盖现有文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -f file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>保留源文件属性：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -p file.txt newfile.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>详细输出复制结果：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -v file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建硬链接：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -l file.txt linkfile.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>创建符号链接：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -s file.txt symlink.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>仅当源文件更新时复制：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -u file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>递归复制并保留所有属性：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -a dir1 /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>递归复制符号链接的目标：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -L dir1 /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>指定备份文件的后缀：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -S .bak file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+<li>禁止覆盖现有文件：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -n file.txt /path/to/newdir/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>交互式确认：使用 -i 选项会在覆盖现有文件前提示用户确认，这有助于防止误覆盖重要文件。</li>
+<li>强制覆盖：使用 -f 选项可以强制覆盖现有文件，不提示用户确认。这在批量复制文件时非常有用，但也容易导致误覆盖。</li>
+<li>递归复制目录：使用 -r 或 -R 选项可以递归复制目录及其内容。这在复制整个目录树时非常有用，但也容易导致误覆盖。</li>
+<li>保留源文件属性：使用 -p 选项可以保留源文件的所有属性（如权限、时间戳等）。</li>
+<li>详细输出：使用 -v 选项可以详细输出每个操作的结果，这对于调试和确认复制过程非常有用。</li>
+<li>硬链接：使用 -l 选项可以创建硬链接而不是复制文件。</li>
+<li>符号链接：使用 -s 选项可以创建符号链接而不是复制文件。</li>
+<li>仅当源文件更新时复制：使用 -u 选项可以仅当源文件比目标文件更新时才复制。</li>
+<li>递归复制并保留所有属性：使用 -a 选项可以递归复制并保留所有属性，相当于 -dpR。</li>
+<li>路径问题：确保提供的路径是正确的，否则 cp 命令可能会复制错误的文件或目录。</li>
+<li>权限问题：如果当前用户没有足够的权限复制文件或目录，cp 命令会失败并显示错误信息。</li>
+<li>备份文件：使用 -S 选项可以指定备份文件的后缀。</li>
+<li>禁止覆盖现有文件：使用 -n 选项可以禁止覆盖现有文件。</li>
+<li>帮助信息：使用 -h 选项可以显示帮助信息，了解更多的选项和用法。</li>
+<li>版本信息：使用 -V 选项可以显示 cp 命令的版本信息。</li>
+</ul>
+<h4 id="搜索目录find"><a class="markdownIt-Anchor" href="#搜索目录find">#</a> 搜索目录（find）</h4>
+<p>find 命令在 Linux 和 Unix-like 操作系统中用于查找文件系统中的文件和目录。这是一个非常强大且灵活的命令，可以基于多种条件进行搜索。</p>
+<p>基本语法： <code>find [路径] [表达式]</code></p>
+<p>参数</p>
+<ul>
+<li>路径：指定查找的起始目录。</li>
+<li>表达式：指定查找的条件。</li>
+</ul>
+<p>表达式选项</p>
+<ul>
+<li>-name：按文件名匹配。</li>
+<li>-iname：按文件名匹配，不区分大小写。</li>
+<li>-type：按文件类型匹配（d: 目录，f: 文件，l: 符号链接）。</li>
+<li>-mtime：按修改时间匹配（天数）。</li>
+<li>-atime：按访问时间匹配（天数）。</li>
+<li>-ctime：按状态改变时间匹配（天数）。</li>
+<li>-size：按文件大小匹配（单位：b, k, M, G）。</li>
+<li>-user：按文件所有者用户名匹配。</li>
+<li>-group：按文件所属组名匹配。</li>
+<li>-perm：按文件权限匹配。</li>
+<li>-newer：按文件是否比给定文件新。</li>
+<li>-empty：查找空文件或空目录。</li>
+<li>-exec：对找到的文件执行命令。</li>
+<li>-print：打印找到的文件或目录路径。</li>
+<li>-print0：打印找到的文件或目录路径，并以 null 字符分隔。</li>
+<li>-ok：提示用户确认是否执行命令。</li>
+</ul>
+<p>连接符</p>
+<ul>
+<li>-and 或 &amp;&amp;：逻辑与。</li>
+<li>-or 或 ||：逻辑或。</li>
+<li>-not 或！：逻辑非。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>按文件名匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -name &quot;file.txt&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件名匹配（不区分大小写）：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -iname &quot;*.txt&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件类型匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -type d</span><br></pre></td></tr></table></figure>
+</li>
+<li>按修改时间匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -mtime -7</span><br></pre></td></tr></table></figure>
+</li>
+<li>按访问时间匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -atime +30</span><br></pre></td></tr></table></figure>
+</li>
+<li>按状态改变时间匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -ctime 10</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件大小匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -size +10M</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件所有者匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -user alice</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件所属组匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -group developers</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件权限匹配：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -perm 755</span><br></pre></td></tr></table></figure>
+</li>
+<li>按文件是否比给定文件新：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -newer file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>查找空文件或空目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -empty</span><br></pre></td></tr></table></figure>
+</li>
+<li>对找到的文件执行命令：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -name &quot;*.txt&quot; -exec chmod 644 &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+</li>
+<li>打印找到的文件或目录路径：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -name &quot;*.txt&quot; -print</span><br></pre></td></tr></table></figure>
+</li>
+<li>打印找到的文件或目录路径，并以 null 字符分隔：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -name &quot;*.txt&quot; -print0</span><br></pre></td></tr></table></figure>
+</li>
+<li>提示用户确认是否执行命令：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/start -name &quot;*.txt&quot; -ok rm &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="查看当前目录pwd"><a class="markdownIt-Anchor" href="#查看当前目录pwd">#</a> 查看当前目录（pwd）</h4>
+<p>pwd（print working directory）命令在 Linux 和 Unix-like 操作系统中用于显示当前工作目录的完整路径。<br>
+这是一个非常简单但常用的命令，对于确定当前所在目录的位置非常有帮助。</p>
+<p>基本语法： <code>pwd [选项]</code></p>
+<p>参数</p>
+<ul>
+<li>pwd 命令通常不需要额外的参数，但可以使用一些选项来定制输出。</li>
+</ul>
+<p>选项</p>
+<ul>
+<li>-P 或 --physical：显示物理路径，即不解析符号链接。</li>
+<li>-L 或 --logical：显示逻辑路径，即解析符号链接（默认行为）。</li>
+<li>-W 或 --win：使用 Windows 格式的路径（适用于 Cygwin 环境）。</li>
+<li>-h 或 --help：显示帮助信息。</li>
+<li>-V 或 --version：显示版本信息。</li>
+</ul>
+<p>示例</p>
+<ul>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd -P</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd -L</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd -W</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd -h</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示当前工作目录：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd -V</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意事项</p>
+<ul>
+<li>默认行为：pwd 命令默认显示逻辑路径，即解析符号链接。</li>
+<li>物理路径：使用 -P 选项可以显示物理路径，即不解析符号链接。这对于处理包含符号链接的目录非常有用。</li>
+<li>Windows 格式：使用 -W 选项可以在 Cygwin 环境下显示 Windows 格式的路径。</li>
+<li>帮助信息：使用 -h 选项可以显示帮助信息，了解更多的选项和用法。</li>
+<li>版本信息：使用 -V 选项可以显示 pwd 命令的版本信息。</li>
+<li>路径解析：在包含符号链接的环境中，pwd 命令的行为可能会有所不同。使用 -P 或 -L 选项可以根据需要选择不同的路径解析方式。</li>
+<li>环境兼容性：在不同的 Linux 发行版和 Unix-like 系统中，pwd 命令的选项可能略有不同。建议查看具体的帮助文档或手册页。</li>
+</ul>
 
       <div class="tags">
           <a href="/joker.github.io/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
@@ -517,7 +999,7 @@ w）和执行（execute, x）。</p>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-25 11:38:21" itemprop="dateModified" datetime="2024-09-25T11:38:21+08:00">2024-09-25</time>
+    <time title="修改时间：2024-09-25 15:19:42" itemprop="dateModified" datetime="2024-09-25T15:19:42+08:00">2024-09-25</time>
   </span>
 </div>
 
@@ -596,7 +1078,7 @@ w）和执行（execute, x）。</p>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 设计理念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFlinux"><span class="toc-number">1.1.</span> <span class="toc-text"> 什么是 Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E5%8F%AB%E4%B8%80%E5%88%87%E7%9A%86%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text"> 什么叫一切皆文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text"> Linux 文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="toc-number">2.2.</span> <span class="toc-text"> Linux 文件权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text"> Linux 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%90%AB%E4%B9%89"><span class="toc-number">3.1.</span> <span class="toc-text"> 命令行含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">3.2.</span> <span class="toc-text"> 命令行快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.3.</span> <span class="toc-text"> 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8Cman"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 命令手册（man）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E7%B3%BB%E7%BB%9Fshutdown"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 关闭系统（shutdown）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7su"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 切换用户（su）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%85%B6%E4%BB%96%E7%94%A8%E6%88%B7%E7%9A%84%E8%BA%AB%E4%BB%BD%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4sudo"><span class="toc-number">3.3.4.</span> <span class="toc-text"> 以其他用户的身份执行命令（sudo）</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 设计理念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFlinux"><span class="toc-number">1.1.</span> <span class="toc-text"> 什么是 Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E5%8F%AB%E4%B8%80%E5%88%87%E7%9A%86%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text"> 什么叫一切皆文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text"> Linux 文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="toc-number">2.2.</span> <span class="toc-text"> Linux 文件权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text"> Linux 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%90%AB%E4%B9%89"><span class="toc-number">3.1.</span> <span class="toc-text"> 命令行含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">3.2.</span> <span class="toc-text"> 命令行快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">3.3.</span> <span class="toc-text"> 基础操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8Cman"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 命令手册（man）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E7%B3%BB%E7%BB%9Fshutdown"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 关闭系统（shutdown）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7su"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 切换用户（su）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%85%B6%E4%BB%96%E7%94%A8%E6%88%B7%E7%9A%84%E8%BA%AB%E4%BB%BD%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4sudo"><span class="toc-number">3.3.4.</span> <span class="toc-text"> 以其他用户的身份执行命令（sudo）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.</span> <span class="toc-text"> 目录命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%9B%AE%E5%BD%95ls"><span class="toc-number">3.4.1.</span> <span class="toc-text"> 查看目录（ls）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E7%9B%AE%E5%BD%95cd"><span class="toc-number">3.4.2.</span> <span class="toc-text"> 切换目录（cd）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95mkdir"><span class="toc-number">3.4.3.</span> <span class="toc-text"> 创建目录（mkdir）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E7%9B%AE%E5%BD%95mv"><span class="toc-number">3.4.4.</span> <span class="toc-text"> 移动目录（mv）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6rm"><span class="toc-number">3.4.5.</span> <span class="toc-text"> 删除文件（rm）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%B7%E8%B4%9D%E7%9B%AE%E5%BD%95cp"><span class="toc-number">3.4.6.</span> <span class="toc-text"> 拷贝目录（cp）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E7%9B%AE%E5%BD%95find"><span class="toc-number">3.4.7.</span> <span class="toc-text"> 搜索目录（find）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95pwd"><span class="toc-number">3.4.8.</span> <span class="toc-text"> 查看当前目录（pwd）</span></a></li></ol></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -697,10 +1179,10 @@ w）和执行（execute, x）。</p>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
   </li>
 
       
@@ -711,26 +1193,6 @@ w）和执行（execute, x）。</p>
 </div>
 
     <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
   </li>
 
       
@@ -757,10 +1219,30 @@ w）和执行（execute, x）。</p>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2%EF%BC%88Windows%EF%BC%89/" title="【RocketMQ】安装与部署（Windows）">【RocketMQ】安装与部署（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
   </li>
 
   </ul>

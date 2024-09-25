@@ -5,19 +5,19 @@
     <link href="https://silvercrow42.github.io/joker.github.io" />
     <updated>2024-09-24T03:39:53.000Z</updated>
     <category term="后端" />
+    <category term="操作系统" />
+    <category term="Linux" />
+    <category term="MQ" />
+    <category term="RocketMQ" />
+    <category term="java" />
+    <category term="spring" />
+    <category term="Redis" />
+    <category term="Redisson" />
+    <category term="Zookeeper" />
+    <category term="分布式锁" />
     <category term="数据库" />
     <category term="NoSQL" />
     <category term="缓存" />
-    <category term="Redis" />
-    <category term="MQ" />
-    <category term="RocketMQ" />
-    <category term="操作系统" />
-    <category term="Linux" />
-    <category term="java" />
-    <category term="Zookeeper" />
-    <category term="Redisson" />
-    <category term="分布式锁" />
-    <category term="spring" />
     <entry>
         <id>https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</id>
         <title>【Zookeeper】Zookeeper面试题汇总与详解</title>
@@ -298,8 +298,8 @@ AOP，通过 ZooKeeper 加锁时需要 ZooKeeper 服务，使用 Redisson 加锁
 </content>
         <category term="后端" />
         <category term="Redis" />
-        <category term="Zookeeper" />
         <category term="Redisson" />
+        <category term="Zookeeper" />
         <category term="分布式锁" />
         <updated>2024-09-10T02:00:01.000Z</updated>
     </entry>

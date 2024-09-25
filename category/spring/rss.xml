@@ -8,19 +8,19 @@
         <pubDate>Fri, 13 Sep 2024 11:24:41 +0800</pubDate>
         <lastBuildDate>Fri, 13 Sep 2024 11:24:41 +0800</lastBuildDate>
         <category>后端</category>
+        <category>操作系统</category>
+        <category>Linux</category>
+        <category>MQ</category>
+        <category>RocketMQ</category>
+        <category>java</category>
+        <category>spring</category>
+        <category>Redis</category>
+        <category>Redisson</category>
+        <category>Zookeeper</category>
+        <category>分布式锁</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
-        <category>Redis</category>
-        <category>MQ</category>
-        <category>RocketMQ</category>
-        <category>操作系统</category>
-        <category>Linux</category>
-        <category>java</category>
-        <category>Zookeeper</category>
-        <category>Redisson</category>
-        <category>分布式锁</category>
-        <category>spring</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</guid>
             <title>【Spring】Spring面试题汇总</title>
