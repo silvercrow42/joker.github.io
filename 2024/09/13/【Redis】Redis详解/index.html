@@ -24,15 +24,15 @@
 <link rel="stylesheet" href="/joker.github.io/css/app.css?v=0.2.5">
 
   
-  <meta name="keywords" content="后端,Redis,数据库,NoSQL,缓存" />
+  <meta name="keywords" content="后端,数据库,NoSQL,缓存,Redis" />
 
 
-<link rel="canonical" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/">
+<link rel="canonical" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/">
 
 
 
   <title>
-【Redis】Redis面试题汇总与详解 - Redis |
+【Redis】Redis详解 - Redis |
 Joker = Joker</title>
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -60,7 +60,7 @@ Joker = Joker</title>
         <div id="brand">
           <div class="pjax">
           
-  <h1 itemprop="name headline">【Redis】Redis面试题汇总与详解
+  <h1 itemprop="name headline">【Redis】Redis详解
   </h1>
   
 <div class="meta">
@@ -101,7 +101,7 @@ Joker = Joker</title>
 
       </div>
       <div id="imgs" class="pjax">
-          <img src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/f7bb710f33356088835bc958c533c7f3.png">
+          <img src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/f7bb710f33356088835bc958c533c7f3.png">
       </div>
     </header>
     <div id="waves">
@@ -131,7 +131,7 @@ Joker = Joker</title>
 </div>
 
     <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
-  <link itemprop="mainEntityOfPage" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/">
+  <link itemprop="mainEntityOfPage" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/">
 
   <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="image" content="/joker.github.io/images/avatar.png">
@@ -203,7 +203,7 @@ Used）缓存淘汰策略。</li>
 <p>底层实现：使用简单动态字符串（SDS）来存储数据，SDS 是为了克服 C 字符串的一些不足而设计的。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span>&#123;</span></span><br><span class="line">    <span class="comment">//记录buf数组中已使用字节的数量</span></span><br><span class="line">    <span class="comment">//等于 SDS 保存字符串的长度</span></span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    <span class="comment">//记录 buf 数组中未使用字节的数量</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>用 SDS 保存字符串 “Redis” 具体图示如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528075607627-218845583.png" class="" title="1120165-20180528075607627-218845583.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528075607627-218845583.png" class="" title="1120165-20180528075607627-218845583.png">
 <p>图片来源：《Redis 设计与实现》</p>
 <p>我们看上面对于 SDS 数据类型的定义：</p>
 <ul>
@@ -212,7 +212,7 @@ Used）缓存淘汰策略。</li>
 <li>free j 记录了 buf 数组中未使用的字节数量</li>
 </ul>
 <p>上面的定义相对于 C 语言对于字符串的定义，有什么好处？</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180527234349672-568401853.png" class="" title="1120165-20180528075607627-218845583.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180527234349672-568401853.png" class="" title="1120165-20180528075607627-218845583.png">
 <ol>
 <li>
 <p>常数复杂度获取字符串长度：由于 len 属性的存在，我们获取 SDS 字符串的长度只需要读取 len 属性，时间复杂度为 O (1)。而对于 C<br>
@@ -265,7 +265,7 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 <p>底层实现：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个双向链表节点</span></span><br><span class="line"><span class="keyword">typedef</span>  <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>&#123;</span></span><br><span class="line">       <span class="comment">//前置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">       <span class="comment">//后置节点</span></span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">       <span class="comment">//节点的值</span></span><br><span class="line">       <span class="type">void</span> *value;  </span><br><span class="line">&#125;listNode</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个双向链表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span>&#123;</span></span><br><span class="line">     <span class="comment">//表头节点</span></span><br><span class="line">     listNode *head;</span><br><span class="line">     <span class="comment">//表尾节点</span></span><br><span class="line">     listNode *tail;</span><br><span class="line">     <span class="comment">//链表所包含的节点数量</span></span><br><span class="line">     <span class="type">unsigned</span> <span class="type">long</span> len;</span><br><span class="line">     <span class="comment">//节点值复制函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值释放函数</span></span><br><span class="line">     <span class="type">void</span> (*<span class="built_in">free</span>) (<span class="type">void</span> *ptr);</span><br><span class="line">     <span class="comment">//节点值对比函数</span></span><br><span class="line">     <span class="type">int</span> (*match) (<span class="type">void</span> *ptr,<span class="type">void</span> *key);</span><br><span class="line">&#125;<span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
 <p>数据结构如下图</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png" class="" title="1120165-20180528074403440-111834793.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png" class="" title="1120165-20180528074403440-111834793.png">
 <p>Redis 的 linkedlist 是由一系列 listNode 节点构成的双向链表。</p>
 <p>每个 listNode 包含三个主要部分：</p>
 <ul>
@@ -308,7 +308,7 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 </ul>
 <h5 id="哈希冲突的优化"><a class="markdownIt-Anchor" href="#哈希冲突的优化">#</a> 哈希冲突的优化</h5>
 <p>我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过 next 这个指针可以将多个哈希值相同的键值对连接在一起，用来解决哈希冲突。</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png" class="" title="1120165-20180528080655703-1600710948.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png" class="" title="1120165-20180528080655703-1600710948.png">
 <ol>
 <li>
 <p>哈希算法：Redis 计算哈希值和索引值方法如下：</p>
@@ -514,13 +514,13 @@ Redis DataBase) 和 AOF (Append Only File)。</p>
 <li>
 <p>save 触发方式</p>
 <p>该命令会阻塞当前 Redis 服务器，执行 save 命令期间，Redis 不能处理其他命令，直到 RDB 过程完成为止。具体流程如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg" class="" title="e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg" class="" title="e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg">
 <p>执行完成时候如果存在老的 RDB 文件，就把新的替代掉旧的。我们的客户端可能都是几万或者是几十万，这种方式显然不可取。</p>
 </li>
 <li>
 <p>bgsave 触发方式</p>
 <p>执行该命令时，Redis 会在后台异步进行快照操作，快照同时还可以响应客户端请求。具体流程如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg" class="" title="023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg" class="" title="023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg">
 <p>具体操作是 Redis 进程执行 fork 操作创建子进程，RDB 持久化过程由子进程负责，完成后自动结束。阻塞只发生在 fork 阶段，一般时间很短。基本上<br>
  Redis 内部所有的 RDB 操作都是采用 bgsave 命令。</p>
 </li>
@@ -541,7 +541,7 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。</l
 </li>
 </ul>
 <p>因为第三种方式是配置的，所以我们对前两种进行一个对比：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg" class="" title="1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg" class="" title="1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg">
 <p>RDB 的优势和劣势</p>
 <ul>
 <li>
@@ -566,13 +566,13 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。</l
 <li>
 <p>持久化原理</p>
 <p>他的原理看下面这张图：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg" class="" title="32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg" class="" title="32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg">
 <p>每当有一个写命令过来时，就直接保存在我们的 AOF 文件中。</p>
 </li>
 <li>
 <p>文件重写原理</p>
 <p>AOF 的方式也同时带来了另一个问题：持久化文件会变的越来越大。为了解决这个问题，redis 提供了 bgrewriteaof 命令用来压缩 aof 的持久化文件。这条命令会将内存中的数据以命令的方式保存到临时文件中，同时会 fork 出一条新进程来将文件重写。</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg" class="" title="09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg" class="" title="09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg">
 <p>重写 aof 文件的操作，并没有读取旧的 aof 文件，而是将整个内存中的数据库内容用命令的方式重写了一个新的 aof 文件，这点和快照有点类似。</p>
 </li>
 </ol>
@@ -583,7 +583,7 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。</l
 <li>不同 no：从不同步</li>
 </ul>
 <p>三种触发机制的对比如下图</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/b17eca8065380cd7df69859ba056a5325982816c.jpeg" class="" title="b17eca8065380cd7df69859ba056a5325982816c.jpeg">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/b17eca8065380cd7df69859ba056a5325982816c.jpeg" class="" title="b17eca8065380cd7df69859ba056a5325982816c.jpeg">
 <p>AOF 的优势和劣势</p>
 <ul>
 <li>优势
@@ -904,7 +904,7 @@ SETEX 命令将会替换旧的值。</li>
 <p>和 MySQL 需要主从复制的原因一样，Redis 虽然读取写入的速度都特别快，但是也会产生性能瓶颈，特别是在读压力上，为了分担压力，Redis 支持主从复制。<br>
 Redis 的主从结构包括一主一从，一主多从或级联结构，复制类型分为全量同步和增量同步。<br>
 下图为级联结构：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png" class="" title="1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png" class="" title="1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png">
 <h4 id="全量同步"><a class="markdownIt-Anchor" href="#全量同步">#</a> 全量同步</h4>
 <p>Redis 全量复制一般发生在 slave 的初始阶段，这时 slave 需要将 master 上的数据都复制一份，具体步骤如下：</p>
 <ol>
@@ -917,7 +917,7 @@ Redis 的主从结构包括一主一从，一主多从或级联结构，复制�
 <li>slave 完成上面的数据初始化后就可以开始接受用户的读请求了。</li>
 </ol>
 <p>大致流程图如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png" class="" title="1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png" class="" title="1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png">
 <h4 id="增量复制"><a class="markdownIt-Anchor" href="#增量复制">#</a> 增量复制</h4>
 <p>增量复制实际上就是在 slave 初始化完成后开始正常工作时 master 发生写操作同步到 slave 的过程。增量复制的具体步骤如下：</p>
 <ol>
@@ -1027,7 +1027,7 @@ ID）。主节点会检查这个信息，并决定是否进行增量复制。</l
 <li>Redis 集群不存在中心节点或代理节点，集群的其中一个最重要的设计目标是达到线性可扩展性；</li>
 </ol>
 <p>其架构如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png" class="" title="1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png" class="" title="1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png">
 <p>其中每一个圆代表一个节点，任何两个节点是互通的，可以归纳以下几点：</p>
 <ul>
 <li>所有的节点相互连接；</li>
@@ -1061,7 +1061,7 @@ Redis 集群中有一个长度为 16384 的哈希槽列表，编号为 0 到 163
 </ul>
 <p>这里值得一提的是，在 Redis Cluster 中，只有 Master 才拥有槽的所有权。如果是某个 Master 的 slave，这个 slave 只负责槽的使用，但是没有所有权。<br>
 槽与节点结构如下所示：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png" class="" title="1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png" class="" title="1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png">
 </li>
 <li>
 <p>主从复制</p>
@@ -1112,7 +1112,7 @@ Redis 集群中有一个长度为 16384 的哈希槽列表，编号为 0 到 163
 </li>
 </ul>
 <p>投票机制原理图如下：</p>
-<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png" class="" title="1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png">
+<img data-src="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png" class="" title="1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png">
 </li>
 </ol>
 <h4 id="redis集群搭建"><a class="markdownIt-Anchor" href="#redis集群搭建">#</a> Redis 集群搭建</h4>
@@ -1727,10 +1727,10 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
 
       <div class="tags">
           <a href="/joker.github.io/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
-          <a href="/joker.github.io/tags/Redis/" rel="tag"><i class="ic i-tag"></i> Redis</a>
           <a href="/joker.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"><i class="ic i-tag"></i> 数据库</a>
           <a href="/joker.github.io/tags/NoSQL/" rel="tag"><i class="ic i-tag"></i> NoSQL</a>
           <a href="/joker.github.io/tags/%E7%BC%93%E5%AD%98/" rel="tag"><i class="ic i-tag"></i> 缓存</a>
+          <a href="/joker.github.io/tags/Redis/" rel="tag"><i class="ic i-tag"></i> Redis</a>
       </div>
   </div>
 
@@ -1742,7 +1742,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-09-22 01:19:39" itemprop="dateModified" datetime="2024-09-22T01:19:39+08:00">2024-09-22</time>
+    <time title="修改时间：2024-10-04 15:54:55" itemprop="dateModified" datetime="2024-10-04T15:54:55+08:00">2024-10-04</time>
   </span>
 </div>
 
@@ -1778,7 +1778,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   </li>
   <li class="link">
     <strong>本文链接：</strong>
-    <a href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">https://silvercrow42.github.io/joker.github.io/2024/09/13/【Redis】Redis面试题汇总与详解/</a>
+    <a href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis详解">https://silvercrow42.github.io/joker.github.io/2024/09/13/【Redis】Redis详解/</a>
   </li>
   <li class="license">
     <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
@@ -1797,17 +1797,17 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
     <div class="item left">
       
 
-  <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;13&#x2F;%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3&#x2F;8674ffb557d9360dfaaf28118b7fbb9e.jpg" title="【Spring】Spring面试题汇总">
+  <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;13&#x2F;%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3&#x2F;8674ffb557d9360dfaaf28118b7fbb9e.jpg" title="【Spring】Spring详解">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> spring</span>
-  <h3>【Spring】Spring面试题汇总</h3>
+  <h3>【Spring】Spring详解</h3>
   </a>
 
     </div>
     <div class="item right">
       
 
-  <a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="next" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;24&#x2F;%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3&#x2F;5dd561b9d4fe9001f78279dd4b5af54b.jpeg" title="【Zookeeper】Zookeeper面试题汇总与详解">
+  <a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="next" data-background-image="&#x2F;joker.github.io&#x2F;2024&#x2F;09&#x2F;24&#x2F;%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3&#x2F;5dd561b9d4fe9001f78279dd4b5af54b.jpeg" title="【Zookeeper】Zookeeper面试题汇总与详解">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> Zookeeper</span>
   <h3>【Zookeeper】Zookeeper面试题汇总与详解</h3>
@@ -1833,7 +1833,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
-          <li class="active"><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" rel="bookmark" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></li>
+          <li class="active"><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/" rel="bookmark" title="【Redis】Redis详解">【Redis】Redis详解</a></li>
         </ul>
       </div>
       <div class="overview panel" data-title="站点概览">
@@ -1905,12 +1905,12 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
 
   <ul id="quick">
     <li class="prev pjax">
-        <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+        <a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
     </li>
     <li class="up"><i class="ic i-arrow-up"></i></li>
     <li class="down"><i class="ic i-arrow-down"></i></li>
     <li class="next pjax">
-        <a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+        <a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
     </li>
     <li class="percent"></li>
   </ul>
@@ -1932,30 +1932,10 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
+<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring面试题汇总">【Spring】Spring面试题汇总</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis面试题汇总与详解">【Redis】Redis面试题汇总与详解</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
   </li>
 
       
@@ -1965,7 +1945,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
 <a href="/joker.github.io/categories/Zookeeper/" title="分类于 Zookeeper">Zookeeper</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Zookeeper】Zookeeper面试题汇总与详解">【Zookeeper】Zookeeper面试题汇总与详解</a></span>
+    <span><a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/" title="【Zookeeper】Zookeeper面试题汇总与详解">【Zookeeper】Zookeeper面试题汇总与详解</a></span>
   </li>
 
       
@@ -1982,20 +1962,40 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux面试题汇总与详解">【Linux】Linux面试题汇总与详解</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring详解">【Spring】Spring详解</a></span>
   </li>
 
       
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
+<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux命令详解">【Linux】Linux命令详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis详解">【Redis】Redis详解</a></span>
   </li>
 
   </ul>
@@ -2026,7 +2026,7 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
   </div>
 <script data-config type="text/javascript">
   var LOCAL = {
-    path: '2024/09/13/【Redis】Redis面试题汇总与详解/',
+    path: '2024/09/13/【Redis】Redis详解/',
     favicon: {
       show: "来辣！ヾ(´∀`o)+",
       hide: "ε = = (づ′▽`)づ走辣!"

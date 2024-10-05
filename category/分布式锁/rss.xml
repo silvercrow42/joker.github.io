@@ -13,22 +13,22 @@
         <category>MQ</category>
         <category>RocketMQ</category>
         <category>java</category>
-        <category>spring</category>
-        <category>Redis</category>
-        <category>Redisson</category>
         <category>Zookeeper</category>
-        <category>分布式锁</category>
+        <category>spring</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
+        <category>Redis</category>
+        <category>Redisson</category>
+        <category>分布式锁</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
             <title>【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</title>
             <link>https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
             <category>后端</category>
+            <category>Zookeeper</category>
             <category>Redis</category>
             <category>Redisson</category>
-            <category>Zookeeper</category>
             <category>分布式锁</category>
             <pubDate>Tue, 10 Sep 2024 10:00:01 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;在分布式系统中，由于服务部署在多个节点中，在运行时数据层面上天生无法互通，因此在处理多线程敏感的数据时，无法像单机应用开发一样通过 java 内部实现的多线程方案来解决。此时我们就需要通过分布式锁的方式来处理数据。&lt;/p&gt;

@@ -13,23 +13,23 @@
         <category>MQ</category>
         <category>RocketMQ</category>
         <category>java</category>
-        <category>spring</category>
-        <category>Redis</category>
-        <category>Redisson</category>
         <category>Zookeeper</category>
-        <category>分布式锁</category>
+        <category>spring</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
+        <category>Redis</category>
+        <category>Redisson</category>
+        <category>分布式锁</category>
         <item>
-            <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</guid>
-            <title>【Redis】Redis面试题汇总与详解</title>
-            <link>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</link>
+            <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/</guid>
+            <title>【Redis】Redis详解</title>
+            <link>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/</link>
             <category>后端</category>
-            <category>Redis</category>
             <category>数据库</category>
             <category>NoSQL</category>
             <category>缓存</category>
+            <category>Redis</category>
             <pubDate>Fri, 13 Sep 2024 13:52:28 +0800</pubDate>
             <description><![CDATA[ &lt;h1 id=&#34;概念&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#概念&#34;&gt;#&lt;/a&gt; 概念&lt;/h1&gt;
 &lt;h2 id=&#34;redis-是什么&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#redis-是什么&#34;&gt;#&lt;/a&gt; Redis 是什么&lt;/h2&gt;
@@ -88,7 +88,7 @@ Used）缓存淘汰策略。&lt;/li&gt;
 &lt;p&gt;底层实现：使用简单动态字符串（SDS）来存储数据，SDS 是为了克服 C 字符串的一些不足而设计的。&lt;/p&gt;
 &lt;figure class=&#34;highlight c&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;sdshdr&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;comment&#34;&gt;//记录buf数组中已使用字节的数量&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;comment&#34;&gt;//等于 SDS 保存字符串的长度&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;type&#34;&gt;int&lt;/span&gt; len;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;comment&#34;&gt;//记录 buf 数组中未使用字节的数量&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;type&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;built_in&#34;&gt;free&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;comment&#34;&gt;//字节数组，用于保存字符串&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;type&#34;&gt;char&lt;/span&gt; buf[];&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;用 SDS 保存字符串 “Redis” 具体图示如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528075607627-218845583.png&#34; class=&#34;&#34; title=&#34;1120165-20180528075607627-218845583.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528075607627-218845583.png&#34; class=&#34;&#34; title=&#34;1120165-20180528075607627-218845583.png&#34;&gt;
 &lt;p&gt;图片来源：《Redis 设计与实现》&lt;/p&gt;
 &lt;p&gt;我们看上面对于 SDS 数据类型的定义：&lt;/p&gt;
 &lt;ul&gt;
@@ -97,7 +97,7 @@ Used）缓存淘汰策略。&lt;/li&gt;
 &lt;li&gt;free j 记录了 buf 数组中未使用的字节数量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;上面的定义相对于 C 语言对于字符串的定义，有什么好处？&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180527234349672-568401853.png&#34; class=&#34;&#34; title=&#34;1120165-20180528075607627-218845583.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180527234349672-568401853.png&#34; class=&#34;&#34; title=&#34;1120165-20180528075607627-218845583.png&#34;&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;常数复杂度获取字符串长度：由于 len 属性的存在，我们获取 SDS 字符串的长度只需要读取 len 属性，时间复杂度为 O (1)。而对于 C&lt;br&gt;
@@ -150,7 +150,7 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 &lt;p&gt;底层实现：&lt;/p&gt;
 &lt;figure class=&#34;highlight c&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;25&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// 定义一个双向链表节点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;typedef&lt;/span&gt;  &lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;listNode&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;comment&#34;&gt;//前置节点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;listNode&lt;/span&gt; *&lt;span class=&#34;title&#34;&gt;prev&lt;/span&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;comment&#34;&gt;//后置节点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;listNode&lt;/span&gt; *&lt;span class=&#34;title&#34;&gt;next&lt;/span&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;comment&#34;&gt;//节点的值&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;       &lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; *value;  &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;listNode&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// 定义一个双向链表&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;list&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//表头节点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     listNode *head;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//表尾节点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     listNode *tail;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//链表所包含的节点数量&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;type&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;type&#34;&gt;long&lt;/span&gt; len;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//节点值复制函数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; (*&lt;span class=&#34;built_in&#34;&gt;free&lt;/span&gt;) (&lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; *ptr);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//节点值释放函数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; (*&lt;span class=&#34;built_in&#34;&gt;free&lt;/span&gt;) (&lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; *ptr);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;comment&#34;&gt;//节点值对比函数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;type&#34;&gt;int&lt;/span&gt; (*match) (&lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; *ptr,&lt;span class=&#34;type&#34;&gt;void&lt;/span&gt; *key);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;span class=&#34;built_in&#34;&gt;list&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;数据结构如下图&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png&#34; class=&#34;&#34; title=&#34;1120165-20180528074403440-111834793.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528074403440-111834793.png&#34; class=&#34;&#34; title=&#34;1120165-20180528074403440-111834793.png&#34;&gt;
 &lt;p&gt;Redis 的 linkedlist 是由一系列 listNode 节点构成的双向链表。&lt;/p&gt;
 &lt;p&gt;每个 listNode 包含三个主要部分：&lt;/p&gt;
 &lt;ul&gt;
@@ -193,7 +193,7 @@ C 语言由于不记录字符串的长度，所以如果要修改字符串，必
 &lt;/ul&gt;
 &lt;h5 id=&#34;哈希冲突的优化&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#哈希冲突的优化&#34;&gt;#&lt;/a&gt; 哈希冲突的优化&lt;/h5&gt;
 &lt;p&gt;我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过 next 这个指针可以将多个哈希值相同的键值对连接在一起，用来解决哈希冲突。&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png&#34; class=&#34;&#34; title=&#34;1120165-20180528080655703-1600710948.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1120165-20180528080655703-1600710948.png&#34; class=&#34;&#34; title=&#34;1120165-20180528080655703-1600710948.png&#34;&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;哈希算法：Redis 计算哈希值和索引值方法如下：&lt;/p&gt;
@@ -399,13 +399,13 @@ Redis DataBase) 和 AOF (Append Only File)。&lt;/p&gt;
 &lt;li&gt;
 &lt;p&gt;save 触发方式&lt;/p&gt;
 &lt;p&gt;该命令会阻塞当前 Redis 服务器，执行 save 命令期间，Redis 不能处理其他命令，直到 RDB 过程完成为止。具体流程如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg&#34; class=&#34;&#34; title=&#34;e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg&#34; class=&#34;&#34; title=&#34;e7cd7b899e510fb3aa8c05042b22c093d0430ca7.jpeg&#34;&gt;
 &lt;p&gt;执行完成时候如果存在老的 RDB 文件，就把新的替代掉旧的。我们的客户端可能都是几万或者是几十万，这种方式显然不可取。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;bgsave 触发方式&lt;/p&gt;
 &lt;p&gt;执行该命令时，Redis 会在后台异步进行快照操作，快照同时还可以响应客户端请求。具体流程如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg&#34; class=&#34;&#34; title=&#34;023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg&#34; class=&#34;&#34; title=&#34;023b5bb5c9ea15cefb035bc8431132f53b87b21e.jpeg&#34;&gt;
 &lt;p&gt;具体操作是 Redis 进程执行 fork 操作创建子进程，RDB 持久化过程由子进程负责，完成后自动结束。阻塞只发生在 fork 阶段，一般时间很短。基本上&lt;br&gt;
  Redis 内部所有的 RDB 操作都是采用 bgsave 命令。&lt;/p&gt;
 &lt;/li&gt;
@@ -426,7 +426,7 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。&lt
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;因为第三种方式是配置的，所以我们对前两种进行一个对比：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg&#34; class=&#34;&#34; title=&#34;1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg&#34; class=&#34;&#34; title=&#34;1c950a7b02087bf43b4490d50ac25f2a11dfcf7e.jpeg&#34;&gt;
 &lt;p&gt;RDB 的优势和劣势&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -451,13 +451,13 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。&lt
 &lt;li&gt;
 &lt;p&gt;持久化原理&lt;/p&gt;
 &lt;p&gt;他的原理看下面这张图：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg&#34; class=&#34;&#34; title=&#34;32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg&#34; class=&#34;&#34; title=&#34;32fa828ba61ea8d3c2502e396b1b3848251f58b0.jpeg&#34;&gt;
 &lt;p&gt;每当有一个写命令过来时，就直接保存在我们的 AOF 文件中。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;文件重写原理&lt;/p&gt;
 &lt;p&gt;AOF 的方式也同时带来了另一个问题：持久化文件会变的越来越大。为了解决这个问题，redis 提供了 bgrewriteaof 命令用来压缩 aof 的持久化文件。这条命令会将内存中的数据以命令的方式保存到临时文件中，同时会 fork 出一条新进程来将文件重写。&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg&#34; class=&#34;&#34; title=&#34;09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg&#34; class=&#34;&#34; title=&#34;09fa513d269759ee28454d2c4cea4b106c22dfd3.jpeg&#34;&gt;
 &lt;p&gt;重写 aof 文件的操作，并没有读取旧的 aof 文件，而是将整个内存中的数据库内容用命令的方式重写了一个新的 aof 文件，这点和快照有点类似。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
@@ -468,7 +468,7 @@ n”。表示 m 秒内数据集存在 n 次修改时，自动触发 bgsave。&lt
 &lt;li&gt;不同 no：从不同步&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;三种触发机制的对比如下图&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/b17eca8065380cd7df69859ba056a5325982816c.jpeg&#34; class=&#34;&#34; title=&#34;b17eca8065380cd7df69859ba056a5325982816c.jpeg&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/b17eca8065380cd7df69859ba056a5325982816c.jpeg&#34; class=&#34;&#34; title=&#34;b17eca8065380cd7df69859ba056a5325982816c.jpeg&#34;&gt;
 &lt;p&gt;AOF 的优势和劣势&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;优势
@@ -789,7 +789,7 @@ SETEX 命令将会替换旧的值。&lt;/li&gt;
 &lt;p&gt;和 MySQL 需要主从复制的原因一样，Redis 虽然读取写入的速度都特别快，但是也会产生性能瓶颈，特别是在读压力上，为了分担压力，Redis 支持主从复制。&lt;br&gt;
 Redis 的主从结构包括一主一从，一主多从或级联结构，复制类型分为全量同步和增量同步。&lt;br&gt;
 下图为级联结构：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png&#34; class=&#34;&#34; title=&#34;1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png&#34; class=&#34;&#34; title=&#34;1557639147418-27b8b69d-f0a8-4ec0-a771-99c43783190d.png&#34;&gt;
 &lt;h4 id=&#34;全量同步&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#全量同步&#34;&gt;#&lt;/a&gt; 全量同步&lt;/h4&gt;
 &lt;p&gt;Redis 全量复制一般发生在 slave 的初始阶段，这时 slave 需要将 master 上的数据都复制一份，具体步骤如下：&lt;/p&gt;
 &lt;ol&gt;
@@ -802,7 +802,7 @@ Redis 的主从结构包括一主一从，一主多从或级联结构，复制�
 &lt;li&gt;slave 完成上面的数据初始化后就可以开始接受用户的读请求了。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;大致流程图如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png&#34; class=&#34;&#34; title=&#34;1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png&#34; class=&#34;&#34; title=&#34;1557639652986-bfbcd0af-6688-4047-83df-8f3bea5d0875.png&#34;&gt;
 &lt;h4 id=&#34;增量复制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#增量复制&#34;&gt;#&lt;/a&gt; 增量复制&lt;/h4&gt;
 &lt;p&gt;增量复制实际上就是在 slave 初始化完成后开始正常工作时 master 发生写操作同步到 slave 的过程。增量复制的具体步骤如下：&lt;/p&gt;
 &lt;ol&gt;
@@ -912,7 +912,7 @@ ID）。主节点会检查这个信息，并决定是否进行增量复制。&lt
 &lt;li&gt;Redis 集群不存在中心节点或代理节点，集群的其中一个最重要的设计目标是达到线性可扩展性；&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;其架构如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png&#34; class=&#34;&#34; title=&#34;1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png&#34; class=&#34;&#34; title=&#34;1557644289413-437c9a81-dcb1-40bc-8549-2a4867b797c2.png&#34;&gt;
 &lt;p&gt;其中每一个圆代表一个节点，任何两个节点是互通的，可以归纳以下几点：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;所有的节点相互连接；&lt;/li&gt;
@@ -946,7 +946,7 @@ Redis 集群中有一个长度为 16384 的哈希槽列表，编号为 0 到 163
 &lt;/ul&gt;
 &lt;p&gt;这里值得一提的是，在 Redis Cluster 中，只有 Master 才拥有槽的所有权。如果是某个 Master 的 slave，这个 slave 只负责槽的使用，但是没有所有权。&lt;br&gt;
 槽与节点结构如下所示：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png&#34; class=&#34;&#34; title=&#34;1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png&#34; class=&#34;&#34; title=&#34;1557644627263-0159f2b0-f9ff-46d6-acd3-abc6a22d8e87.png&#34;&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;主从复制&lt;/p&gt;
@@ -997,7 +997,7 @@ Redis 集群中有一个长度为 16384 的哈希槽列表，编号为 0 到 163
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;投票机制原理图如下：&lt;/p&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png&#34; class=&#34;&#34; title=&#34;1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png&#34; class=&#34;&#34; title=&#34;1557645005629-3f876a67-45ec-4285-8821-3ebf42dd4345.png&#34;&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4 id=&#34;redis集群搭建&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#redis集群搭建&#34;&gt;#&lt;/a&gt; Redis 集群搭建&lt;/h4&gt;
@@ -1616,9 +1616,9 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
             <title>【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</title>
             <link>https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
             <category>后端</category>
+            <category>Zookeeper</category>
             <category>Redis</category>
             <category>Redisson</category>
-            <category>Zookeeper</category>
             <category>分布式锁</category>
             <pubDate>Tue, 10 Sep 2024 10:00:01 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;在分布式系统中，由于服务部署在多个节点中，在运行时数据层面上天生无法互通，因此在处理多线程敏感的数据时，无法像单机应用开发一样通过 java 内部实现的多线程方案来解决。此时我们就需要通过分布式锁的方式来处理数据。&lt;/p&gt;

@@ -10,18 +10,18 @@
     <category term="MQ" />
     <category term="RocketMQ" />
     <category term="java" />
-    <category term="spring" />
-    <category term="Redis" />
-    <category term="Redisson" />
     <category term="Zookeeper" />
-    <category term="分布式锁" />
+    <category term="spring" />
     <category term="数据库" />
     <category term="NoSQL" />
     <category term="缓存" />
+    <category term="Redis" />
+    <category term="Redisson" />
+    <category term="分布式锁" />
     <entry>
-        <id>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/</id>
-        <title>【Spring】Spring面试题汇总</title>
-        <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/"/>
+        <id>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/</id>
+        <title>【Spring】Spring详解</title>
+        <link rel="alternate" href="https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/"/>
         <content type="html">&lt;h2 id=&#34;spring的基本概念&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#spring的基本概念&#34;&gt;#&lt;/a&gt; Spring 的基本概念&lt;/h2&gt;
 &lt;h3 id=&#34;1-spring-是什么&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-spring-是什么&#34;&gt;#&lt;/a&gt; 1、Spring 是什么？&lt;/h3&gt;
 &lt;p&gt;Spring 是一个轻量级 Java 开发框架，最早有 Rod Johnson 创建，目的是为了解决企业级应用开发的业务逻辑层和其他各层的耦合问题。它是一个分层的&lt;br&gt;
@@ -43,7 +43,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;3-说说-spring-有哪些模块&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-说说-spring-有哪些模块&#34;&gt;#&lt;/a&gt; 3、说说 Spring 有哪些模块？&lt;/h3&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/26e3bd5f237ab05ae63f5a697805b33b.png&#34; class=&#34;&#34; title=&#34;Spring模块&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/26e3bd5f237ab05ae63f5a697805b33b.png&#34; class=&#34;&#34; title=&#34;Spring模块&#34;&gt;
 &lt;p&gt;上图对应的是 Spring 4.x 版本的架构图，主要包括以下八个模块：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -268,7 +268,7 @@
 &lt;li&gt;使用 ThreadLocal：对于某些特定场景，可以使用 ThreadLocal 来实现线程之间的隔离，确保每个线程都有自己的独立副本。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;3-spring-bean-的生命周期&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-spring-bean-的生命周期&#34;&gt;#&lt;/a&gt; 3、Spring Bean 的生命周期？&lt;/h3&gt;
-&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91spring%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3/0cb7664ed7f4ec62270c528f298e03a3.png&#34; class=&#34;&#34; title=&#34;Spring Bean 生命周期&#34;&gt;
+&lt;img data-src=&#34;/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/0cb7664ed7f4ec62270c528f298e03a3.png&#34; class=&#34;&#34; title=&#34;Spring Bean 生命周期&#34;&gt;
 &lt;p&gt;Bean 在 Spring 容器中从创建到销毁经历了若干阶段，每一阶段都可以进行个性化定制。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
