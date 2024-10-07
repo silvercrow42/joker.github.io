@@ -13,8 +13,8 @@
         <category>MQ</category>
         <category>RocketMQ</category>
         <category>java</category>
-        <category>spring</category>
         <category>Zookeeper</category>
+        <category>spring</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
@@ -30,7 +30,7 @@
             <category>Zookeeper</category>
             <pubDate>Tue, 24 Sep 2024 11:39:53 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;什么是zookeeper&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#什么是zookeeper&#34;&gt;#&lt;/a&gt; 什么是 Zookeeper&lt;/h2&gt;
-&lt;p&gt;Zookeeper 是一个开源的协调服务，用于分布式应用程序，提供了诸如配置维护、域名服务、分布式同步、组服务等功能。它是一个为分布式应用提供一致性服务的软件，其内部使用了一种称为&lt;br&gt;
+&lt;p&gt;Zookeeper 是一个开源的主动协调服务，用于分布式应用程序，提供了诸如配置维护、域名服务、分布式同步、组服务等功能。它是一个为分布式应用提供一致性服务的软件，其内部使用了一种称为&lt;br&gt;
  Zab 的协议（在选举过程中使用 Paxos 协议）来保证分布式环境中不同节点之间的数据一致性。&lt;/p&gt;
 &lt;p&gt;Zookeeper 的主要特点包括：&lt;/p&gt;
 &lt;ul&gt;
@@ -131,6 +131,551 @@
 &lt;/ol&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;znode&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#znode&#34;&gt;#&lt;/a&gt; Znode&lt;/h2&gt;
+&lt;p&gt;Znode 是 Zookeeper 中的基本数据结构，用于存储数据和组织数据结构。&lt;br&gt;
+每个 Znode 都有一个唯一的路径，路径类似于文件系统的路径，以 / 开头。&lt;/p&gt;
+&lt;p&gt;Znode 的属性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据内容：
+&lt;ul&gt;
+&lt;li&gt;data：Znode 存储的数据内容，最大为 1MB。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ACL（Access Control List）：
+&lt;ul&gt;
+&lt;li&gt;权限控制列表：定义了对 Znode 的访问权限，包括读、写、创建子节点等权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;版本信息：
+&lt;ul&gt;
+&lt;li&gt;version：Znode 的版本号，用于数据一致性检查。&lt;/li&gt;
+&lt;li&gt;cversion：子节点的版本号。&lt;/li&gt;
+&lt;li&gt;aversion：ACL 的版本号。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;时间戳：
+&lt;ul&gt;
+&lt;li&gt;ctime：创建时间。&lt;/li&gt;
+&lt;li&gt;mtime：最后修改时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;子节点：
+&lt;ul&gt;
+&lt;li&gt;children：Znode 可以拥有子节点，形成树状结构。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Znode 的类型包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;持久节点（Persistent）：持久节点在 ZooKeeper 服务器重启后不会丢失，除非显式删除。Java 创建示例如下：&lt;/p&gt;
+ &lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;zookeeper.create(&lt;span class=&#34;string&#34;&gt;&amp;quot;/path&amp;quot;&lt;/span&gt;, data, acl, CreateMode.PERSISTENT);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;临时节点（Ephemeral）：创建后，如果创建该节点的客户端会话断开，则自动删除。且其不能有子节点。Java 创建示例如下：&lt;/p&gt;
+ &lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;zookeeper.create(&lt;span class=&#34;string&#34;&gt;&amp;quot;/path&amp;quot;&lt;/span&gt;, data, acl, CreateMode.EPHEMERAL);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;顺序节点（Sequential）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;顺序节点在创建时自动获得一个唯一的序号，用于排序。例如，如果路径为 /path，创建的第一个顺序节点可能是&lt;br&gt;
+ /path00000001。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;顺序节点也包含持久节点和临时节点两种持久化类型。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过 Java 创建一个路径为 &amp;quot;/path&amp;quot; 的持久顺序节点示例如下：&lt;/p&gt;
+&lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;zookeeper.create(&lt;span class=&#34;string&#34;&gt;&amp;quot;/path&amp;quot;&lt;/span&gt;, data, acl, CreateMode.PERSISTENT_SEQUENTIAL);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;默认情况下创建的 Znode 为持久节点类型。&lt;/p&gt;
+&lt;p&gt;注意事项：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建节点时，必须要带上全路径。&lt;/li&gt;
+&lt;li&gt;创建节点时，如果父节点不存在，ZooKeeper 会自动创建父节点。&lt;/li&gt;
+&lt;li&gt;同一级节点 key 名称是唯一的。&lt;/li&gt;
+&lt;li&gt;delete 命令只能一层一层删除，不能删除一个节点下的所有子节点。新版本可以通过 deleteall 命令递归删除。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;zookeeper集群&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper集群&#34;&gt;#&lt;/a&gt; Zookeeper 集群&lt;/h2&gt;
+&lt;p&gt;Zookeeper 集群是一种分布式协调服务，主要用于解决分布式系统中的一致性问题。它通过一组服务器组成集群，共同维护一个高度一致的状态。&lt;/p&gt;
+&lt;p&gt;Zookeeper 集群的组成和角色如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;领导者（Leader）：&lt;/p&gt;
+&lt;p&gt;Leader 是 Zookeeper 集群中的核心角色，负责处理客户端请求并协调其他服务器的状态。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;处理客户端请求：
+&lt;ul&gt;
+&lt;li&gt;Leader 负责接收客户端的所有读写请求，并处理这些请求。&lt;/li&gt;
+&lt;li&gt;对于读请求，Leader 可以直接返回结果。&lt;/li&gt;
+&lt;li&gt;对于写请求，Leader 会广播给所有 Follower 和 Observer。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;数据同步：
+&lt;ul&gt;
+&lt;li&gt;Leader 负责将写请求广播给所有的 Follower，并确保所有 Follower 都正确地执行了写操作。&lt;/li&gt;
+&lt;li&gt;Leader 通过事务日志（transaction log）和快照（snapshot）来保证数据的一致性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;选举协调：
+&lt;ul&gt;
+&lt;li&gt;当集群中出现故障或需要重新选举时，Leader 负责协调选举过程。&lt;/li&gt;
+&lt;li&gt;Leader 通过投票机制来确定新的 Leader。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;跟随者（Follower）：&lt;/p&gt;
+&lt;p&gt;Follower 是 Zookeeper 集群中的重要角色之一，负责接收客户端请求并将请求转发给 Leader。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;接收客户端请求：
+&lt;ul&gt;
+&lt;li&gt;Follower 可以接收客户端的请求，并将请求转发给 Leader。&lt;/li&gt;
+&lt;li&gt;Follower 也可以直接处理客户端的读请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;数据同步：
+&lt;ul&gt;
+&lt;li&gt;Follower 负责同步 Leader 的状态。&lt;/li&gt;
+&lt;li&gt;当 Leader 发送写请求时，Follower 会执行相同的写操作，并确认操作完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;选举参与：
+&lt;ul&gt;
+&lt;li&gt;Follower 参与选举过程，通过投票机制选举新的 Leader。&lt;/li&gt;
+&lt;li&gt;当集群中出现故障时，Follower 会参与重新选举。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;观察者（Observer）：&lt;/p&gt;
+&lt;p&gt;Observer 是 Zookeeper 集群中的辅助角色，主要用于提高集群的吞吐量。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;接收客户端请求：
+&lt;ul&gt;
+&lt;li&gt;Observer 可以接收客户端的请求，并将请求转发给 Leader。&lt;/li&gt;
+&lt;li&gt;Observer 不参与选举过程，因此不会影响选举的结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;数据同步：
+&lt;ul&gt;
+&lt;li&gt;Observer 负责同步 Leader 的状态。&lt;/li&gt;
+&lt;li&gt;当 Leader 发送写请求时，Observer 会执行相同的写操作，并确认操作完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;提高吞吐量：
+&lt;ul&gt;
+&lt;li&gt;Observer 可以接收更多的客户端请求，从而提高集群的整体吞吐量。&lt;/li&gt;
+&lt;li&gt;Observer 不参与选举过程，因此不会增加选举的复杂度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据一致性：Zookeeper 通过 ZAB 算法保证数据的一致性。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;事务日志：
+&lt;ul&gt;
+&lt;li&gt;每个服务器都会记录事务日志（transaction log），确保数据的一致性。&lt;/li&gt;
+&lt;li&gt;在选举过程中，Leader 会根据事务日志同步其他服务器的状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;快照：
+&lt;ul&gt;
+&lt;li&gt;定期生成快照（snapshot），减少事务日志的大小，提高性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;zookeeper的读写流程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper的读写流程&#34;&gt;#&lt;/a&gt; Zookeeper 的读写流程&lt;/h2&gt;
+&lt;p&gt;当客户端向 Zookeeper 发送一个数据变更请求时，请求首先到达 Leader 节点。以下是详细的流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;写入事务日志
+&lt;ol&gt;
+&lt;li&gt;Leader 收到变更请求：
+&lt;ul&gt;
+&lt;li&gt;Leader 节点首先接收到客户端发送的数据变更请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;生成事务记录：
+&lt;ul&gt;
+&lt;li&gt;Leader 节点生成一条事务记录，这条记录包含了变更请求的所有细节，例如操作类型（创建、删除、更新）、节点路径、数据等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;写入事务日志：
+&lt;ul&gt;
+&lt;li&gt;Leader 节点将这条事务记录写入事务日志文件中。事务日志文件通常位于磁盘上，以确保数据的持久性。&lt;/li&gt;
+&lt;li&gt;事务日志文件通常以 .log 或 .txn 结尾。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;写入内存
+&lt;ol&gt;
+&lt;li&gt;应用变更到内存：
+&lt;ul&gt;
+&lt;li&gt;在事务日志写入完成后，Leader 节点将变更请求应用到内存中的数据树。&lt;/li&gt;
+&lt;li&gt;这一步确保了数据的一致性和实时性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;广播变更请求
+&lt;ol&gt;
+&lt;li&gt;广播变更请求：
+&lt;ul&gt;
+&lt;li&gt;Leader 节点将变更请求广播给所有 Follower 节点。&lt;/li&gt;
+&lt;li&gt;Follower 节点接收到变更请求后，同样先写入事务日志，再写入内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;确认变更
+&lt;ol&gt;
+&lt;li&gt;Follower 处理变更：
+&lt;ul&gt;
+&lt;li&gt;每个 Follower 节点接收到变更请求后，先将其写入自己的事务日志文件中，然后再应用到内存中的数据树。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;多数确认：
+&lt;ul&gt;
+&lt;li&gt;当大多数 Follower 节点确认收到并处理完变更请求后，Leader 节点认为变更成功。&lt;/li&gt;
+&lt;li&gt;这一步确保了数据的一致性和可靠性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;返回结果：
+&lt;ul&gt;
+&lt;li&gt;Leader 节点将变更成功的消息返回给客户端。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;zookeeper的选举机制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper的选举机制&#34;&gt;#&lt;/a&gt; Zookeeper 的选举机制&lt;/h2&gt;
+&lt;p&gt;Zookeeper 的选举机制基于 Fast Leader Election (FLE) 算法，确保在一个分布式环境中快速且正确地选出领导者。&lt;/p&gt;
+&lt;p&gt;Zookeeper 集群中的选举机制通常在以下几种情况下被触发：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初始启动：当集群中的所有服务器首次启动时，它们需要选举出一个 Leader。&lt;/li&gt;
+&lt;li&gt;Leader 故障：当当前的 Leader 发生故障（如宕机或网络分区）时，需要重新选举新的 Leader。&lt;/li&gt;
+&lt;li&gt;Leader 步骤落后：当 Leader 的步骤落后于其他服务器时，可能需要重新选举新的 Leader。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在进行 Zookeeper 集群中，进行选举的节点具有以下状态：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;LOOKING
+&lt;ul&gt;
+&lt;li&gt;定义：节点处于寻找领导者的状态。&lt;/li&gt;
+&lt;li&gt;行为：节点会发起投票，并接收来自其他节点的投票信息。一旦收集到足够的投票信息，它会尝试成为领导者或者选择一个合适的领导者。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LEADING
+&lt;ul&gt;
+&lt;li&gt;定义：节点成为领导者。&lt;/li&gt;
+&lt;li&gt;行为：负责协调集群中的所有事务操作，并向其他节点发送心跳信息以维持集群的一致性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;FOLLOWING
+&lt;ul&gt;
+&lt;li&gt;定义：节点作为跟随者。&lt;/li&gt;
+&lt;li&gt;行为：接收领导者的心跳信息和指令，并执行相应的操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OBSERVING
+&lt;ul&gt;
+&lt;li&gt;定义：节点作为观察者。&lt;/li&gt;
+&lt;li&gt;行为：观察者可以参与投票过程，但不参与决策制定。观察者主要用于扩展集群的读取能力。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参与运算的关键变量&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;myid
+&lt;ul&gt;
+&lt;li&gt;定义：每个节点的唯一标识符。&lt;/li&gt;
+&lt;li&gt;作用：用于区分不同的节点，在选举过程中用于投票。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;zxid
+&lt;ul&gt;
+&lt;li&gt;定义：事务 ID，表示最后一次提交的事务编号。&lt;/li&gt;
+&lt;li&gt;作用：用于判断节点的状态是否最新。具有更大 zxid 的节点被认为是更 “新” 的节点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;epoch
+&lt;ul&gt;
+&lt;li&gt;定义：选举轮次。&lt;/li&gt;
+&lt;li&gt;作用：防止过期的投票信息干扰当前的选举过程。每次选举开始时，epoch 增加。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;peerState
+&lt;ul&gt;
+&lt;li&gt;定义：节点的当前状态。&lt;/li&gt;
+&lt;li&gt;作用：记录节点当前处于哪种状态（LOOKING, LEADING, FOLLOWING, OBSERVING）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;votesReceived
+&lt;ul&gt;
+&lt;li&gt;定义：节点接收到的投票数量。&lt;/li&gt;
+&lt;li&gt;作用：用于统计当前节点是否获得了大多数投票。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;lastVote
+&lt;ul&gt;
+&lt;li&gt;定义：节点上一次投票的对象。&lt;/li&gt;
+&lt;li&gt;作用：记录上一次投票的对象，避免重复投票。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;electionType
+&lt;ul&gt;
+&lt;li&gt;定义：选举类型（例如普通选举或重新选举）。&lt;/li&gt;
+&lt;li&gt;作用：用于区分不同类型的选举过程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;详细流程&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化状态：当一个节点启动时，它会进入 LOOKING 状态。这意味着它正在寻找或试图成为领导者。&lt;/li&gt;
+&lt;li&gt;初始化投票：每个节点在启动时会给自己投一票，并将投票信息（包括 myid 和 zxid）发送给集群中的其他节点。&lt;/li&gt;
+&lt;li&gt;接收投票信息：节点会接收到其他节点的投票信息。&lt;/li&gt;
+&lt;li&gt;比较和更新投票
+&lt;ol&gt;
+&lt;li&gt;比较 epoch：节点会比较接收到的投票信息中的 epoch 和自己的 epoch。
+&lt;ul&gt;
+&lt;li&gt;当接收到的 epoch 大于自己的 epoch，则更新自己的 epoch，并将新的投票信息再次发送给集群中的所有节点，防止投票过期。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;比较 zxid：节点会比较接收到的投票信息中的 zxid 和自己的 zxid。
+&lt;ul&gt;
+&lt;li&gt;如果接收到的投票信息中的 zxid 大于自己的 zxid，则更新自己的投票信息，并将新的投票信息再次发送给集群中的所有节点。&lt;/li&gt;
+&lt;li&gt;如果接收到的投票信息中的 zxid 等于自己的 zxid，则比较 myid。
+&lt;ul&gt;
+&lt;li&gt;如果接收到的投票信息中的 myid 大于自己的 myid，则更新自己的投票信息，并将新的投票信息再次发送给集群中的所有节点。&lt;/li&gt;
+&lt;li&gt;如果接收到的投票信息中的 myid 小于自己的 myid，则保持当前的投票信息不变。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果接收到的投票信息中的 zxid 小于自己的 zxid，则保持当前的投票信息不变。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;统计投票结果：每个节点会统计接收到的投票信息。如果一个特定的节点得到了大多数（超过半数）的投票，那么这个节点就被认为是领导者。
+&lt;ul&gt;
+&lt;li&gt;大多数投票：对于奇数个节点的集群，大多数意味着 (N + 1) / 2；对于偶数个节点，则需要 N / 2 + 1 才能构成大多数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;领导者确认：成功获得大多数投票的节点会向集群广播它的领导者身份。&lt;br&gt;
+其他节点接收到这条消息后，会切换到 FOLLOWING 状态，并开始跟随新的领导者。&lt;/li&gt;
+&lt;li&gt;故障转移：如果当前的领导者失效了，跟随者会重新进入 LOOKING 状态并开始新一轮的选举。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;示例流程&lt;/p&gt;
+&lt;p&gt;假设有一个 Zookeeper 集群，包含三个节点 A、B 和 C：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化状态：A、B 和 C 都进入 LOOKING 状态。&lt;/li&gt;
+&lt;li&gt;投票：A、B 和 C 各自给自己投一票，并将投票信息发送给其他节点。假设
+&lt;ul&gt;
+&lt;li&gt;A 的 zxid 是 100。&lt;/li&gt;
+&lt;li&gt;B 的 zxid 是 90。&lt;/li&gt;
+&lt;li&gt;C 的 zxid 是 110。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;接收投票：
+&lt;ul&gt;
+&lt;li&gt;A 收到 B 和 C 的投票信息。&lt;/li&gt;
+&lt;li&gt;B 收到 A 和 C 的投票信息。&lt;/li&gt;
+&lt;li&gt;C 收到 A 和 B 的投票信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;比较和更新投票：
+&lt;ul&gt;
+&lt;li&gt;A 发现 C 的 zxid 更大，更新自己的投票信息，并重新发送投票给 B 和 C。&lt;/li&gt;
+&lt;li&gt;B 发现 C 的 zxid 更大，更新自己的投票信息，并重新发送投票给 A 和 C。&lt;/li&gt;
+&lt;li&gt;C 发现自己的 zxid 最大，保持投票信息不变。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;统计投票结果：C 收到 A 和 B 的投票，统计后发现自己的投票数达到 2（超过半数）。&lt;/li&gt;
+&lt;li&gt;领导者确认：
+&lt;ul&gt;
+&lt;li&gt;C 向 A 和 B 广播自己成为领导者的信息。&lt;/li&gt;
+&lt;li&gt;A 和 B 收到消息后，切换到 FOLLOWING 状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;故障转移：如果 C 故障，A 和 B 重新进入 LOOKING 状态，重复上述流程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;zookeeper的数据同步机制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper的数据同步机制&#34;&gt;#&lt;/a&gt; Zookeeper 的数据同步机制&lt;/h2&gt;
+&lt;p&gt;Zookeeper 使用 ZAB（Zookeeper Atomic Broadcast）协议来保证数据的一致性和高可用性。&lt;/p&gt;
+&lt;p&gt;在集群中已经存在 Leader 后，集群中的其他服务器会通过以下步骤与 Leader 保持同步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Leader 同步&lt;/p&gt;
+&lt;p&gt;选举出新的 Leader 后，Leader 会开始与其他 Follower 进行数据同步。具体步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Leader 发送事务日志：
+&lt;ul&gt;
+&lt;li&gt;Leader 将最新的事务日志（transaction log）发送给所有 Follower。&lt;/li&gt;
+&lt;li&gt;事务日志包含了所有未提交的事务记录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Follower 接收事务日志：
+&lt;ul&gt;
+&lt;li&gt;Follower 接收到事务日志后，会将其应用到本地状态上。&lt;/li&gt;
+&lt;li&gt;Follower 会确认事务日志的正确性，并将确认信息发送回 Leader。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Leader 确认同步：
+&lt;ul&gt;
+&lt;li&gt;Leader 收到所有 Follower 的确认信息后，会确认数据同步完成。&lt;/li&gt;
+&lt;li&gt;Leader 会发送确认信息给所有 Follower，表明数据同步完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Follower 同步&lt;/p&gt;
+&lt;p&gt;Follower 在同步过程中需要确保与 Leader 的状态一致。具体步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Leader 发送写请求：
+&lt;ul&gt;
+&lt;li&gt;当 Leader 收到客户端的写请求时，会将写请求广播给所有 Follower。&lt;/li&gt;
+&lt;li&gt;写请求包含具体的写操作和事务 ID（zxid）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Follower 执行写操作：
+&lt;ul&gt;
+&lt;li&gt;Follower 接收到写请求后，会执行相同的写操作，并记录事务日志。&lt;/li&gt;
+&lt;li&gt;Follower 会将确认信息发送回 Leader，表明写操作已完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Leader 确认写操作：
+&lt;ul&gt;
+&lt;li&gt;Leader 收到所有 Follower 的确认信息后，会确认写操作完成。&lt;/li&gt;
+&lt;li&gt;Leader 会发送确认信息给所有 Follower，表明写操作完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Observer 同步&lt;/p&gt;
+&lt;p&gt;Observer 不参与选举过程，但需要同步 Leader 的数据以保持最新状态。具体步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Observer 同步数据：
+&lt;ul&gt;
+&lt;li&gt;Observer 从 Leader 获取最新的数据。&lt;/li&gt;
+&lt;li&gt;Leader 将最新的事务日志发送给 Observer。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Observer 应用事务日志：
+&lt;ul&gt;
+&lt;li&gt;Observer 接收到事务日志后，会将其应用到本地状态上。&lt;/li&gt;
+&lt;li&gt;Observer 会确认事务日志的正确性，并将确认信息发送回 Leader。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Leader 确认同步：
+&lt;ul&gt;
+&lt;li&gt;Leader 收到 Observer 的确认信息后，会确认数据同步完成。&lt;/li&gt;
+&lt;li&gt;Leader 会发送确认信息给 Observer，表明数据同步完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;详细流程示例&lt;/p&gt;
+&lt;p&gt;假设集群中有三个服务器：Server A、Server B 和 Server C。Server A 成为 Leader，Server B 和 Server C 作为 Follower。此外，还有一个&lt;br&gt;
+ Observer 服务器 Server D。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Leader 同步：
+&lt;ul&gt;
+&lt;li&gt;Server A 发送最新的事务日志给 Server B 和 Server C。&lt;/li&gt;
+&lt;li&gt;Server B 和 Server C 接收到事务日志后，应用到本地状态，并发送确认信息给 Server A。&lt;/li&gt;
+&lt;li&gt;Server A 收到所有 Follower 的确认信息后，确认数据同步完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Follower 同步：
+&lt;ul&gt;
+&lt;li&gt;当 Server A 收到客户端的写请求时，将写请求广播给 Server B 和 Server C。&lt;/li&gt;
+&lt;li&gt;Server B 和 Server C 执行相同的写操作，并记录事务日志。&lt;/li&gt;
+&lt;li&gt;Server B 和 Server C 发送确认信息给 Server A。&lt;/li&gt;
+&lt;li&gt;Server A 收到所有 Follower 的确认信息后，确认写操作完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Observer 同步：
+&lt;ul&gt;
+&lt;li&gt;Server D 从 Server A 获取最新的事务日志。&lt;/li&gt;
+&lt;li&gt;Server A 发送最新的事务日志给 Server D。&lt;/li&gt;
+&lt;li&gt;Server D 接收到事务日志后，应用到本地状态，并发送确认信息给 Server A。&lt;/li&gt;
+&lt;li&gt;Server A 收到 Observer 的确认信息后，确认数据同步完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;zookeeper的持久化机制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper的持久化机制&#34;&gt;#&lt;/a&gt; Zookeeper 的持久化机制&lt;/h2&gt;
+&lt;p&gt;Zookeeper 的数据持久化机制是其可靠性的关键组成部分之一。为了确保数据在系统崩溃或重启后仍然可用，Zookeeper 采用了多种机制来实现数据持久化。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;事务日志（Transaction Log）&lt;/p&gt;
+&lt;p&gt;事务日志记录了所有对 Zookeeper 数据树的操作。每次写操作都会被记录在事务日志中，以便在系统崩溃后能够恢复数据。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;事务日志的作用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;记录所有写操作：每次写操作（如创建节点、删除节点、更新节点数据等）都会被记录在事务日志中。&lt;/li&gt;
+&lt;li&gt;支持数据恢复：在系统崩溃后，可以通过事务日志恢复数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;事务日志的存储&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;事务日志通常存储在磁盘上，以确保数据的安全性和持久性。每个 Server 都有自己的事务日志文件，通常位于配置文件&lt;br&gt;
+ zoo.cfg&lt;br&gt;
+ 中指定的目录下。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;事务日志的格式&lt;/p&gt;
+&lt;p&gt;事务日志文件通常以 .log 或 .txn 结尾。每个事务日志文件包含一系列事务记录，每条记录包含以下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;事务类型：标识操作类型（如 create、delete、setData 等）。&lt;/li&gt;
+&lt;li&gt;事务 ID（zxid）：唯一的事务标识符。&lt;/li&gt;
+&lt;li&gt;操作详情：具体的操作内容（如节点路径、数据等）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;快照（Snapshot）&lt;/p&gt;
+&lt;p&gt;快照是对 Zookeeper 数据树的一个完整备份。快照定期生成，以减少事务日志的大小，并提高恢复速度。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;快照的作用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;快速恢复数据：在系统崩溃后，可以通过快照快速恢复数据。&lt;/li&gt;
+&lt;li&gt;减少事务日志大小：定期生成快照可以减少事务日志的大小，提高系统性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;快照的存储&lt;/p&gt;
+&lt;p&gt;快照通常也存储在磁盘上，与事务日志文件一起存放在配置文件 zoo.cfg 中指定的目录下。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;快照的格式&lt;/p&gt;
+&lt;p&gt;快照文件通常以 .snapshot 或 .snap 结尾。每个快照文件包含以下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据树的完整状态：当前 Zookeeper 数据树的完整状态。&lt;/li&gt;
+&lt;li&gt;事务 ID（zxid）：最后一个事务的 ID，用于标识快照的时间点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;恢复机制&lt;/p&gt;
+&lt;p&gt;当 Zookeeper 服务器启动时，需要从磁盘上的事务日志和快照文件中恢复数据。恢复过程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;加载快照：服务器启动时，首先加载最新的快照文件，恢复数据树的基本状态。&lt;/li&gt;
+&lt;li&gt;重放事务日志：从最新的快照时间点之后的事务日志开始重放，逐条执行事务日志中的操作，直到最新的事务日志为止。&lt;/li&gt;
+&lt;li&gt;检查一致性：服务器会检查数据树的状态是否一致，确保没有遗漏的操作。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
  ]]></description>
         </item>
     </channel>
