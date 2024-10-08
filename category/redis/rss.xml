@@ -12,13 +12,13 @@
         <category>Linux</category>
         <category>MQ</category>
         <category>RocketMQ</category>
-        <category>java</category>
-        <category>Zookeeper</category>
-        <category>spring</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
         <category>Redis</category>
+        <category>java</category>
+        <category>spring</category>
+        <category>Zookeeper</category>
         <category>Redisson</category>
         <category>分布式锁</category>
         <item>

@@ -12,18 +12,18 @@
         <category>Linux</category>
         <category>MQ</category>
         <category>RocketMQ</category>
-        <category>java</category>
-        <category>Zookeeper</category>
-        <category>spring</category>
         <category>数据库</category>
         <category>NoSQL</category>
         <category>缓存</category>
         <category>Redis</category>
+        <category>java</category>
+        <category>spring</category>
+        <category>Zookeeper</category>
         <category>Redisson</category>
         <category>分布式锁</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/</guid>
-            <title>【Zookeeper】Zookeeper面试题汇总与详解</title>
+            <title>【Zookeeper】Zookeeper详解</title>
             <link>https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/</link>
             <category>后端</category>
             <category>java</category>
@@ -197,6 +197,54 @@
 &lt;li&gt;创建节点时，如果父节点不存在，ZooKeeper 会自动创建父节点。&lt;/li&gt;
 &lt;li&gt;同一级节点 key 名称是唯一的。&lt;/li&gt;
 &lt;li&gt;delete 命令只能一层一层删除，不能删除一个节点下的所有子节点。新版本可以通过 deleteall 命令递归删除。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;watch机制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#watch机制&#34;&gt;#&lt;/a&gt; Watch 机制&lt;/h2&gt;
+&lt;h3 id=&#34;概述&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#概述&#34;&gt;#&lt;/a&gt; 概述&lt;/h3&gt;
+&lt;p&gt;ZooKeeper 的 watch 机制是一种非常重要的特性，用于实现实时监控 ZooKeeper 中的数据变化。&lt;br&gt;
+在 Spring Cloud 应用中，可以通过 Curator 框架结合 Spring Boot 来实现对 ZooKeeper 数据的监控。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;基本概念&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Watch：一种一次性触发的通知机制。&lt;/li&gt;
+&lt;li&gt;Watcher：客户端注册的监听器，用于接收 ZooKeeper 的通知。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;工作原理&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注册 Watcher：客户端在执行某些操作（如获取节点数据、获取子节点列表等）时，可以注册一个 Watcher。&lt;/li&gt;
+&lt;li&gt;触发 Watcher：当节点数据或子节点列表发生变化时，ZooKeeper 会触发相应的 Watcher。&lt;/li&gt;
+&lt;li&gt;处理事件：客户端在收到 Watcher 触发的通知后，可以处理相应的事件，并重新注册 Watcher。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;事件类型&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NodeCreatedEvent：节点创建事件。&lt;/li&gt;
+&lt;li&gt;NodeDeletedEvent：节点删除事件。&lt;/li&gt;
+&lt;li&gt;NodeDataChangedEvent：节点数据变化事件。&lt;/li&gt;
+&lt;li&gt;NodeChildrenChangedEvent：子节点列表变化事件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;使用场景&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置管理：在分布式系统中，配置管理需要实时监控配置的变化，以保持配置的实时一致性。&lt;/li&gt;
+&lt;li&gt;监控服务：在分布式系统中，需要实时监控服务的状态，以确定服务的可用性。&lt;/li&gt;
+&lt;li&gt;负载均衡：在分布式系统中，需要根据负载情况动态调整服务实例的数量，以实现负载均衡。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;在-spring-cloud-应用中的使用方法&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#在-spring-cloud-应用中的使用方法&#34;&gt;#&lt;/a&gt; 在 Spring Cloud 应用中的使用方法&lt;/h3&gt;
+&lt;h4 id=&#34;curator&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#curator&#34;&gt;#&lt;/a&gt; Curator&lt;/h4&gt;
+&lt;p&gt;Curator 框架提供了简化 ZooKeeper 使用的 API，使得注册和处理 Watcher 更加方便。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;创建 Curator 客户端&lt;/p&gt;
+&lt;p&gt;在 Spring Boot 应用中，可以通过配置 Curator 客户端来管理 ZooKeeper 连接。&lt;/p&gt;
+ &lt;figure class=&#34;highlight yaml&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;attr&#34;&gt;spring:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  &lt;span class=&#34;attr&#34;&gt;curator:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;attr&#34;&gt;connect-string:&lt;/span&gt; &lt;span class=&#34;string&#34;&gt;localhost:2181&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;attr&#34;&gt;session-timeout-ms:&lt;/span&gt; &lt;span class=&#34;number&#34;&gt;5000&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;attr&#34;&gt;connection-timeout-ms:&lt;/span&gt; &lt;span class=&#34;number&#34;&gt;3000&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;attr&#34;&gt;retry-policy:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;      &lt;span class=&#34;attr&#34;&gt;base-sleep-time-ms:&lt;/span&gt; &lt;span class=&#34;number&#34;&gt;1000&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;      &lt;span class=&#34;attr&#34;&gt;max-retries:&lt;/span&gt; &lt;span class=&#34;number&#34;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;配置 Curator 客户端&lt;/p&gt;
+&lt;p&gt;在 Spring Boot 应用中，可以通过 @Configuration 类来配置 Curator 客户端。&lt;/p&gt;
+ &lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;23&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.RetryPolicy;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.CuratorFramework;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.CuratorFrameworkFactory;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.retry.ExponentialBackoffRetry;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.springframework.context.annotation.Bean;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.springframework.context.annotation.Configuration;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;meta&#34;&gt;@Configuration&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;CuratorConfig&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;meta&#34;&gt;@Bean&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; CuratorFramework &lt;span class=&#34;title function_&#34;&gt;curatorFramework&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;()&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;type&#34;&gt;RetryPolicy&lt;/span&gt; &lt;span class=&#34;variable&#34;&gt;retryPolicy&lt;/span&gt; &lt;span class=&#34;operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;ExponentialBackoffRetry&lt;/span&gt;(&lt;span class=&#34;number&#34;&gt;1000&lt;/span&gt;, &lt;span class=&#34;number&#34;&gt;3&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;type&#34;&gt;CuratorFramework&lt;/span&gt; &lt;span class=&#34;variable&#34;&gt;client&lt;/span&gt; &lt;span class=&#34;operator&#34;&gt;=&lt;/span&gt; CuratorFrameworkFactory.builder()&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                .connectString(&lt;span class=&#34;string&#34;&gt;&amp;quot;localhost:2181&amp;quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                .sessionTimeoutMs(&lt;span class=&#34;number&#34;&gt;5000&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                .connectionTimeoutMs(&lt;span class=&#34;number&#34;&gt;3000&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                .retryPolicy(retryPolicy)&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                .build();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        client.start();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;keyword&#34;&gt;return&lt;/span&gt; client;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;注册 Watcher&lt;/p&gt;
+&lt;p&gt;在 Spring Boot 应用中，可以通过 Curator 框架提供的 NodeCache 和 PathChildrenCache 来注册 Watcher。&lt;/p&gt;
+ &lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;42&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;43&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;44&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;45&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;46&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;47&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;48&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;49&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;50&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;51&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;52&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;53&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;54&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;55&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;56&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;57&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;58&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.CuratorFramework;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.api.ACLProvider;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.ChildData;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.NodeCache;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.NodeCacheListener;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.PathChildrenCache;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.curator.utils.CloseableUtils;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.zookeeper.CreateMode;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.zookeeper.WatchedEvent;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.apache.zookeeper.Watcher;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.springframework.beans.factory.annotation.Autowired;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;import&lt;/span&gt; org.springframework.stereotype.Component;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;meta&#34;&gt;@Component&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;WatcherService&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;meta&#34;&gt;@Autowired&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;private&lt;/span&gt; CuratorFramework curatorFramework;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title function_&#34;&gt;watchNodeData&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;throws&lt;/span&gt; Exception &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;type&#34;&gt;NodeCache&lt;/span&gt; &lt;span class=&#34;variable&#34;&gt;nodeCache&lt;/span&gt; &lt;span class=&#34;operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;NodeCache&lt;/span&gt;(curatorFramework, &lt;span class=&#34;string&#34;&gt;&amp;quot;/testNode&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        nodeCache.getListenable().addListener(&lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;NodeCacheListener&lt;/span&gt;() &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &lt;span class=&#34;meta&#34;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title function_&#34;&gt;nodeChanged&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;throws&lt;/span&gt; Exception &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                &lt;span class=&#34;type&#34;&gt;ChildData&lt;/span&gt; &lt;span class=&#34;variable&#34;&gt;currentData&lt;/span&gt; &lt;span class=&#34;operator&#34;&gt;=&lt;/span&gt; nodeCache.getCurrentData();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                &lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; (currentData != &lt;span class=&#34;literal&#34;&gt;null&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                    System.out.println(&lt;span class=&#34;string&#34;&gt;&amp;quot;Node data changed: &amp;quot;&lt;/span&gt; + &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;String&lt;/span&gt;(currentData.getData()));&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        nodeCache.start();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title function_&#34;&gt;watchChildrenChanges&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;throws&lt;/span&gt; Exception &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;type&#34;&gt;PathChildrenCache&lt;/span&gt; &lt;span class=&#34;variable&#34;&gt;childrenCache&lt;/span&gt; &lt;span class=&#34;operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;PathChildrenCache&lt;/span&gt;(curatorFramework, &lt;span class=&#34;string&#34;&gt;&amp;quot;/testNode&amp;quot;&lt;/span&gt;, &lt;span class=&#34;literal&#34;&gt;true&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        childrenCache.getListenable().addListener(&lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;PathChildrenCacheListener&lt;/span&gt;() &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &lt;span class=&#34;meta&#34;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title function_&#34;&gt;childEvent&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;(CuratorFramework client, PathChildrenCacheEvent event)&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;throws&lt;/span&gt; Exception &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                &lt;span class=&#34;keyword&#34;&gt;switch&lt;/span&gt; (event.getType()) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                    &lt;span class=&#34;keyword&#34;&gt;case&lt;/span&gt; CHILD_ADDED:&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        System.out.println(&lt;span class=&#34;string&#34;&gt;&amp;quot;Child added: &amp;quot;&lt;/span&gt; + event.getData().getPath());&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        &lt;span class=&#34;keyword&#34;&gt;break&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                    &lt;span class=&#34;keyword&#34;&gt;case&lt;/span&gt; CHILD_UPDATED:&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        System.out.println(&lt;span class=&#34;string&#34;&gt;&amp;quot;Child updated: &amp;quot;&lt;/span&gt; + event.getData().getPath());&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        &lt;span class=&#34;keyword&#34;&gt;break&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                    &lt;span class=&#34;keyword&#34;&gt;case&lt;/span&gt; CHILD_REMOVED:&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        System.out.println(&lt;span class=&#34;string&#34;&gt;&amp;quot;Child removed: &amp;quot;&lt;/span&gt; + event.getData().getPath());&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        &lt;span class=&#34;keyword&#34;&gt;break&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                    &lt;span class=&#34;keyword&#34;&gt;default&lt;/span&gt;:&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                        System.out.println(&lt;span class=&#34;string&#34;&gt;&amp;quot;Unknown event type: &amp;quot;&lt;/span&gt; + event.getType());&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;                &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;            &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        childrenCache.start();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;zookeeper集群&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper集群&#34;&gt;#&lt;/a&gt; Zookeeper 集群&lt;/h2&gt;
 &lt;p&gt;Zookeeper 集群是一种分布式协调服务，主要用于解决分布式系统中的一致性问题。它通过一组服务器组成集群，共同维护一个高度一致的状态。&lt;/p&gt;
@@ -389,6 +437,40 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;在 ZooKeeper 的选举过程中，投票信息通常包含一个五元组，用于描述候选节点的状态和其他相关信息。这个五元组包括以下五个元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;epoch（纪元号）
+&lt;ul&gt;
+&lt;li&gt;定义：纪元号（epoch）是一个整数，用于标识选举周期。每次选举都会有一个新的纪元号。&lt;/li&gt;
+&lt;li&gt;作用：纪元号用于区分不同的选举周期，防止旧的投票信息影响新的选举。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;zxid（事务 ID）
+&lt;ul&gt;
+&lt;li&gt;定义：事务 ID（zxid）是一个 64 位的整数，用于标识事务的唯一性。&lt;/li&gt;
+&lt;li&gt;组成：zxid 由两部分组成：高 32 位是纪元号（epoch），低 32 位是事务编号（transaction number）。&lt;/li&gt;
+&lt;li&gt;作用：用于确定哪个节点具有最新的事务信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;peerId（节点 ID）
+&lt;ul&gt;
+&lt;li&gt;定义：节点 ID（peerId）是一个唯一的标识符，用于标识集群中的每个节点。&lt;/li&gt;
+&lt;li&gt;作用：用于识别投票来自哪个节点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;leaderId（Leader ID）
+&lt;ul&gt;
+&lt;li&gt;定义：Leader ID（leaderId）是一个标识符，用于标识当前投票支持的候选 Leader。&lt;/li&gt;
+&lt;li&gt;作用：用于确定哪个节点被投票支持作为新的 Leader。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;type（投票类型）
+&lt;ul&gt;
+&lt;li&gt;定义：投票类型（type）是一个标识符，用于描述当前投票的类型。&lt;/li&gt;
+&lt;li&gt;作用：用于区分不同类型的投票，如 LOOKING、LEADING 或 LEADER。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;参与运算的关键变量&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;myid
@@ -505,8 +587,27 @@
 &lt;/ol&gt;
 &lt;h2 id=&#34;zookeeper的数据同步机制&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#zookeeper的数据同步机制&#34;&gt;#&lt;/a&gt; Zookeeper 的数据同步机制&lt;/h2&gt;
 &lt;p&gt;Zookeeper 使用 ZAB（Zookeeper Atomic Broadcast）协议来保证数据的一致性和高可用性。&lt;/p&gt;
-&lt;p&gt;在集群中已经存在 Leader 后，集群中的其他服务器会通过以下步骤与 Leader 保持同步：&lt;/p&gt;
+&lt;p&gt;在集群中已经选举出 Leader 后，集群中的其他服务器会通过以下步骤与 Leader 保持同步：&lt;/p&gt;
 &lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;状态同步&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;新领导者确定事务状态：新领导者需要确定哪些事务应该保留，哪些事务应该撤销。&lt;/li&gt;
+&lt;li&gt;事务日志检查：新领导者检查所有节点的事务日志，找出最新的事务状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;冲突解决&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;冲突检测：新领导者检查事务日志，找出冲突的事务。&lt;/li&gt;
+&lt;li&gt;冲突解决策略：
+&lt;ul&gt;
+&lt;li&gt;基于事务编号（ZXID）：保留编号较大的事务。&lt;/li&gt;
+&lt;li&gt;基于事务时间戳：保留时间戳较新的事务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Leader 同步&lt;/p&gt;
 &lt;p&gt;选举出新的 Leader 后，Leader 会开始与其他 Follower 进行数据同步。具体步骤如下：&lt;/p&gt;
@@ -683,8 +784,8 @@
             <title>【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</title>
             <link>https://silvercrow42.github.io/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
             <category>后端</category>
-            <category>Zookeeper</category>
             <category>Redis</category>
+            <category>Zookeeper</category>
             <category>Redisson</category>
             <category>分布式锁</category>
             <pubDate>Tue, 10 Sep 2024 10:00:01 +0800</pubDate>
