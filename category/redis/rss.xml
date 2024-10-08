@@ -17,10 +17,10 @@
         <category>缓存</category>
         <category>Redis</category>
         <category>java</category>
-        <category>spring</category>
         <category>Zookeeper</category>
         <category>Redisson</category>
         <category>分布式锁</category>
+        <category>spring</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/</guid>
             <title>【Redis】Redis详解</title>

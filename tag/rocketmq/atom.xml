@@ -14,10 +14,10 @@
     <category term="缓存" />
     <category term="Redis" />
     <category term="java" />
-    <category term="spring" />
     <category term="Zookeeper" />
     <category term="Redisson" />
     <category term="分布式锁" />
+    <category term="spring" />
     <entry>
         <id>https://silvercrow42.github.io/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/</id>
         <title>【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</title>

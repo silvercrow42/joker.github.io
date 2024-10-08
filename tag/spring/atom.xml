@@ -14,10 +14,10 @@
     <category term="缓存" />
     <category term="Redis" />
     <category term="java" />
-    <category term="spring" />
     <category term="Zookeeper" />
     <category term="Redisson" />
     <category term="分布式锁" />
+    <category term="spring" />
     <entry>
         <id>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/</id>
         <title>【Spring】Spring详解</title>
