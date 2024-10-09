@@ -363,6 +363,27 @@ Joker = Joker</title>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.curator.framework.CuratorFramework;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.api.ACLProvider;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.ChildData;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.NodeCache;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.NodeCacheListener;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.PathChildrenCache;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;</span><br><span class="line"><span class="keyword">import</span> org.apache.curator.utils.CloseableUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.CreateMode;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.WatchedEvent;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.Watcher;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WatcherService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CuratorFramework curatorFramework;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">watchNodeData</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">NodeCache</span> <span class="variable">nodeCache</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NodeCache</span>(curatorFramework, <span class="string">&quot;/testNode&quot;</span>);</span><br><span class="line">        nodeCache.getListenable().addListener(<span class="keyword">new</span> <span class="title class_">NodeCacheListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">nodeChanged</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                <span class="type">ChildData</span> <span class="variable">currentData</span> <span class="operator">=</span> nodeCache.getCurrentData();</span><br><span class="line">                <span class="keyword">if</span> (currentData != <span class="literal">null</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Node data changed: &quot;</span> + <span class="keyword">new</span> <span class="title class_">String</span>(currentData.getData()));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        nodeCache.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">watchChildrenChanges</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">PathChildrenCache</span> <span class="variable">childrenCache</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PathChildrenCache</span>(curatorFramework, <span class="string">&quot;/testNode&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">        childrenCache.getListenable().addListener(<span class="keyword">new</span> <span class="title class_">PathChildrenCacheListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">childEvent</span><span class="params">(CuratorFramework client, PathChildrenCacheEvent event)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                <span class="keyword">switch</span> (event.getType()) &#123;</span><br><span class="line">                    <span class="keyword">case</span> CHILD_ADDED:</span><br><span class="line">                        System.out.println(<span class="string">&quot;Child added: &quot;</span> + event.getData().getPath());</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> CHILD_UPDATED:</span><br><span class="line">                        System.out.println(<span class="string">&quot;Child updated: &quot;</span> + event.getData().getPath());</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> CHILD_REMOVED:</span><br><span class="line">                        System.out.println(<span class="string">&quot;Child removed: &quot;</span> + event.getData().getPath());</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">default</span>:</span><br><span class="line">                        System.out.println(<span class="string">&quot;Unknown event type: &quot;</span> + event.getType());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        childrenCache.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<h2 id="zookeeper-命令"><a class="markdownIt-Anchor" href="#zookeeper-命令">#</a> Zookeeper 命令</h2>
+<ol>
+<li>ls: 列出指定节点下的所有子节点。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>get: 获取指定节点的数据以及其状态信息。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>set: 设置指定节点的数据。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set /path/to/node new_data</span><br></pre></td></tr></table></figure>
+</li>
+<li>create: 创建一个新的节点，并可以设置节点的权限和类型（持久化或临时）。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create /path/to/new_node data [acl] [flags]</span><br></pre></td></tr></table></figure>
+其中 [acl] 表示访问控制列表，[flags] 可以是 0（持久化节点）或 1（临时节点）。</li>
+<li>delete: 删除指定的节点。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>stat: 获取指定节点的状态信息。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>rmr: 递归删除一个节点及其所有的子节点。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmr /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>sync: 强制同步节点到所有服务器。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sync /path/to/node</span><br></pre></td></tr></table></figure>
+</li>
+<li>close: 关闭当前客户端连接。 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">close</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <h2 id="zookeeper集群"><a class="markdownIt-Anchor" href="#zookeeper集群">#</a> Zookeeper 集群</h2>
 <p>Zookeeper 集群是一种分布式协调服务，主要用于解决分布式系统中的一致性问题。它通过一组服务器组成集群，共同维护一个高度一致的状态。</p>
 <p>Zookeeper 集群的组成和角色如下：</p>
@@ -455,8 +476,9 @@ Joker = Joker</title>
 </ul>
 </li>
 </ul>
-<h2 id="zookeeper的读写流程"><a class="markdownIt-Anchor" href="#zookeeper的读写流程">#</a> Zookeeper 的读写流程</h2>
-<p>当客户端向 Zookeeper 发送一个数据变更请求时，请求首先到达 Leader 节点。以下是详细的流程：</p>
+<h3 id="zookeeper集群的读写流程"><a class="markdownIt-Anchor" href="#zookeeper集群的读写流程">#</a> Zookeeper 集群的读写流程</h3>
+<p>Zookeeper 单机均遵循先写磁盘后写内存的写入模式，能够确保数据一致性。<br>
+在集群模式下，当客户端向 Zookeeper 发送一个数据变更请求时，请求首先到达 Leader 节点。以下是详细的流程：</p>
 <ol>
 <li>写入事务日志
 <ol>
@@ -519,7 +541,7 @@ Joker = Joker</title>
 </ol>
 </li>
 </ol>
-<h2 id="zookeeper的选举机制"><a class="markdownIt-Anchor" href="#zookeeper的选举机制">#</a> Zookeeper 的选举机制</h2>
+<h3 id="zookeeper集群的选举机制"><a class="markdownIt-Anchor" href="#zookeeper集群的选举机制">#</a> Zookeeper 集群的选举机制</h3>
 <p>Zookeeper 的选举机制基于 Fast Leader Election (FLE) 算法，确保在一个分布式环境中快速且正确地选出领导者。</p>
 <p>Zookeeper 集群中的选举机制通常在以下几种情况下被触发：</p>
 <ul>
@@ -702,7 +724,7 @@ Joker = Joker</title>
 </li>
 <li>故障转移：如果 C 故障，A 和 B 重新进入 LOOKING 状态，重复上述流程。</li>
 </ol>
-<h2 id="zookeeper的数据同步机制"><a class="markdownIt-Anchor" href="#zookeeper的数据同步机制">#</a> Zookeeper 的数据同步机制</h2>
+<h3 id="zookeeper的数据同步机制"><a class="markdownIt-Anchor" href="#zookeeper的数据同步机制">#</a> Zookeeper 的数据同步机制</h3>
 <p>Zookeeper 使用 ZAB（Zookeeper Atomic Broadcast）协议来保证数据的一致性和高可用性。</p>
 <p>在集群中已经选举出 Leader 后，集群中的其他服务器会通过以下步骤与 Leader 保持同步：</p>
 <ol>
@@ -826,7 +848,7 @@ Joker = Joker</title>
 </ul>
 </li>
 </ol>
-<h2 id="zookeeper的持久化机制"><a class="markdownIt-Anchor" href="#zookeeper的持久化机制">#</a> Zookeeper 的持久化机制</h2>
+<h3 id="zookeeper的持久化机制"><a class="markdownIt-Anchor" href="#zookeeper的持久化机制">#</a> Zookeeper 的持久化机制</h3>
 <p>Zookeeper 的数据持久化机制是其可靠性的关键组成部分之一。为了确保数据在系统崩溃或重启后仍然可用，Zookeeper 采用了多种机制来实现数据持久化。</p>
 <ol>
 <li>
@@ -910,7 +932,7 @@ Joker = Joker</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-10-08 14:15:30" itemprop="dateModified" datetime="2024-10-08T14:15:30+08:00">2024-10-08</time>
+    <time title="修改时间：2024-10-09 09:37:35" itemprop="dateModified" datetime="2024-10-09T09:37:35+08:00">2024-10-09</time>
   </span>
 </div>
 
@@ -997,7 +1019,7 @@ Joker = Joker</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFzookeeper"><span class="toc-number">1.</span> <span class="toc-text"> 什么是 Zookeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#znode"><span class="toc-number">2.</span> <span class="toc-text"> Znode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text"> Watch 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text"> 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-spring-cloud-%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text"> 在 Spring Cloud 应用中的使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#curator"><span class="toc-number">3.2.1.</span> <span class="toc-text"> Curator</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E9%9B%86%E7%BE%A4"><span class="toc-number">4.</span> <span class="toc-text"> Zookeeper 集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E7%9A%84%E8%AF%BB%E5%86%99%E6%B5%81%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text"> Zookeeper 的读写流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E7%9A%84%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6"><span class="toc-number">6.</span> <span class="toc-text"> Zookeeper 的选举机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E7%9A%84%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">7.</span> <span class="toc-text"> Zookeeper 的数据同步机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="toc-number">8.</span> <span class="toc-text"> Zookeeper 的持久化机制</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFzookeeper"><span class="toc-number">1.</span> <span class="toc-text"> 什么是 Zookeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#znode"><span class="toc-number">2.</span> <span class="toc-text"> Znode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text"> Watch 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text"> 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-spring-cloud-%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text"> 在 Spring Cloud 应用中的使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#curator"><span class="toc-number">3.2.1.</span> <span class="toc-text"> Curator</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper-%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text"> Zookeeper 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper%E9%9B%86%E7%BE%A4"><span class="toc-number">5.</span> <span class="toc-text"> Zookeeper 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper%E9%9B%86%E7%BE%A4%E7%9A%84%E8%AF%BB%E5%86%99%E6%B5%81%E7%A8%8B"><span class="toc-number">5.1.</span> <span class="toc-text"> Zookeeper 集群的读写流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper%E9%9B%86%E7%BE%A4%E7%9A%84%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text"> Zookeeper 集群的选举机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper%E7%9A%84%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">5.3.</span> <span class="toc-text"> Zookeeper 的数据同步机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="toc-number">5.4.</span> <span class="toc-text"> Zookeeper 的持久化机制</span></a></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -1100,36 +1122,6 @@ Joker = Joker</title>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux命令详解">【Linux】Linux命令详解</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring详解">【Spring】Spring详解</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
 </div>
 
@@ -1160,10 +1152,40 @@ Joker = Joker</title>
   <li class="item">
     
 <div class="breadcrumb">
+<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux命令详解">【Linux】Linux命令详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
 <a href="/joker.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分类于 分布式锁">分布式锁</a>
 </div>
 
     <span><a href="/joker.github.io/2024/09/10/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E9%80%9A%E8%BF%87Zookeeper%E4%B8%8ERedisson%E5%AE%9E%E7%8E%B0Spring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁">【分布式】通过Zookeeper与Redisson实现Spring注解式分布式锁</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/spring/" title="分类于 spring">spring</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Spring%E3%80%91Spring%E8%AF%A6%E8%A7%A3/" title="【Spring】Spring详解">【Spring】Spring详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
   </li>
 
   </ul>
