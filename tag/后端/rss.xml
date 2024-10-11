@@ -8,21 +8,21 @@
         <pubDate>Wed, 09 Oct 2024 09:58:28 +0800</pubDate>
         <lastBuildDate>Wed, 09 Oct 2024 09:58:28 +0800</lastBuildDate>
         <category>后端</category>
+        <category>操作系统</category>
+        <category>Linux</category>
         <category>数据库</category>
         <category>关系型数据库</category>
         <category>Mysql</category>
         <category>MQ</category>
         <category>RocketMQ</category>
         <category>java</category>
-        <category>Zookeeper</category>
-        <category>NoSQL</category>
-        <category>缓存</category>
-        <category>Redis</category>
         <category>spring</category>
+        <category>Zookeeper</category>
+        <category>Redis</category>
         <category>Redisson</category>
         <category>分布式锁</category>
-        <category>操作系统</category>
-        <category>Linux</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/10/09/%E3%80%90Mysql%E3%80%91Mysql%E8%AF%A6%E8%A7%A3/</guid>
             <title>【Mysql】Mysql详解</title>
@@ -896,7 +896,8 @@ BETWEEN ‘A’ AND ‘Z’。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;应用场景&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;事务管理：在事务管理中，意向锁帮助数据库管理系统预测事务的操作类型，提前准备相应的锁资源。&lt;/li&gt;
+&lt;li&gt;事务管理：在事务管理中，意向锁帮助数据库管理系统预测事务的操作类型，提前准备相应的锁资源。&lt;br&gt;
+.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
@@ -914,6 +915,29 @@ BETWEEN ‘A’ AND ‘Z’。&lt;/li&gt;
 &lt;li&gt;定义：间隙锁锁定行之间的 “间隙”，防止插入新的行。&lt;/li&gt;
 &lt;li&gt;应用场景：在可重复读隔离级别下，InnoDB 使用间隙锁防止插入新的行。&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3 id=&#34;mvcc&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#mvcc&#34;&gt;#&lt;/a&gt; MVCC&lt;/h3&gt;
+&lt;p&gt;Mysql 的多版本并发控制（Multiversion Concurrency Control，简称 MVCC）主要用于实现读取操作与写入操作之间的并发执行。&lt;br&gt;
+尤其是在 InnoDB 存储引擎中，它通过维护数据的多个版本来支持高并发读写操作。以下是关于 MVCV 的一些关键点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;非锁定读取：在大多数情况下，MVCC 允许读取操作不加锁地进行，这意味着读取操作不会阻塞写入操作，反之亦然。这极大地提高了数据库的并发性能。&lt;/li&gt;
+&lt;li&gt;快照读与当前读：
+&lt;ul&gt;
+&lt;li&gt;快照读（Snapshot Read）：默认情况下，读取操作获取的是事务开始时刻的数据版本，而不是最新的数据版本。这种方式避免了读取过程中可能发生的脏读、不可重复读等问题。&lt;/li&gt;
+&lt;li&gt;当前读（Current Read）：当使用某些特定类型的查询（如带有 FOR UPDATE 或 LOCK IN SHARE MODE 提示的查询）时，会读取到最新的数据版本，并且可能会导致等待写锁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;版本号机制：为了实现多版本并发控制，每个记录都有两个隐藏的字段：DB_TRX_ID 和 DB_ROLL_PTR。DB_TRX_ID 记录了最后修改这条记录的事务 ID，而 DB_ROLL_PTR 则指向了该记录的回滚段，其中保存着旧版本的数据。&lt;/li&gt;
+&lt;li&gt;可见性规则：事务如何看到数据取决于一些简单的规则，这些规则基于事务的开始时间以及行上的版本标识来决定。具体来说，只有满足以下条件之一的行对当前事务才是可见的：
+&lt;ul&gt;
+&lt;li&gt;行的创建事务 ID 小于当前事务 ID（即行是在当前事务开始之前创建的）。&lt;/li&gt;
+&lt;li&gt;行的创建事务 ID 等于当前事务 ID 并且行已被标记为已删除。&lt;/li&gt;
+&lt;li&gt;行的删除事务 ID 大于当前事务 ID（即行是在当前事务开始之后被删除的）。&lt;/li&gt;
+&lt;li&gt;行尚未被标记为已删除。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;事务隔离级别：MVCC 的行为还受到事务隔离级别的影响。不同的隔离级别决定了事务之间如何交互以及如何处理数据版本。例如，在可重复读（Repeatable&lt;br&gt;
+read）隔离级别下，InnoDB 会对读取的数据创建一个快照，并在整个事务期间都使用这个快照。&lt;/li&gt;
+&lt;/ol&gt;
  ]]></description>
         </item>
         <item>
@@ -4547,9 +4571,9 @@ ftp 命令行工具允许用户连接到 FTP 服务器，上传、下载文件�
             <link>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/</link>
             <category>后端</category>
             <category>数据库</category>
+            <category>Redis</category>
             <category>NoSQL</category>
             <category>缓存</category>
-            <category>Redis</category>
             <pubDate>Fri, 13 Sep 2024 13:52:28 +0800</pubDate>
             <description><![CDATA[ &lt;h1 id=&#34;概念&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#概念&#34;&gt;#&lt;/a&gt; 概念&lt;/h1&gt;
 &lt;h2 id=&#34;redis-是什么&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#redis-是什么&#34;&gt;#&lt;/a&gt; Redis 是什么&lt;/h2&gt;

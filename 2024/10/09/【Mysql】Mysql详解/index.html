@@ -101,14 +101,7 @@ Joker = Joker</title>
 
       </div>
       <div id="imgs" class="pjax">
-        <ul>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?266862"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?781517"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?710878"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?94222"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?601385"></li>
-          <li class="item" data-background-image="https://api.boxmoe.com/random.php?size=large?394423"></li>
-        </ul>
+          <img src="/joker.github.io/2024/10/09/%E3%80%90Mysql%E3%80%91Mysql%E8%AF%A6%E8%A7%A3/v2-f5616a646e67b7e6616b796587a31a0e_1440w.png">
       </div>
     </header>
     <div id="waves">
@@ -1017,7 +1010,8 @@ BETWEEN ‘A’ AND ‘Z’。</li>
 </ul>
 <p>应用场景</p>
 <ul>
-<li>事务管理：在事务管理中，意向锁帮助数据库管理系统预测事务的操作类型，提前准备相应的锁资源。</li>
+<li>事务管理：在事务管理中，意向锁帮助数据库管理系统预测事务的操作类型，提前准备相应的锁资源。<br>
+.</li>
 </ul>
 </li>
 </ol>
@@ -1035,6 +1029,29 @@ BETWEEN ‘A’ AND ‘Z’。</li>
 <li>定义：间隙锁锁定行之间的 “间隙”，防止插入新的行。</li>
 <li>应用场景：在可重复读隔离级别下，InnoDB 使用间隙锁防止插入新的行。</li>
 </ul>
+<h3 id="mvcc"><a class="markdownIt-Anchor" href="#mvcc">#</a> MVCC</h3>
+<p>Mysql 的多版本并发控制（Multiversion Concurrency Control，简称 MVCC）主要用于实现读取操作与写入操作之间的并发执行。<br>
+尤其是在 InnoDB 存储引擎中，它通过维护数据的多个版本来支持高并发读写操作。以下是关于 MVCV 的一些关键点：</p>
+<ol>
+<li>非锁定读取：在大多数情况下，MVCC 允许读取操作不加锁地进行，这意味着读取操作不会阻塞写入操作，反之亦然。这极大地提高了数据库的并发性能。</li>
+<li>快照读与当前读：
+<ul>
+<li>快照读（Snapshot Read）：默认情况下，读取操作获取的是事务开始时刻的数据版本，而不是最新的数据版本。这种方式避免了读取过程中可能发生的脏读、不可重复读等问题。</li>
+<li>当前读（Current Read）：当使用某些特定类型的查询（如带有 FOR UPDATE 或 LOCK IN SHARE MODE 提示的查询）时，会读取到最新的数据版本，并且可能会导致等待写锁。</li>
+</ul>
+</li>
+<li>版本号机制：为了实现多版本并发控制，每个记录都有两个隐藏的字段：DB_TRX_ID 和 DB_ROLL_PTR。DB_TRX_ID 记录了最后修改这条记录的事务 ID，而 DB_ROLL_PTR 则指向了该记录的回滚段，其中保存着旧版本的数据。</li>
+<li>可见性规则：事务如何看到数据取决于一些简单的规则，这些规则基于事务的开始时间以及行上的版本标识来决定。具体来说，只有满足以下条件之一的行对当前事务才是可见的：
+<ul>
+<li>行的创建事务 ID 小于当前事务 ID（即行是在当前事务开始之前创建的）。</li>
+<li>行的创建事务 ID 等于当前事务 ID 并且行已被标记为已删除。</li>
+<li>行的删除事务 ID 大于当前事务 ID（即行是在当前事务开始之后被删除的）。</li>
+<li>行尚未被标记为已删除。</li>
+</ul>
+</li>
+<li>事务隔离级别：MVCC 的行为还受到事务隔离级别的影响。不同的隔离级别决定了事务之间如何交互以及如何处理数据版本。例如，在可重复读（Repeatable<br>
+read）隔离级别下，InnoDB 会对读取的数据创建一个快照，并在整个事务期间都使用这个快照。</li>
+</ol>
 
       <div class="tags">
           <a href="/joker.github.io/tags/%E5%90%8E%E7%AB%AF/" rel="tag"><i class="ic i-tag"></i> 后端</a>
@@ -1052,7 +1069,7 @@ BETWEEN ‘A’ AND ‘Z’。</li>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-10-10 12:36:43" itemprop="dateModified" datetime="2024-10-10T12:36:43+08:00">2024-10-10</time>
+    <time title="修改时间：2024-10-11 10:57:09" itemprop="dateModified" datetime="2024-10-11T10:57:09+08:00">2024-10-11</time>
   </span>
 </div>
 
@@ -1131,7 +1148,7 @@ BETWEEN ‘A’ AND ‘Z’。</li>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql"><span class="toc-number">1.</span> <span class="toc-text"> 什么是 Mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text"> Mysql 的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text"> 数值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 日期和时间类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text"> 字符串类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE%E4%B8%8E%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8Benumeration-and-set-types"><span class="toc-number">2.4.</span> <span class="toc-text"> 枚举与集合类型（Enumeration and Set Types）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8Bspatial-data-types"><span class="toc-number">2.5.</span> <span class="toc-text"> 空间数据类型（Spatial Data Types）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">3.</span> <span class="toc-text"> 索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-%E7%B4%A2%E5%BC%95"><span class="toc-number">3.1.</span> <span class="toc-text"> Hash 索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#btree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.</span> <span class="toc-text"> B+Tree 索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#b-tree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.1.</span> <span class="toc-text"> B-Tree 索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree-%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.2.</span> <span class="toc-text"> B+Tree 索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree%E7%B4%A2%E5%BC%95%E5%92%8Cb-tree%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.3.</span> <span class="toc-text"> B+Tree 索引和 B-Tree 索引的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8btree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.4.</span> <span class="toc-text"> 为什么要使用 B+Tree 索引？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%87%AA%E5%B9%B3%E8%A1%A1"><span class="toc-number">3.2.5.</span> <span class="toc-text"> B+Tree 索引的自平衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="toc-number">3.3.</span> <span class="toc-text"> 什么情况下无法使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B7%A6%E5%8C%B9%E9%85%8D%E5%8E%9F%E5%88%99"><span class="toc-number">3.4.</span> <span class="toc-text"> 最左匹配原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.</span> <span class="toc-text"> 事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.1.</span> <span class="toc-text"> 并发事务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text"> 锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-%E4%B8%AD%E7%9A%84%E9%94%81%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.1.</span> <span class="toc-text"> MySQL 中的锁类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-%E4%B8%AD%E7%9A%84%E9%94%81%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text"> MySQL 中的锁机制</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql"><span class="toc-number">1.</span> <span class="toc-text"> 什么是 Mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text"> Mysql 的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text"> 数值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 日期和时间类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text"> 字符串类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE%E4%B8%8E%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8Benumeration-and-set-types"><span class="toc-number">2.4.</span> <span class="toc-text"> 枚举与集合类型（Enumeration and Set Types）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8Bspatial-data-types"><span class="toc-number">2.5.</span> <span class="toc-text"> 空间数据类型（Spatial Data Types）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">3.</span> <span class="toc-text"> 索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-%E7%B4%A2%E5%BC%95"><span class="toc-number">3.1.</span> <span class="toc-text"> Hash 索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#btree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.</span> <span class="toc-text"> B+Tree 索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#b-tree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.1.</span> <span class="toc-text"> B-Tree 索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree-%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.2.</span> <span class="toc-text"> B+Tree 索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree%E7%B4%A2%E5%BC%95%E5%92%8Cb-tree%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.3.</span> <span class="toc-text"> B+Tree 索引和 B-Tree 索引的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8btree%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.4.</span> <span class="toc-text"> 为什么要使用 B+Tree 索引？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#btree-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%87%AA%E5%B9%B3%E8%A1%A1"><span class="toc-number">3.2.5.</span> <span class="toc-text"> B+Tree 索引的自平衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="toc-number">3.3.</span> <span class="toc-text"> 什么情况下无法使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B7%A6%E5%8C%B9%E9%85%8D%E5%8E%9F%E5%88%99"><span class="toc-number">3.4.</span> <span class="toc-text"> 最左匹配原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.</span> <span class="toc-text"> 事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.1.</span> <span class="toc-text"> 并发事务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text"> 锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-%E4%B8%AD%E7%9A%84%E9%94%81%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.1.</span> <span class="toc-text"> MySQL 中的锁类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-%E4%B8%AD%E7%9A%84%E9%94%81%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text"> MySQL 中的锁机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mvcc"><span class="toc-number">5.3.</span> <span class="toc-text"> MVCC</span></a></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
         <ul>
@@ -1232,16 +1249,6 @@ BETWEEN ‘A’ AND ‘Z’。</li>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
-</div>
-
-    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux命令详解">【Linux】Linux命令详解</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
@@ -1272,20 +1279,20 @@ BETWEEN ‘A’ AND ‘Z’。</li>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Zookeeper/" title="分类于 Zookeeper">Zookeeper</a>
+<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/" title="【Zookeeper】Zookeeper详解">【Zookeeper】Zookeeper详解</a></span>
+    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
   </li>
 
       
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/RocketMQ/" title="分类于 RocketMQ">RocketMQ</a>
+<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/09/%E3%80%90RocketMQ%E3%80%91SpringBoot%E6%95%B4%E5%90%88%E4%B8%8E%E4%BD%BF%E7%94%A8RocketMQ/" title="【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）">【RocketMQ】SpringBoot整合与使用RocketMQ（Windows）</a></span>
+    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis详解">【Redis】Redis详解</a></span>
   </li>
 
       
@@ -1302,10 +1309,20 @@ BETWEEN ‘A’ AND ‘Z’。</li>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/joker.github.io/categories/Redis/" title="分类于 Redis">Redis</a>
+<a href="/joker.github.io/categories/Linux/" title="分类于 Linux">Linux</a>
 </div>
 
-    <span><a href="/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/" title="【Redis】Redis详解">【Redis】Redis详解</a></span>
+    <span><a href="/joker.github.io/2024/09/25/%E3%80%90Linux%E3%80%91Linux%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="【Linux】Linux命令详解">【Linux】Linux命令详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/joker.github.io/categories/Zookeeper/" title="分类于 Zookeeper">Zookeeper</a>
+</div>
+
+    <span><a href="/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/" title="【Zookeeper】Zookeeper详解">【Zookeeper】Zookeeper详解</a></span>
   </li>
 
   </ul>

@@ -8,21 +8,21 @@
         <pubDate>Tue, 24 Sep 2024 11:39:53 +0800</pubDate>
         <lastBuildDate>Tue, 24 Sep 2024 11:39:53 +0800</lastBuildDate>
         <category>后端</category>
+        <category>操作系统</category>
+        <category>Linux</category>
         <category>数据库</category>
         <category>关系型数据库</category>
         <category>Mysql</category>
         <category>MQ</category>
         <category>RocketMQ</category>
         <category>java</category>
-        <category>Zookeeper</category>
-        <category>NoSQL</category>
-        <category>缓存</category>
-        <category>Redis</category>
         <category>spring</category>
+        <category>Zookeeper</category>
+        <category>Redis</category>
         <category>Redisson</category>
         <category>分布式锁</category>
-        <category>操作系统</category>
-        <category>Linux</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
         <item>
             <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/09/24/%E3%80%90Zookeeper%E3%80%91Zookeeper%E8%AF%A6%E8%A7%A3/</guid>
             <title>【Zookeeper】Zookeeper详解</title>
