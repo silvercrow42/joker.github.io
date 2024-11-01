@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>Joker • Posts by &#34;多线程&#34; tag</title>
+        <link>https://silvercrow42.github.io/joker.github.io</link>
+        <description></description>
+        <language>zh-CN,en,default</language>
+        <pubDate>Fri, 01 Nov 2024 15:56:08 +0800</pubDate>
+        <lastBuildDate>Fri, 01 Nov 2024 15:56:08 +0800</lastBuildDate>
+        <category>后端</category>
+        <category>数据库</category>
+        <category>关系型数据库</category>
+        <category>Mysql</category>
+        <category>MQ</category>
+        <category>RocketMQ</category>
+        <category>操作系统</category>
+        <category>Linux</category>
+        <category>java</category>
+        <category>多线程</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
+        <category>Redis</category>
+        <category>Zookeeper</category>
+        <category>spring</category>
+        <category>Redisson</category>
+        <category>分布式锁</category>
+        <item>
+            <guid isPermalink="true">https://silvercrow42.github.io/joker.github.io/2024/11/01/%E3%80%90java%E3%80%91%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
+            <title>【java】多线程详解</title>
+            <link>https://silvercrow42.github.io/joker.github.io/2024/11/01/%E3%80%90java%E3%80%91%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+            <category>后端</category>
+            <category>java</category>
+            <category>多线程</category>
+            <pubDate>Fri, 01 Nov 2024 15:56:08 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;并发基础&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#并发基础&#34;&gt;#&lt;/a&gt; 并发基础&lt;/h2&gt;
+&lt;h3 id=&#34;什么是并发&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#什么是并发&#34;&gt;#&lt;/a&gt; 什么是并发&lt;/h3&gt;
+&lt;p&gt;并发是指多个任务在同一时间段内交错执行的能力。虽然这些任务可能不是真正的同时执行，但它们在时间上被快速交替调度，从而给人一种同时进行的错觉。并发可以显著提高程序的效率和响应性。以下是并发的几个关键点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;任务切换：操作系统通过快速切换任务来实现并发，每个任务在一段时间内获得 CPU 时间片。&lt;/li&gt;
+&lt;li&gt;资源共享：并发任务通常共享某些资源，如内存、文件句柄等，因此需要适当的同步机制来避免冲突。&lt;/li&gt;
+&lt;li&gt;提高资源利用率：通过并发，可以更充分地利用系统资源，尤其是多核处理器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;并发的使用场景&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#并发的使用场景&#34;&gt;#&lt;/a&gt; 并发的使用场景&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Web 服务器
+&lt;ul&gt;
+&lt;li&gt;处理多个请求：Web 服务器需要同时处理来自多个客户端的请求。通过并发，服务器可以创建多个线程或进程来处理这些请求，提高响应速度和吞吐量。&lt;/li&gt;
+&lt;li&gt;异步 IO 操作：处理网络请求和文件读写等 IO 操作时，使用异步 IO 可以避免阻塞主线程，提高整体性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;数据库系统
+&lt;ul&gt;
+&lt;li&gt;并行查询：数据库系统可以并行执行多个查询，特别是在处理大数据集时，可以显著提高查询效率。&lt;/li&gt;
+&lt;li&gt;事务管理：并发控制机制（如锁和事务隔离级别）确保多个事务可以安全地并行执行，避免数据不一致。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;图形用户界面（GUI）应用程序
+&lt;ul&gt;
+&lt;li&gt;响应用户输入：主线程负责处理用户输入和更新界面，后台线程处理耗时任务（如数据加载、计算等），保持界面的响应性。&lt;/li&gt;
+&lt;li&gt;动画和渲染：并行处理动画和渲染任务，提高视觉效果的流畅度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;大数据分析
+&lt;ul&gt;
+&lt;li&gt;并行数据处理：使用 MapReduce 等并行计算框架，将大数据集分成多个部分，由多个节点并行处理，加快数据处理速度。&lt;/li&gt;
+&lt;li&gt;分布式存储：并行读取和写入分布式存储系统中的数据，提高数据访问效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;游戏开发
+&lt;ul&gt;
+&lt;li&gt;物理模拟：并行处理复杂的物理模拟计算，提高游戏的真实感和性能。&lt;/li&gt;
+&lt;li&gt;AI 计算：并行处理游戏中的 AI 逻辑，使 NPC（非玩家角色）的行为更加智能和多样化。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;文件和数据处理
+&lt;ul&gt;
+&lt;li&gt;并行文件处理：并行读取和处理多个文件，加快数据处理速度。&lt;/li&gt;
+&lt;li&gt;批处理任务：并行执行批处理任务，如日志分析、数据转换等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;网络爬虫
+&lt;ul&gt;
+&lt;li&gt;并行抓取：同时从多个网站抓取数据，提高抓取速度。&lt;/li&gt;
+&lt;li&gt;数据处理：并行处理抓取到的数据，加快数据清洗和分析过程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;机器学习和深度学习
+&lt;ul&gt;
+&lt;li&gt;模型训练：并行训练模型，特别是在使用 GPU 加速时，可以显著缩短训练时间。&lt;/li&gt;
+&lt;li&gt;数据预处理：并行处理大量训练数据，提高数据准备效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;实时系统
+&lt;ul&gt;
+&lt;li&gt;实时数据处理：并行处理实时数据流，如传感器数据、股票市场数据等，确保低延迟和高吞吐量。&lt;/li&gt;
+&lt;li&gt;任务调度：并行调度和执行多个实时任务，确保系统的响应性和可靠性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;云计算和虚拟化
+&lt;ul&gt;
+&lt;li&gt;资源分配：并行管理和分配计算资源，提高资源利用率。&lt;/li&gt;
+&lt;li&gt;虚拟机管理：并行处理虚拟机的创建、启动和停止等操作，提高管理效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;高并发情况下可能出现的问题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#高并发情况下可能出现的问题&#34;&gt;#&lt;/a&gt; 高并发情况下可能出现的问题&lt;/h3&gt;
+&lt;p&gt;在并发场景下，可能会面临多种问题，这些问题如果不妥善处理，会影响系统的稳定性和性能。以下是一些常见的并发问题及其简要说明：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;死锁（Deadlock）
+&lt;ul&gt;
+&lt;li&gt;定义：多个线程或进程互相等待对方持有的资源，导致所有线程或进程都无法继续执行。&lt;/li&gt;
+&lt;li&gt;原因：资源分配不当、循环等待、缺乏超时机制等。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 持有资源 X 并请求资源 Y，而线程 B 持有资源 Y 并请求资源 X。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;竞态条件（Race Condition）
+&lt;ul&gt;
+&lt;li&gt;定义：多个线程或进程以不可预测的顺序访问和修改共享资源，导致不一致的状态。&lt;/li&gt;
+&lt;li&gt;原因：缺乏适当的同步机制、线程间通信不正确等。&lt;/li&gt;
+&lt;li&gt;示例：多个线程同时读取和修改同一个变量，导致最终结果不确定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;上下文切换开销（Context Switching Overhead）
+&lt;ul&gt;
+&lt;li&gt;定义：操作系统在不同线程或进程之间切换时，需要保存和恢复当前线程的上下文，这会消耗时间和资源。&lt;/li&gt;
+&lt;li&gt;原因：频繁的上下文切换。&lt;/li&gt;
+&lt;li&gt;示例：在高并发环境下，频繁的线程切换会导致 CPU 利用率下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;资源竞争（Resource Contention）
+&lt;ul&gt;
+&lt;li&gt;定义：多个线程或进程竞争有限的资源，导致性能下降或资源浪费。&lt;/li&gt;
+&lt;li&gt;原因：资源不足、同步机制不当等。&lt;/li&gt;
+&lt;li&gt;示例：多个线程同时访问同一个文件或数据库连接池。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;饥饿（Starvation）
+&lt;ul&gt;
+&lt;li&gt;定义：某个线程或进程由于长时间无法获得所需的资源而无法继续执行。&lt;/li&gt;
+&lt;li&gt;原因：优先级调度不当、资源分配不公平等。&lt;/li&gt;
+&lt;li&gt;示例：低优先级线程长时间无法获得 CPU 时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;活锁（Livelock）
+&lt;ul&gt;
+&lt;li&gt;定义：多个线程或进程不断重复相同的操作，试图避免冲突，但最终无法取得进展。&lt;/li&gt;
+&lt;li&gt;原因：缺乏有效的冲突解决机制。&lt;/li&gt;
+&lt;li&gt;示例：两个线程在尝试获取同一个资源时，不断退让，导致两者都无法成功获取资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;内存泄漏（Memory Leak）
+&lt;ul&gt;
+&lt;li&gt;定义：程序在运行过程中未能释放不再使用的内存，导致内存占用逐渐增加。&lt;/li&gt;
+&lt;li&gt;原因：未正确管理内存分配和释放、对象引用未解除等。&lt;/li&gt;
+&lt;li&gt;示例：线程创建的对象未被及时回收，导致内存占用不断增加。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;不一致状态（Inconsistent State）
+&lt;ul&gt;
+&lt;li&gt;定义：由于并发操作导致数据状态不一致，影响程序的正确性。&lt;/li&gt;
+&lt;li&gt;原因：缺乏原子操作、同步机制不当等。&lt;/li&gt;
+&lt;li&gt;示例：多个线程同时修改同一个数据结构，导致数据结构损坏。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;性能瓶颈（Performance Bottleneck）
+&lt;ul&gt;
+&lt;li&gt;定义：系统在高并发情况下，由于某个组件的性能限制，导致整体性能下降。&lt;/li&gt;
+&lt;li&gt;原因：单点故障、资源限制、设计不合理等。&lt;/li&gt;
+&lt;li&gt;示例：数据库连接池大小限制导致请求排队，影响整体性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;解决方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同步机制：使用锁（如互斥锁、信号量）、条件变量等同步机制来协调线程之间的访问。&lt;/li&gt;
+&lt;li&gt;原子操作：使用原子操作来确保操作的不可分割性。&lt;/li&gt;
+&lt;li&gt;线程池：使用线程池来管理线程，减少上下文切换开销。&lt;/li&gt;
+&lt;li&gt;资源管理：合理分配和管理资源，避免资源竞争和饥饿。&lt;/li&gt;
+&lt;li&gt;超时机制：设置超时机制，防止死锁和活锁。&lt;/li&gt;
+&lt;li&gt;内存管理：及时释放不再使用的内存，避免内存泄漏。&lt;/li&gt;
+&lt;li&gt;性能优化：识别和优化性能瓶颈，提高系统整体性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;happen-before-原则&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#happen-before-原则&#34;&gt;#&lt;/a&gt; Happen-before 原则&lt;/h3&gt;
+&lt;p&gt;Happen-before 原则是 Java 内存模型（Java Memory Model, JMM）中的一个重要概念，用于保证多线程环境下的内存可见性和操作顺序。Happen-before&lt;br&gt;
+ 原则定义了两个操作之间的顺序关系，确保一个操作的结果对另一个操作是可见的。&lt;/p&gt;
+&lt;p&gt;如果一个操作 A happen-before 另一个操作 B，那么 A 的结果对 B 是可见的，且 A 的动作在 B 之前完成。&lt;/p&gt;
+&lt;p&gt;Happen-before 原则包括以下几个具体规则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;程序顺序规则（Program Order Rule）
+&lt;ul&gt;
+&lt;li&gt;在一个线程中，按照程序代码的顺序，前面的操作 happen-before 后面的操作。&lt;/li&gt;
+&lt;li&gt;示例：在同一个线程中，x = 1; y = x + 1;，x = 1 happen-before y = x + 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;监视器锁规则（Monitor Lock Rule）
+&lt;ul&gt;
+&lt;li&gt;对同一个锁的解锁操作 happen-before 后面对该锁的加锁操作。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 解锁一个对象的监视器，然后线程 B 加锁同一个对象的监视器，A 的解锁操作 happen-before B 的加锁操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;volatile 变量规则（Volatile Variable Rule）
+&lt;ul&gt;
+&lt;li&gt;对一个 volatile 变量的写操作 happen-before 后面对该变量的读操作。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 写入一个 volatile 变量 x，然后线程 B 读取同一个 volatile 变量 x，A 的写操作 happen-before B 的读操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;线程启动规则（Thread Start Rule）
+&lt;ul&gt;
+&lt;li&gt;线程的启动操作 happen-before 线程中的任何操作。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 启动线程 B，A 的启动操作 happen-before B 中的任何操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;线程终止规则（Thread Termination Rule）
+&lt;ul&gt;
+&lt;li&gt;线程中的任何操作 happen-before 线程的终止检测。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 终止，线程 B 检测到 A 已经终止，A 中的任何操作 happen-before B 检测到 A 的终止。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;中断规则（Interrupt Rule）
+&lt;ul&gt;
+&lt;li&gt;对线程的中断操作 happen-before 被中断线程检测到中断。&lt;/li&gt;
+&lt;li&gt;示例：线程 A 中断线程 B，A 的中断操作 happen-before B 检测到中断。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;传递性（Transitivity）
+&lt;ul&gt;
+&lt;li&gt;如果 A happen-before B，且 B happen-before C，则 A happen-before C。&lt;/li&gt;
+&lt;li&gt;示例：A happen-before B，B happen-before C，因此 A happen-before C。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java-中的线程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#java-中的线程&#34;&gt;#&lt;/a&gt; Java 中的线程&lt;/h2&gt;
+&lt;h3 id=&#34;线程的生命周期&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#线程的生命周期&#34;&gt;#&lt;/a&gt; 线程的生命周期&lt;/h3&gt;
+&lt;p&gt;Java 线程有六种状态，这些状态反映了线程在其生命周期中的不同阶段。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;新建（New）：线程被创建但尚未启动。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当调用 Thread 对象的 start 方法时，线程从新建状态切换到就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;就绪（Runnable）线程已经准备好运行，等待 CPU 分配时间片。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从新建状态调用 start 方法后进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从阻塞、等待或定时等待状态返回后进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因时间片用完或更高优先级线程抢占 CPU 而进入就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行（Running）：Java 线程中将就绪（ready）和运行中（running）两种状态笼统的称为 “运行”，以下为两种状态的区分情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;就绪（Ready）：线程已经准备好运行，等待 CPU 分配时间片。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从新建状态调用 start 方法后进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从阻塞、等待或定时等待状态返回后进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因时间片用完或更高优先级线程抢占 CPU 而进入就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行（Running）：线程正在 CPU 上执行。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从就绪状态获得 CPU 时间片后进入运行状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因时间片用完或更高优先级线程抢占 CPU 而进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 wait、join、sleep 等方法进入等待或定时等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Object 的 wait 方法进入等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Thread 的 join 方法进入等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Thread 的 sleep 方法进入定时等待状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;阻塞（Blocked）：线程被阻塞，等待获取监视器锁。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从运行状态因尝试获取已被其他线程持有的锁而进入阻塞状态。&lt;/li&gt;
+&lt;li&gt;从阻塞状态因获得锁后进入就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;等待（Waiting）：线程无限期等待其他线程执行特定操作。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从运行状态因调用 Object 的 wait 方法进入等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Thread 的 join 方法进入等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 LockSupport 的 park 方法进入等待状态。&lt;/li&gt;
+&lt;li&gt;从等待状态因调用 Object 的 notify 或 notifyAll 方法进入就绪状态。&lt;/li&gt;
+&lt;li&gt;从等待状态因调用 Thread 的 interrupt 方法进入就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;定时等待（Timed Waiting）：线程在指定时间内等待其他线程执行特定操作。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从运行状态因调用 Thread 的 sleep 方法进入定时等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Object 的 wait 方法并指定超时时间进入定时等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 Thread 的 join 方法并指定超时时间进入定时等待状态。&lt;/li&gt;
+&lt;li&gt;从运行状态因调用 LockSupport 的 parkNanos 或 parkUntil 方法进入定时等待状态。&lt;/li&gt;
+&lt;li&gt;从定时等待状态因超时或调用 Thread 的 interrupt 方法进入就绪状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;终止（Terminated）：线程已经退出，不再活动。&lt;/p&gt;
+&lt;p&gt;前置条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从运行状态因 run 方法执行完毕或抛出未捕获的异常而进入终止状态。&lt;/li&gt;
+&lt;li&gt;从等待或定时等待状态因调用 Thread 的 interrupt 方法并抛出 InterruptedException 而进入终止状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

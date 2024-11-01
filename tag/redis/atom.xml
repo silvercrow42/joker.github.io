@@ -5,21 +5,22 @@
     <link href="https://silvercrow42.github.io/joker.github.io" />
     <updated>2024-09-13T05:52:28.000Z</updated>
     <category term="后端" />
-    <category term="操作系统" />
-    <category term="Linux" />
     <category term="数据库" />
     <category term="关系型数据库" />
     <category term="Mysql" />
     <category term="MQ" />
     <category term="RocketMQ" />
+    <category term="操作系统" />
+    <category term="Linux" />
     <category term="java" />
-    <category term="spring" />
-    <category term="Zookeeper" />
-    <category term="Redis" />
-    <category term="Redisson" />
-    <category term="分布式锁" />
+    <category term="多线程" />
     <category term="NoSQL" />
     <category term="缓存" />
+    <category term="Redis" />
+    <category term="Zookeeper" />
+    <category term="spring" />
+    <category term="Redisson" />
+    <category term="分布式锁" />
     <entry>
         <id>https://silvercrow42.github.io/joker.github.io/2024/09/13/%E3%80%90Redis%E3%80%91Redis%E8%AF%A6%E8%A7%A3/</id>
         <title>【Redis】Redis详解</title>
@@ -1605,9 +1606,9 @@ Sets），Redis 使用了跳跃表（Skiplist），这是一种支持快速插�
 </content>
         <category term="后端" />
         <category term="数据库" />
-        <category term="Redis" />
         <category term="NoSQL" />
         <category term="缓存" />
+        <category term="Redis" />
         <updated>2024-09-13T05:52:28.000Z</updated>
     </entry>
     <entry>
@@ -1853,8 +1854,8 @@ AOP，通过 ZooKeeper 加锁时需要 ZooKeeper 服务，使用 Redisson 加锁
 &lt;p&gt;同样能够实现锁的效果。&lt;/p&gt;
 </content>
         <category term="后端" />
-        <category term="Zookeeper" />
         <category term="Redis" />
+        <category term="Zookeeper" />
         <category term="Redisson" />
         <category term="分布式锁" />
         <updated>2024-09-10T02:00:01.000Z</updated>
