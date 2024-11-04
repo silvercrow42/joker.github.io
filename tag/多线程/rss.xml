@@ -9,6 +9,9 @@
         <lastBuildDate>Fri, 01 Nov 2024 15:56:08 +0800</lastBuildDate>
         <category>后端</category>
         <category>数据库</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
+        <category>Redis</category>
         <category>关系型数据库</category>
         <category>Mysql</category>
         <category>MQ</category>
@@ -17,11 +20,8 @@
         <category>Linux</category>
         <category>java</category>
         <category>多线程</category>
-        <category>NoSQL</category>
-        <category>缓存</category>
-        <category>Redis</category>
-        <category>Zookeeper</category>
         <category>spring</category>
+        <category>Zookeeper</category>
         <category>Redisson</category>
         <category>分布式锁</category>
         <item>
@@ -311,6 +311,197 @@
 &lt;ul&gt;
 &lt;li&gt;从运行状态因 run 方法执行完毕或抛出未捕获的异常而进入终止状态。&lt;/li&gt;
 &lt;li&gt;从等待或定时等待状态因调用 Thread 的 interrupt 方法并抛出 InterruptedException 而进入终止状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;线程的创建&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#线程的创建&#34;&gt;#&lt;/a&gt; 线程的创建&lt;/h2&gt;
+&lt;h3 id=&#34;常规方式创建&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#常规方式创建&#34;&gt;#&lt;/a&gt; 常规方式创建&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;通过继承 Thread 类创建线程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建一个新的类，该类继承自 Thread 类。&lt;/li&gt;
+&lt;li&gt;重写 run 方法，在其中定义线程执行的代码。&lt;/li&gt;
+&lt;li&gt;创建该类的实例，并调用 start 方法启动线程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过实现 Runnable 接口创建线程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建一个新的类，该类实现 Runnable 接口。&lt;/li&gt;
+&lt;li&gt;实现 run 方法，在其中定义线程执行的代码。&lt;/li&gt;
+&lt;li&gt;创建 Runnable 接口的实现类实例，并将其传递给 Thread 类的构造器。&lt;/li&gt;
+&lt;li&gt;调用 Thread 对象的 start 方法启动线程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;线程池&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#线程池&#34;&gt;#&lt;/a&gt; 线程池&lt;/h3&gt;
+&lt;p&gt;Java 中的线程池是一种用于管理和复用线程的技术，可以有效提高应用程序的性能和响应速度。线程池的主要优点包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;减少线程创建开销：线程的创建和销毁是相对昂贵的操作，线程池可以复用已存在的线程，减少这些开销。&lt;/li&gt;
+&lt;li&gt;控制资源使用：通过限制线程的数量，可以防止系统资源被过度消耗。&lt;/li&gt;
+&lt;li&gt;提高响应速度：任务可以直接分配给已有线程，减少了等待时间。&lt;/li&gt;
+&lt;li&gt;便于管理：可以更方便地管理线程的生命周期和状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;工厂类创建&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#工厂类创建&#34;&gt;#&lt;/a&gt; 工厂类创建&lt;/h4&gt;
+&lt;p&gt;Java 中支持通过 java.util.concurrent.Executors 工厂类来创建，创建方法包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;固定大小线程池 (FixedThreadPool)： &lt;code&gt;Executors.newFixedThreadPool(int nThreads)&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述：创建一个固定大小的线程池。&lt;/li&gt;
+&lt;li&gt;特点：线程池中的线程数量固定，如果所有线程都在执行任务，新提交的任务会被放入队列中等待。&lt;/li&gt;
+&lt;li&gt;适用场景：适合处理大量耗时较短的任务，确保资源不会被过度消耗。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单线程线程池 (SingleThreadExecutor)： &lt;code&gt;Executors.newSingleThreadExecutor()&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述：创建一个单线程的线程池。&lt;/li&gt;
+&lt;li&gt;特点：只有一个工作线程，确保所有任务按顺序执行。&lt;/li&gt;
+&lt;li&gt;适用场景：适合需要保证任务顺序执行的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可缓存线程池 (CachedThreadPool)： &lt;code&gt;Executors.newCachedThreadPool()&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述：创建一个可缓存的线程池。&lt;/li&gt;
+&lt;li&gt;特点：线程池会根据需要创建新的线程，但会复用之前构造的线程。适用于执行大量短期异步任务的程序。&lt;/li&gt;
+&lt;li&gt;适用场景：适合处理大量短生命周期的任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;定时任务线程池 (ScheduledThreadPool)： &lt;code&gt;Executors.newScheduledThreadPool(int corePoolSize)&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述：创建一个支持定时和周期性任务执行的线程池。&lt;/li&gt;
+&lt;li&gt;特点：支持延迟执行和定期执行任务。&lt;/li&gt;
+&lt;li&gt;适用场景：适合需要定时或周期性执行任务的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;工作窃取线程池 (WorkStealingPool)： &lt;code&gt;Executors.newWorkStealingPool(int parallelism)&lt;/code&gt; （Java 8 及以上版本）
+&lt;ul&gt;
+&lt;li&gt;描述：创建一个工作窃取线程池。&lt;/li&gt;
+&lt;li&gt;特点：使用 ForkJoinPool 实现，线程之间可以 “窃取” 任务，提高并行度和效率。&lt;/li&gt;
+&lt;li&gt;适用场景：适合处理大量细粒度的任务，提高并行处理能力。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;核心参数&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#核心参数&#34;&gt;#&lt;/a&gt; 核心参数&lt;/h4&gt;
+&lt;p&gt;通过 new 方法创建的线程池实例具备以下的方法参数:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;corePoolSize：
+&lt;ul&gt;
+&lt;li&gt;含义：线程池的基本大小，即即使空闲也会一直保留的线程数。&lt;/li&gt;
+&lt;li&gt;作用：当新任务提交时，如果当前线程数小于 corePoolSize，即使有空闲线程，也会创建新线程来处理任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;maximumPoolSize：
+&lt;ul&gt;
+&lt;li&gt;含义：线程池允许的最大线程数。&lt;/li&gt;
+&lt;li&gt;作用：当线程池中的线程数达到 corePoolSize 后，如果继续提交任务且任务队列已满，则会创建新线程，直到线程数达到 maximumPoolSize。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;keepAliveTime：
+&lt;ul&gt;
+&lt;li&gt;含义：线程池中超过 corePoolSize 的空闲线程等待新任务的最长时间。&lt;/li&gt;
+&lt;li&gt;作用：如果线程池中的线程数大于 corePoolSize，并且某个线程空闲时间超过了 keepAliveTime，则该线程会被终止。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;unit：
+&lt;ul&gt;
+&lt;li&gt;含义：keepAliveTime 的时间单位，如 TimeUnit.SECONDS、TimeUnit.MINUTES 等。&lt;/li&gt;
+&lt;li&gt;作用：指定 keepAliveTime 的时间单位。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;workQueue：
+&lt;ul&gt;
+&lt;li&gt;含义：用于保存等待执行任务的阻塞队列。&lt;/li&gt;
+&lt;li&gt;常见类型：
+&lt;ul&gt;
+&lt;li&gt;ArrayBlockingQueue：基于数组的有界阻塞队列。&lt;/li&gt;
+&lt;li&gt;LinkedBlockingQueue：基于链表的无界阻塞队列。&lt;/li&gt;
+&lt;li&gt;SynchronousQueue：不存储元素的阻塞队列，每个插入操作必须等待一个移除操作，反之亦然。&lt;/li&gt;
+&lt;li&gt;PriorityBlockingQueue：具有优先级的无界阻塞队列。&lt;/li&gt;
+&lt;li&gt;DelayQueue：延迟任务队列，元素为 Delayed 对象，只有延迟期满的元素才能从队列中 take 出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;threadFactory：
+&lt;ul&gt;
+&lt;li&gt;含义：用于创建新线程的工厂。&lt;/li&gt;
+&lt;li&gt;作用：可以自定义线程的名称、优先级等属性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;handler：
+&lt;ul&gt;
+&lt;li&gt;含义：拒绝策略，当线程池和任务队列都已满时，用于处理新提交任务的策略。&lt;/li&gt;
+&lt;li&gt;常见策略：
+&lt;ul&gt;
+&lt;li&gt;AbortPolicy：默认策略，直接抛出 RejectedExecutionException 异常。&lt;/li&gt;
+&lt;li&gt;CallerRunsPolicy：由调用线程（提交任务的线程）执行该任务。&lt;/li&gt;
+&lt;li&gt;DiscardPolicy：直接丢弃任务，不抛出异常。&lt;/li&gt;
+&lt;li&gt;DiscardOldestPolicy：丢弃队列中最老的任务，然后重新提交新任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;除了 JDK 默认提供的四种拒绝策略，我们可以通过实现 RejectedExecutionHandler 接口根据自己的业务需求去自定义拒绝策略。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;线程池的工作流程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#线程池的工作流程&#34;&gt;#&lt;/a&gt; 线程池的工作流程&lt;/h4&gt;
+&lt;p&gt;当创建一个线程池后，不断赋予线程池任务，线程池会根据以下流程来处理任务：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;检查当前线程数是否小于 corePoolSize：
+&lt;ul&gt;
+&lt;li&gt;如果当前线程数小于 corePoolSize，线程池会创建新线程来处理新任务，即使其他线程是空闲的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;将任务添加到任务队列：
+&lt;ul&gt;
+&lt;li&gt;如果当前线程数已经达到 corePoolSize，线程池会尝试将新任务添加到任务队列中。&lt;/li&gt;
+&lt;li&gt;任务队列的选择会影响线程池的行为。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;检查当前线程数是否小于 maximumPoolSize：
+&lt;ul&gt;
+&lt;li&gt;如果任务队列已满且当前线程数小于 maximumPoolSize，线程池会创建新线程来处理新任务，直到线程数达到 maximumPoolSize。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;执行拒绝策略：
+&lt;ul&gt;
+&lt;li&gt;如果当前线程数已经达到 maximumPoolSize 且任务队列已满，线程池会根据配置的拒绝策略处理新任务。&lt;/li&gt;
+&lt;li&gt;常见的拒绝策略包括：
+&lt;ul&gt;
+&lt;li&gt;AbortPolicy：默认策略，直接抛出 RejectedExecutionException 异常。&lt;/li&gt;
+&lt;li&gt;CallerRunsPolicy：由调用线程（提交任务的线程）执行该任务。&lt;/li&gt;
+&lt;li&gt;DiscardPolicy：直接丢弃任务，不抛出异常。&lt;/li&gt;
+&lt;li&gt;DiscardOldestPolicy：丢弃队列中最老的任务，然后重新提交新任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;开启任务&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开启任务&#34;&gt;#&lt;/a&gt; 开启任务&lt;/h4&gt;
+&lt;p&gt;在获取到线程池实例后，可以通过以下方式开启任务：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 ExecutorService 的 submit 方法可以返回一个 Future 对象，用于获取任务的执行结果或取消任务。&lt;/li&gt;
+&lt;li&gt;使用 ExecutorService 的 execute 方法没有返回值，适用于不需要获取任务结果的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;任务执行流程&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;线程获取任务：
+&lt;ul&gt;
+&lt;li&gt;线程池中的空闲线程会从任务队列中获取任务。&lt;/li&gt;
+&lt;li&gt;获取任务的方式取决于任务队列的类型。例如，LinkedBlockingQueue 使用 take 方法阻塞地获取任务，而 SynchronousQueue 使用&lt;br&gt;
+ poll 方法非阻塞地获取任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;执行任务：
+&lt;ul&gt;
+&lt;li&gt;线程获取到任务后，会调用任务的 run 方法来执行任务。&lt;/li&gt;
+&lt;li&gt;任务执行过程中，如果任务抛出异常，线程池会捕获异常并处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;任务完成：
+&lt;ul&gt;
+&lt;li&gt;任务执行完成后，线程会返回任务队列，等待下一个任务。&lt;/li&gt;
+&lt;li&gt;如果任务是通过 submit 方法提交的，Future 对象的状态会被更新，调用者可以通过 get 方法获取任务的结果。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;

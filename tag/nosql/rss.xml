@@ -9,6 +9,9 @@
         <lastBuildDate>Fri, 13 Sep 2024 13:52:28 +0800</lastBuildDate>
         <category>后端</category>
         <category>数据库</category>
+        <category>NoSQL</category>
+        <category>缓存</category>
+        <category>Redis</category>
         <category>关系型数据库</category>
         <category>Mysql</category>
         <category>MQ</category>
@@ -17,11 +20,8 @@
         <category>Linux</category>
         <category>java</category>
         <category>多线程</category>
-        <category>NoSQL</category>
-        <category>缓存</category>
-        <category>Redis</category>
-        <category>Zookeeper</category>
         <category>spring</category>
+        <category>Zookeeper</category>
         <category>Redisson</category>
         <category>分布式锁</category>
         <item>
